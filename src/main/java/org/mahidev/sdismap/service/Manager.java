@@ -2,6 +2,7 @@ package org.mahidev.sdismap.service;
 
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.mahidev.sdismap.model.Location;
 import org.mahidev.sdismap.model.Sdis;
 
@@ -13,14 +14,18 @@ public class Manager {
 
         List<Sdis> getAllSdis();
 
+        List<Sdis> saveAllSdis(@NotNull final List<Sdis> sdisList);
+
         Optional<Location> getLocation(@NotBlank final String name);
 
         Optional<String> getDescription(@NotBlank final String name);
     }
 
-    public interface ExcelService {
+    public interface ReaderService<T> {
 
-        List<Sdis> readExcel();
+        List<T> readExcel();
+
+        List<T> saveExcel();
     }
 
 }

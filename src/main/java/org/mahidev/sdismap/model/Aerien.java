@@ -1,11 +1,10 @@
 package org.mahidev.sdismap.model;
 
-import com.alibaba.excel.annotation.ExcelProperty;
+import com.poiji.annotation.ExcelCellName;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -19,36 +18,35 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 public class Aerien {
 
-	@ExcelProperty("Aerien N°")
-	private final String number;
+    @ExcelCellName("Aerien N°")
+    private final int number;
 
-	@ExcelProperty("Aerien Ref. Petitionnaire")
-	private final String petitionerReference;
+    @ExcelCellName("Aerien Ref. Petitionnaire")
+    private final String petitionerReference;
 
-	@ExcelProperty("Aerien Type")
-	private final String type;
+    @ExcelCellName("Aerien Type")
+    private final String type;
 
-	@ExcelProperty("Aerien Dimension (m)")
-	private final String dimension;
+    @ExcelCellName("Aerien Dimension (m)")
+    private final String dimension;
 
-	@ExcelProperty("Aerien Tilt (Deg.)")
-	private final String tilt;
+    @ExcelCellName("Aerien Tilt (Deg.)")
+    private final String tilt;
 
-	@ExcelProperty("Aerien Azymuth (Deg.)")
-	private final String azimuth;
+    @ExcelCellName("Aerien Azymuth (Deg.)")
+    private final String azimuth;
 
-	@ExcelProperty("Aerien Ouverture (Deg.)")
-	private final String opening;
+    @ExcelCellName("Aerien Ouverture (Deg.)")
+    private final String opening;
 
-	@ExcelProperty("Aerien Hauteur (m)")
-	private final String height;
+    @ExcelCellName("Aerien Hauteur (m)")
+    private final String height;
 
-	@Id
-	@GeneratedValue
-	@EqualsAndHashCode.Include
-	private Long id;
+    @Id
+    @GeneratedValue
+    @EqualsAndHashCode.Include
+    private Long id;
 
-	@NotNull
-	@OneToOne
-	private Sdis sdis;
+    @OneToOne
+    private Sdis sdis;
 }

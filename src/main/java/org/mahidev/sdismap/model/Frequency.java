@@ -1,11 +1,10 @@
 package org.mahidev.sdismap.model;
 
-import com.alibaba.excel.annotation.ExcelProperty;
+import com.poiji.annotation.ExcelCellName;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -19,21 +18,20 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 public class Frequency {
 
-	@ExcelProperty("Bande Freq. Min.")
-	private final String bandMin;
+    @ExcelCellName("Bande Freq. Min.")
+    private final String bandMin;
 
-	@ExcelProperty("Bande Freq. Max.")
-	private final String bandMax;
+    @ExcelCellName("Bande Freq. Max.")
+    private final String bandMax;
 
-	@ExcelProperty("Bande Service")
-	private final String bandService;
+    @ExcelCellName("Bande Service")
+    private final String bandService;
 
-	@Id
-	@GeneratedValue
-	@EqualsAndHashCode.Include
-	private Long id;
+    @Id
+    @GeneratedValue
+    @EqualsAndHashCode.Include
+    private Long id;
 
-	@NotNull
-	@OneToOne
-	private Sdis sdis;
+    @OneToOne
+    private Sdis sdis;
 }
