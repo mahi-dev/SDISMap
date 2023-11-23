@@ -1,11 +1,14 @@
 package org.mahidev.sdismap.model;
 
-import jakarta.persistence.*;
+import com.alibaba.excel.annotation.ExcelProperty;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-
-import java.math.BigDecimal;
 
 @Entity
 @Data
@@ -14,17 +17,34 @@ import java.math.BigDecimal;
 @DynamicUpdate
 public class Location {
 
-    @NotNull
-    private final BigDecimal latitude;
-    @NotNull
-    private final BigDecimal longitude;
-    @Id
-    @GeneratedValue
-    @EqualsAndHashCode.Include
-    private Long id;
+	@NotNull
+	@ExcelProperty("Site Long. (Deg.)")
+	private final String siteLongitude;
 
-    @NonNull
-    @OneToOne
-    @JoinColumn(name = "sdis_id")
-    private Sdis sdis;
+	@NotNull
+	@ExcelProperty("Site Lat. (Deg.)")
+	private final String siteLatitude;
+
+	@ExcelProperty("Site Adresse")
+	private final String address;
+
+	@ExcelProperty("Site Lieu Dit")
+	private final String placeName;
+
+	@NotBlank
+	@ExcelProperty("Site Commune")
+	private final String municipality;
+
+	@NotNull
+	@ExcelProperty("Site Code Postal")
+	private final Integer postalCode;
+
+	@Id
+	@GeneratedValue
+	@EqualsAndHashCode.Include
+	private Long id;
+
+	@NonNull
+	@OneToOne
+	private Sdis sdis;
 }

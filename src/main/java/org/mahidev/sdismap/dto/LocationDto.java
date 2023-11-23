@@ -3,10 +3,9 @@ package org.mahidev.sdismap.dto;
 import jakarta.validation.constraints.NotNull;
 import org.mahidev.sdismap.model.Location;
 
-import java.math.BigDecimal;
-
-public record LocationDto(String Name, BigDecimal latitude, BigDecimal longitude) {
-    public static LocationDto toDto(@NotNull final Location location) {
-        return new LocationDto(location.getSdis().getName(), location.getLatitude(), location.getLongitude());
-    }
+public record LocationDto(String Name, String address, int postalCode, String municipality, String siteLatitude, String siteLongitude) {
+	public static LocationDto toDto(@NotNull final Location location) {
+		return new LocationDto(location.getSdis().getName(), location.getAddress(), location.getPostalCode(), location.getMunicipality(),
+				location.getSiteLatitude(), location.getSiteLongitude());
+	}
 }
