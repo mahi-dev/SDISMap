@@ -20,40 +20,47 @@ import java.util.List;
 @Log4j2
 @RestController
 @RequestMapping("/api/sdis")
-public record RestSdisController(Manager.SdisService service, Manager.ReaderService<Sdis> readerService, DataSource dataSource) {
+public record RestSdisController(Manager.SdisService service, Manager.ReaderService<Sdis> readerService,
+                                 DataSource dataSource) {
 
-	@GetMapping("/description/{name}")
-	public String getDescription(@PathVariable @NotBlank final String name) {
-		return service.getDescription(name)
-				.orElseThrow(() -> new SdisDescriptionNotFoundException(GlobalExceptionHandler.SDIS_DESCRIPTION_NOT_FOUND_EXCEPTION));
-	}
+    @GetMapping("/{id}")
+    public Sdis getSdis(@PathVariable @NotBlank final int id) {
+        return service.getSdis(id)
+                .orElseThrow(() -> new SdisDescriptionNotFoundException(GlobalExceptionHandler.NO_LOCATION_FOUND_EXCEPTION_MESSAGE));
+    }
 
-	@GetMapping("/location/{name}")
-	public LocationDto getLocation(@PathVariable @NotBlank final String name) {
-		return service.getLocation(name).map(LocationDto::toDto)
-				.orElseThrow(() -> new SdisDescriptionNotFoundException(GlobalExceptionHandler.NO_LOCATION_FOUND_EXCEPTION_MESSAGE));
-	}
+    @GetMapping("/description/{name}")
+    public String getDescription(@PathVariable @NotBlank final String name) {
+        return service.getDescription(name)
+                .orElseThrow(() -> new SdisDescriptionNotFoundException(GlobalExceptionHandler.SDIS_DESCRIPTION_NOT_FOUND_EXCEPTION));
+    }
 
-	@GetMapping(value = "/import")
-	public List<Sdis> importSdis() {
-		try {
-			return readerService.saveExcel(dataSource);
-		} catch (IOException e) {
-			throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
-		}
-	}
+    @GetMapping("/location/{name}")
+    public LocationDto getLocation(@PathVariable @NotBlank final String name) {
+        return service.getSdis(name).map(LocationDto::toDto)
+                .orElseThrow(() -> new SdisDescriptionNotFoundException(GlobalExceptionHandler.NO_LOCATION_FOUND_EXCEPTION_MESSAGE));
+    }
 
-	@PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public List<Sdis> importSdis(@RequestParam final MultipartFile file) {
-		try (final var datasource = new StreamDataSource(file)) {
-			return readerService.saveExcel(datasource);
-		} catch (IOException e) {
-			throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
-		}
-	}
+    @GetMapping(value = "/import")
+    public List<Sdis> importSdis() {
+        try {
+            return readerService.saveExcel(dataSource);
+        } catch (final IOException e) {
+            throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
+        }
+    }
 
-	@GetMapping(value = "/count")
-	public long countSdis() {
-		return service.count();
-	}
+    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public List<Sdis> importSdis(@RequestParam final MultipartFile file) {
+        try (final var datasource = new StreamDataSource(file)) {
+            return readerService.saveExcel(datasource);
+        } catch (final IOException e) {
+            throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
+        }
+    }
+
+    @GetMapping(value = "/count")
+    public long countSdis() {
+        return service.count();
+    }
 }
