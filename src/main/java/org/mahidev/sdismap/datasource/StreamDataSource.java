@@ -9,30 +9,31 @@ import java.nio.file.Path;
 
 public class StreamDataSource implements DataSource, AutoCloseable {
 
-    private final MultipartFile file;
+	private static Path createTempFile(final MultipartFile multipartFile) throws IOException {
+		final var tempFile = Files.createTempFile("upload_", multipartFile.getName());
+		multipartFile.transferTo(tempFile);
+		return tempFile;
+	}
 
-    @Value("${upload.temp.path}")
-    private final Path tempFilePath;
+	public StreamDataSource(final MultipartFile multipartFile) throws IOException {
+		file = multipartFile;
+		tempFile = createTempFile(file);
+	}
 
-    public StreamDataSource(final MultipartFile file) throws IOException {
-        this.file = file;
-        tempFilePath = createTempFile(file);
-    }
+	private final Path tempFile;
 
-    private static Path createTempFile(final MultipartFile file) throws IOException {
-        final var tempFile = Files.createTempFile("upload_", file.getOriginalFilename());
-        file.transferTo(tempFile);
-        return tempFile;
-    }
+	private final MultipartFile file;
 
-    @Override
-    public Path getPath() {
-        return tempFilePath;
-    }
+	@Value("${upload.temp.path}")
+	private Path tempFilePath;
 
-    @Override
-    public void close() throws IOException {
-        Files.deleteIfExists(tempFilePath);
-    }
+	@Override
+	public Path getPath() {
+		return tempFile;
+	}
 
+	@Override
+	public void close() throws IOException {
+		Files.deleteIfExists(tempFile);
+	}
 }

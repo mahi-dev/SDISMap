@@ -1,31 +1,32 @@
 package org.mahidev.sdismap.service;
 
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.model.Location;
 import org.mahidev.sdismap.model.Sdis;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 public class Manager {
-    public interface SdisService {
+	public interface SdisService {
 
-        List<Sdis> getAllSdis();
+		List<Sdis> getAllSdis();
 
-        List<Sdis> saveAllSdis(@NotNull final List<Sdis> sdisList);
+		List<Sdis> saveAllSdis(@NotNull final List<Sdis> sdisList);
 
-        Optional<Location> getLocation(@NotBlank final String name);
+		Optional<Location> getLocation(@NotBlank final String name);
 
-        Optional<String> getDescription(@NotBlank final String name);
-    }
+		Optional<String> getDescription(@NotBlank final String name);
+	}
 
-    public interface ReaderService<T> {
+	public interface ReaderService<T> {
 
-        List<T> readExcel();
+		List<T> readExcel(@NotNull final DataSource dataSource) throws IOException;
 
-        List<T> saveExcel();
-    }
+		List<T> saveExcel(@NotNull final DataSource dataSource) throws IOException;
+	}
 
 }

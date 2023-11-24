@@ -4,11 +4,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.mahidev.sdismap.datasource.DataSource;
+import org.mahidev.sdismap.datasource.StreamDataSource;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.repository.SdisRepository;
+import org.mahidev.sdismap.web.InMemoryMultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
+
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -17,47 +23,59 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @TestPropertySource({"classpath:application.properties", "classpath:application-dev.properties"})
 class ExcelServiceTest {
 
-    @Autowired
-    SdisRepository sdisRepository;
+	@Autowired
+	SdisRepository sdisRepository;
 
-    @Autowired
-    Manager.SdisService sdisService;
+	@Autowired
+	Manager.SdisService sdisService;
 
-    @Autowired
-    Manager.ReaderService<Sdis> readerService;
+	@Autowired
+	Manager.ReaderService<Sdis> readerService;
 
-    @BeforeEach
-    void setUp() {
-        sdisRepository.deleteAll();
-    }
+	@Autowired
+	@Qualifier("fileDataSource")
+	DataSource dataSource;
 
-    @AfterEach
-    void tearDown() {
-        sdisRepository.deleteAll();
-    }
+	@BeforeEach
+	void setUp() {
+		sdisRepository.deleteAll();
+	}
 
-    @Test
-    void readExcel() {
-        final var sdisList = readerService.readExcel();
-        assertFalse(sdisList.isEmpty());
-    }
+	@AfterEach
+	void tearDown() {
+		sdisRepository.deleteAll();
+	}
 
-    @Test
-    void saveExcel() {
-        final var sdisList = readerService.saveExcel();
-        assertFalse(sdisList.isEmpty());
-        assertFalse(sdisService.getAllSdis().isEmpty());
-    }
+	@Test
+	void readExcel() throws IOException {
+		final var sdisList = readerService.readExcel(dataSource);
+		assertFalse(sdisList.isEmpty());
+	}
 
-    @Test
-    void service() {
-    }
+	@Test
+	void readExcelFromMultiPart() throws IOException {
+		try (final var datasource = new StreamDataSource(new InMemoryMultipartFile(dataSource.getPath()))) {
+			final var sdisList = readerService.readExcel(datasource);
+			assertFalse(sdisList.isEmpty());
+		}
+	}
 
-    @Test
-    void listener() {
-    }
+	@Test
+	void saveExcel() throws IOException {
+		final var sdisList = readerService.saveExcel(dataSource);
+		assertFalse(sdisList.isEmpty());
+		assertFalse(sdisService.getAllSdis().isEmpty());
+	}
 
-    @Test
-    void dataSource() {
-    }
+	@Test
+	void service() {
+	}
+
+	@Test
+	void listener() {
+	}
+
+	@Test
+	void dataSource() {
+	}
 }

@@ -1,7 +1,6 @@
 package org.mahidev.sdismap;
 
 import org.mahidev.sdismap.controller.RestSdisController;
-import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.datasource.FileDataSource;
 import org.mahidev.sdismap.excel.service.ExcelParser;
 import org.mahidev.sdismap.excel.service.PoijiExcelReader;
@@ -27,32 +26,31 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ConfigurationPropertiesScan
 public class SdisMapApplication {
 
-    public static void main(final String[] args) {
-        SpringApplication.run(SdisMapApplication.class, args);
-    }
+	public static void main(final String[] args) {
+		SpringApplication.run(SdisMapApplication.class, args);
+	}
 
-    @Lazy
-    @Bean
-    Manager.SdisService sdisService(final SdisRepository repository) {
-        return new SdisService(repository);
-    }
+	@Lazy
+	@Bean
+	Manager.SdisService sdisService(final SdisRepository repository) {
+		return new SdisService(repository);
+	}
 
-    @Lazy
-    @Bean
-    RestSdisController restSdisController(final Manager.SdisService service) {
-        return new RestSdisController(service);
-    }
+	@Lazy
+	@Bean
+	RestSdisController restSdisController(final Manager.SdisService service) {
+		return new RestSdisController(service);
+	}
 
-    @Lazy
-    @Bean
-    ExcelParser<Sdis> excelParser() {
-        return new PoijiExcelReader();
-    }
+	@Lazy
+	@Bean
+	ExcelParser<Sdis> excelParser() {
+		return new PoijiExcelReader();
+	}
 
-    @Bean
-    @Qualifier("sdisExcelService")
-    Manager.ReaderService<Sdis> excelService(final Manager.SdisService service, final ExcelParser<Sdis> excelParser,
-                                             @Qualifier("fileDataSource") final DataSource dataSource) {
-        return new XlsReaderService(service, excelParser, dataSource);
-    }
+	@Bean
+	@Qualifier("sdisExcelService")
+	Manager.ReaderService<Sdis> excelService(final Manager.SdisService service, final ExcelParser<Sdis> excelParser) {
+		return new XlsReaderService(service, excelParser);
+	}
 }
