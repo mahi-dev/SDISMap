@@ -1,4 +1,4 @@
-package org.mahidev.sdismap.web;
+package org.mahidev.sdismap.utility;
 
 import lombok.Data;
 import lombok.NonNull;

@@ -2,10 +2,7 @@ package org.mahidev.sdismap.model;
 
 import com.poiji.annotation.ExcelCell;
 import com.poiji.annotation.ExcelCellName;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -21,32 +18,32 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 public class Location {
 
-    @NotNull
-    @ExcelCellName("Site Long. (Deg.)")
-    private final String siteLongitude;
+	@NotNull
+	@ExcelCellName("Site Long. (Deg.)")
+	private final String siteLongitude;
 
-    @NotNull
-    @ExcelCellName("Site Lat. (Deg.)")
-    private final String siteLatitude;
+	@NotNull
+	@ExcelCellName("Site Lat. (Deg.)")
+	private final String siteLatitude;
 
-    @ExcelCell(6)
-    private final String address;
+	@ExcelCell(6)
+	private final String address;
 
-    @ExcelCellName("Site Lieu Dit")
-    private final String placeName;
+	@ExcelCellName("Site Lieu Dit")
+	private final String placeName;
 
-    @NotBlank
-    @ExcelCellName("Site Commune")
-    private final String municipality;
+	@NotBlank
+	@ExcelCellName("Site Commune")
+	private final String municipality;
 
-    @ExcelCellName("Site Code Postal")
-    private final int postalCode;
+	@ExcelCellName("Site Code Postal")
+	private final int postalCode;
 
-    @Id
-    @GeneratedValue
-    @EqualsAndHashCode.Include
-    private Long id;
+	@Id
+	@GeneratedValue
+	@EqualsAndHashCode.Include
+	private Long id;
 
-    @OneToOne
-    private Sdis sdis;
+	@OneToOne(fetch = FetchType.EAGER)
+	private Sdis sdis;
 }

@@ -1,6 +1,7 @@
 package org.mahidev.sdismap;
 
 import org.mahidev.sdismap.controller.RestSdisController;
+import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.datasource.FileDataSource;
 import org.mahidev.sdismap.excel.service.ExcelParser;
 import org.mahidev.sdismap.excel.service.PoijiExcelReader;
@@ -32,25 +33,27 @@ public class SdisMapApplication {
 
 	@Lazy
 	@Bean
+	@Qualifier("sdisExcelService")
+	Manager.ReaderService<Sdis> excelService(final Manager.SdisService service, final ExcelParser<Sdis> excelParser) {
+		return new XlsReaderService(service, excelParser);
+	}
+
+	@Lazy
+	@Bean
 	Manager.SdisService sdisService(final SdisRepository repository) {
 		return new SdisService(repository);
 	}
 
 	@Lazy
 	@Bean
-	RestSdisController restSdisController(final Manager.SdisService service) {
-		return new RestSdisController(service);
+	RestSdisController restSdisController(final Manager.SdisService sdisService, final Manager.ReaderService<Sdis> readerService,
+			@Qualifier("fileDataSource") DataSource dataSource) {
+		return new RestSdisController(sdisService, readerService, dataSource);
 	}
 
 	@Lazy
 	@Bean
 	ExcelParser<Sdis> excelParser() {
 		return new PoijiExcelReader();
-	}
-
-	@Bean
-	@Qualifier("sdisExcelService")
-	Manager.ReaderService<Sdis> excelService(final Manager.SdisService service, final ExcelParser<Sdis> excelParser) {
-		return new XlsReaderService(service, excelParser);
 	}
 }

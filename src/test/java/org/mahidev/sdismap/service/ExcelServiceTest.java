@@ -8,7 +8,7 @@ import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.datasource.StreamDataSource;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.repository.SdisRepository;
-import org.mahidev.sdismap.web.InMemoryMultipartFile;
+import org.mahidev.sdismap.utility.InMemoryMultipartFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -65,6 +65,15 @@ class ExcelServiceTest {
 		final var sdisList = readerService.saveExcel(dataSource);
 		assertFalse(sdisList.isEmpty());
 		assertFalse(sdisService.getAllSdis().isEmpty());
+	}
+
+	@Test
+	void saveExcelFromMultiPart() throws IOException {
+		try (final var datasource = new StreamDataSource(new InMemoryMultipartFile(dataSource.getPath()))) {
+			final var sdisList = readerService.saveExcel(datasource);
+			assertFalse(sdisList.isEmpty());
+			assertFalse(sdisService.getAllSdis().isEmpty());
+		}
 	}
 
 	@Test

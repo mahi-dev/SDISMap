@@ -13,6 +13,8 @@ import java.util.Optional;
 public class Manager {
 	public interface SdisService {
 
+		long count();
+
 		List<Sdis> getAllSdis();
 
 		List<Sdis> saveAllSdis(@NotNull final List<Sdis> sdisList);

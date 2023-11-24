@@ -3,6 +3,7 @@ package org.mahidev.sdismap.excel.service;
 import com.poiji.bind.Poiji;
 import com.poiji.exception.PoijiExcelType;
 import jakarta.validation.constraints.NotNull;
+import org.mahidev.sdismap.exception.BadFormatException;
 import org.mahidev.sdismap.model.Sdis;
 
 import java.io.IOException;
@@ -15,8 +16,8 @@ public record PoijiExcelReader() implements ExcelParser<Sdis> {
 		return switch (Files.probeContentType(filePath)) {
 			case XLS -> PoijiExcelType.XLS;
 			case XLSX -> PoijiExcelType.XLSX;
-			default -> throw new IllegalStateException(
-					String.format("le fichier %s est un %s, un %s ou un %s est attendu: ", filePath.getFileName(), XLS, XLSX,
+			default -> throw new BadFormatException(
+					String.format("Le fichier %s est un %s, un %s ou un %s est attendu!", filePath.getFileName(), XLS, XLSX,
 							Files.probeContentType(filePath)));
 		};
 	}

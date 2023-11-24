@@ -1,10 +1,7 @@
 package org.mahidev.sdismap.model;
 
 import com.poiji.annotation.ExcelCellName;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -20,26 +17,26 @@ import java.math.BigDecimal;
 @DynamicUpdate
 public class EmissionReception {
 
-    @ExcelCellName("EmRec N°")
-    private final String number;
+	@ExcelCellName("EmRec N°")
+	private final String number;
 
-    @ExcelCellName("EmRec Systeme")
-    private final String systme;
+	@ExcelCellName("EmRec Systeme")
+	private final String systme;
 
-    @ExcelCellName("EmRec Designation Em.")
-    private final String designation;
+	@ExcelCellName("EmRec Designation Em.")
+	private final String designation;
 
-    @ExcelCellName("EmRec Puissance (dBW)")
-    private final BigDecimal power;
+	@ExcelCellName("EmRec Puissance (dBW)")
+	private final BigDecimal power;
 
-    @ExcelCellName("EmRec Unite de Puissance")
-    private final String powerUnit;
+	@ExcelCellName("EmRec Unite de Puissance")
+	private final String powerUnit;
 
-    @Id
-    @GeneratedValue
-    @EqualsAndHashCode.Include
-    private Long id;
+	@Id
+	@GeneratedValue
+	@EqualsAndHashCode.Include
+	private Long id;
 
-    @OneToOne
-    private Sdis sdis;
+	@OneToOne(fetch = FetchType.EAGER)
+	private Sdis sdis;
 }
