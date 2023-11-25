@@ -4,16 +4,13 @@ import com.poiji.annotation.ExcelCellName;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
-import java.math.BigDecimal;
-
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @DynamicUpdate
@@ -29,7 +26,7 @@ public class EmissionReception {
     private final String designation;
 
     @ExcelCellName("EmRec Puissance (dBW)")
-    private final BigDecimal power;
+    private final double power;
 
     @ExcelCellName("EmRec Unite de Puissance")
     private final String powerUnit;
@@ -38,5 +35,6 @@ public class EmissionReception {
     @GeneratedValue
     @EqualsAndHashCode.Include
     private Long id;
+
 
 }

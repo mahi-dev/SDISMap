@@ -4,14 +4,13 @@ import com.poiji.annotation.ExcelCellName;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
 @DynamicUpdate
@@ -30,5 +29,6 @@ public class Frequency {
     @GeneratedValue
     @EqualsAndHashCode.Include
     private Long id;
+
 
 }

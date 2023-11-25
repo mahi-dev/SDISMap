@@ -1,6 +1,7 @@
 package org.mahidev.sdismap.controller;
 
 import jakarta.validation.constraints.NotBlank;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.datasource.StreamDataSource;
@@ -35,9 +36,9 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
                 .orElseThrow(() -> new SdisDescriptionNotFoundException(GlobalExceptionHandler.SDIS_DESCRIPTION_NOT_FOUND_EXCEPTION));
     }
 
-    @GetMapping("/location/{name}")
-    public LocationDto getLocation(@PathVariable @NotBlank final String name) {
-        return service.getSdis(name).map(LocationDto::toDto)
+    @GetMapping("/location/{id}")
+    public LocationDto getLocation(@PathVariable @NotBlank final int id) {
+        return service.getSdis(id).map(LocationDto::toDto)
                 .orElseThrow(() -> new SdisDescriptionNotFoundException(GlobalExceptionHandler.NO_LOCATION_FOUND_EXCEPTION_MESSAGE));
     }
 
@@ -51,7 +52,7 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
     }
 
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<Sdis> importSdis(@RequestParam final MultipartFile file) {
+    public List<Sdis> importSdis(@RequestParam @NonNull final MultipartFile file) {
         try (final var datasource = new StreamDataSource(file)) {
             return readerService.saveExcel(datasource);
         } catch (final IOException e) {

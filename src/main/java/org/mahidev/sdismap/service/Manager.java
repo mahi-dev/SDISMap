@@ -1,7 +1,7 @@
 package org.mahidev.sdismap.service;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.model.Sdis;
 
@@ -16,7 +16,7 @@ public class Manager {
 
         List<Sdis> getAllSdis();
 
-        List<Sdis> saveAllSdis(@NotNull final List<Sdis> sdisList);
+        List<Sdis> saveAllSdis(@NonNull final List<Sdis> sdisList);
 
         Optional<Sdis> getSdis(final long id);
 
@@ -29,9 +29,13 @@ public class Manager {
 
     public interface ReaderService<T> {
 
-        List<T> readExcel(@NotNull final DataSource dataSource) throws IOException;
+        List<T> readExcel(@NonNull final DataSource dataSource) throws IOException;
 
-        List<T> saveExcel(@NotNull final DataSource dataSource) throws IOException;
+        List<Sdis> readExcel(@NonNull DataSource dataSource, int limit) throws IOException;
+
+        List<T> saveExcel(@NonNull final DataSource dataSource) throws IOException;
+
+        List<T> saveExcel(@NonNull final DataSource dataSource, final int limit) throws IOException;
     }
 
 }

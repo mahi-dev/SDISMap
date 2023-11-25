@@ -2,6 +2,7 @@ package org.mahidev.sdismap.service;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.repository.SdisRepository;
 import org.mahidev.sdismap.utility.SdisComparator;
@@ -22,7 +23,7 @@ public record SdisService(SdisRepository repository) implements Manager.SdisServ
     }
 
     @Override
-    public List<Sdis> saveAllSdis(@NotNull final List<Sdis> sdisList) {
+    public List<Sdis> saveAllSdis(@NotNull final @NonNull List<Sdis> sdisList) {
         final var filtered = SdisComparator.filter(getAllSdis(), sdisList); //@Todo à reparer
         return repository.saveAll(filtered);
     }

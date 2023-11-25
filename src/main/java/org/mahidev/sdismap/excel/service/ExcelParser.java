@@ -1,6 +1,6 @@
 package org.mahidev.sdismap.excel.service;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface ExcelParser<T> {
 
-	List<T> parseExcel(@NotNull final Path xlsFile) throws IOException;
+    List<T> parseExcel(@NonNull final Path xlsFile) throws IOException;
 }

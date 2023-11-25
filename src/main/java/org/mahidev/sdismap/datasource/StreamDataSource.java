@@ -1,5 +1,6 @@
 package org.mahidev.sdismap.datasource;
 
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,31 +10,29 @@ import java.nio.file.Path;
 
 public class StreamDataSource implements DataSource, AutoCloseable {
 
-	private static Path createTempFile(final MultipartFile multipartFile) throws IOException {
-		final var tempFile = Files.createTempFile("upload_", multipartFile.getName());
-		multipartFile.transferTo(tempFile);
-		return tempFile;
-	}
+    private final Path tempFile;
+    private final MultipartFile file;
+    @Value("${upload.temp.path}")
+    private Path tempFilePath;
 
-	public StreamDataSource(final MultipartFile multipartFile) throws IOException {
-		file = multipartFile;
-		tempFile = createTempFile(file);
-	}
+    public StreamDataSource(@NonNull final MultipartFile multipartFile) throws IOException {
+        file = multipartFile;
+        tempFile = createTempFile(file);
+    }
 
-	private final Path tempFile;
+    private static Path createTempFile(@NonNull final MultipartFile multipartFile) throws IOException {
+        final var tempFile = Files.createTempFile("upload_", multipartFile.getName());
+        multipartFile.transferTo(tempFile);
+        return tempFile;
+    }
 
-	private final MultipartFile file;
+    @Override
+    public Path getPath() {
+        return tempFile;
+    }
 
-	@Value("${upload.temp.path}")
-	private Path tempFilePath;
-
-	@Override
-	public Path getPath() {
-		return tempFile;
-	}
-
-	@Override
-	public void close() throws IOException {
-		Files.deleteIfExists(tempFile);
-	}
+    @Override
+    public void close() throws IOException {
+        Files.deleteIfExists(tempFile);
+    }
 }

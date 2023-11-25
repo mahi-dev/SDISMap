@@ -1,6 +1,6 @@
 package org.mahidev.sdismap.utility;
 
-import jakarta.validation.constraints.NotNull;
+import lombok.NonNull;
 import org.mahidev.sdismap.model.*;
 
 import java.util.List;
@@ -8,20 +8,17 @@ import java.util.Objects;
 
 public class SdisComparator {
 
-    public static List<Sdis> filter(@NotNull final List<Sdis> sdisBase, @NotNull final List<Sdis> sdisToCompare) {
+    public static List<Sdis> filter(@NonNull final List<Sdis> sdisBase, @NonNull final List<Sdis> sdisToCompare) {
         return sdisToCompare.parallelStream().filter(sdis -> !isPresent(sdisBase, sdis)).toList();
     }
 
-    public static boolean isPresent(@NotNull final List<Sdis> sdisBase, @NotNull final Sdis sdisToCompare) {
+    public static boolean isPresent(@NonNull final List<Sdis> sdisBase, @NonNull final Sdis sdisToCompare) {
         return sdisBase.parallelStream().anyMatch(sdis -> areSdisEntitiesEqual(sdis, sdisToCompare));
     }
 
-    public static boolean areSdisEntitiesEqual(@NotNull final Sdis sdisBase, @NotNull final Sdis sdisToCompare) {
+    public static boolean areSdisEntitiesEqual(@NonNull final Sdis sdisBase, @NonNull final Sdis sdisToCompare) {
         if (sdisBase == sdisToCompare) {
             return true;
-        }
-        if (sdisBase == null || sdisToCompare == null) {
-            return false;
         }
 
         return Objects.equals(sdisBase.getName(), sdisToCompare.getName()) && Objects.equals(sdisBase.getMainUser(),
@@ -39,12 +36,9 @@ public class SdisComparator {
                 sdisToCompare.getEmissionReception()) && areFrequencyEntitiesEqual(sdisBase.getFrequency(), sdisToCompare.getFrequency());
     }
 
-    private static boolean areLocationEntitiesEqual(@NotNull final Location locationBase, @NotNull final Location locationToCompare) {
+    private static boolean areLocationEntitiesEqual(@NonNull final Location locationBase, @NonNull final Location locationToCompare) {
         if (locationBase == locationToCompare) {
             return true;
-        }
-        if (locationBase == null || locationToCompare == null) {
-            return false;
         }
 
         return Objects.equals(locationBase.getSiteLongitude(), locationToCompare.getSiteLongitude()) && Objects.equals(locationBase.getSiteLatitude(),
@@ -53,12 +47,9 @@ public class SdisComparator {
                 locationToCompare.getMunicipality()) && locationBase.getPostalCode() == locationToCompare.getPostalCode();
     }
 
-    private static boolean areAerienEntitiesEqual(@NotNull final Aerien aerienBase, @NotNull final Aerien aerienToCompare) {
+    private static boolean areAerienEntitiesEqual(@NonNull final Aerien aerienBase, @NonNull final Aerien aerienToCompare) {
         if (aerienBase == aerienToCompare) {
             return true;
-        }
-        if (aerienBase == null || aerienToCompare == null) {
-            return false;
         }
 
         return aerienBase.getNumber() == aerienToCompare.getNumber() && Objects.equals(aerienBase.getPetitionerReference(),
@@ -68,13 +59,10 @@ public class SdisComparator {
                 aerienBase.getOpening(), aerienToCompare.getOpening()) && Objects.equals(aerienBase.getHeight(), aerienToCompare.getHeight());
     }
 
-    private static boolean areEmissionReceptionEntitiesEqual(@NotNull final EmissionReception emissionReceptionBase,
-                                                             @NotNull final EmissionReception emissionReceptionToCompare) {
+    private static boolean areEmissionReceptionEntitiesEqual(@NonNull final EmissionReception emissionReceptionBase,
+                                                             @NonNull final EmissionReception emissionReceptionToCompare) {
         if (emissionReceptionBase == emissionReceptionToCompare) {
             return true;
-        }
-        if (emissionReceptionBase == null || emissionReceptionToCompare == null) {
-            return false;
         }
 
         return Objects.equals(emissionReceptionBase.getNumber(), emissionReceptionToCompare.getNumber()) && Objects.equals(
@@ -83,12 +71,9 @@ public class SdisComparator {
                 emissionReceptionToCompare.getPower()) && Objects.equals(emissionReceptionBase.getPowerUnit(), emissionReceptionToCompare.getPowerUnit());
     }
 
-    private static boolean areFrequencyEntitiesEqual(@NotNull final Frequency frequencyBase, @NotNull final Frequency frequencyToCompare) {
+    private static boolean areFrequencyEntitiesEqual(@NonNull final Frequency frequencyBase, @NonNull final Frequency frequencyToCompare) {
         if (frequencyBase == frequencyToCompare) {
             return true;
-        }
-        if (frequencyBase == null || frequencyToCompare == null) {
-            return false;
         }
 
         return Objects.equals(frequencyBase.getBandMin(), frequencyToCompare.getBandMin()) && Objects.equals(frequencyBase.getBandMax(),
