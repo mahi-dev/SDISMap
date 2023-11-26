@@ -250,7 +250,7 @@ main {
 
 .sidepanel[class^='col-'], .sidepanel[class*=' col-'] {
     overflow-x: clip;
-    padding: 1% 0 0 1%;
+    padding: 1% 1% 0 1%;
 }
 
 .hover {
@@ -1400,4 +1400,8 @@ div.share-table-row__cell {
     width: 70%;
     margin-left: auto;
     margin-top: 10px;
+}
+
+.leaflet-attribution-flag {
+    display: none !important;
 }

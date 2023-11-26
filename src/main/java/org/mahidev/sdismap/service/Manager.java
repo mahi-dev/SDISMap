@@ -3,6 +3,7 @@ package org.mahidev.sdismap.service;
 import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
 import org.mahidev.sdismap.datasource.DataSource;
+import org.mahidev.sdismap.model.Filter;
 import org.mahidev.sdismap.model.Sdis;
 
 import java.io.IOException;
@@ -24,7 +25,9 @@ public class Manager {
 
         Optional<String> getDescription(@NotBlank final String name);
 
+        Optional<Filter> getFilter();
 
+        List<Sdis> getFilteredSdis(List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities, List<Integer> postalCodes);
     }
 
     public interface ReaderService<T> {

@@ -3,6 +3,7 @@ import {RestWebClient} from "./service/RestWebClient.js";
 import {SdisApiClient} from "./service/SdisApiClient.js";
 import {Header} from "./ui/header/header.js";
 import {SdisMap} from "./ui/Map/SdisMap.js";
+import {SidePanel} from "./ui/SidePanel/SidePanel.js";
 
 class Main {
 
@@ -24,6 +25,7 @@ class Main {
     async init() {
         this.createHeader();
         await this.createMap();
+        this.createSidePannel();
     }
 
     async createMap() {
@@ -43,6 +45,26 @@ class Main {
         this._sdisMap.sdisData = this._sdisData;
         this._sdisMap.initMap();
         this._sdisMap.initSdisMarker(this._sdisData.sdisList);
+    }
+
+    createSidePannel() {
+
+        const switchButton = {name: 'recherche dans le corps du texte', active: true, visible: true};
+        const informationIcon = {
+            tooltips: `Recherche uniquement dans l'objet, le nom du compte, le nom du fichier`,
+            icon: 'fa fa-info-circle', visible: !switchButton.active
+        };
+
+        this._sidePanel = new SidePanel({
+            switchButton, informationIcon,
+            customFilters: {},
+            prestationFilters: [],
+            dateFilters: [],
+            formatFilters: []
+        });
+        this._sidePanel.attach(document.querySelector('.principal'));
+        this._sidePanel.closeButtonVisible = false;
+
     }
 }
 

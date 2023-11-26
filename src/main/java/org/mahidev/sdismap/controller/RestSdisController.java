@@ -9,6 +9,7 @@ import org.mahidev.sdismap.dto.LocationDto;
 import org.mahidev.sdismap.exception.GlobalExceptionHandler;
 import org.mahidev.sdismap.exception.ImportSdisException;
 import org.mahidev.sdismap.exception.SdisDescriptionNotFoundException;
+import org.mahidev.sdismap.model.Filter;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.model.SdisData;
 import org.mahidev.sdismap.service.Manager;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Log4j2
 @RestController
@@ -27,6 +29,15 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
     @GetMapping("/")
     public SdisData getAllSdis() {
         return new SdisData(service.getAllSdis());
+    }
+
+    @GetMapping("/filter")
+    public SdisData getFilteredSdis(@RequestParam(required = false) final List<String> names,
+                                    @RequestParam(required = false) final List<Integer> anfrNumbers,
+                                    @RequestParam(required = false) final List<Integer> inseeSites,
+                                    @RequestParam(required = false) final List<String> municipalities,
+                                    @RequestParam(required = false) final List<Integer> postalCodes) {
+        return new SdisData(service.getFilteredSdis(names, anfrNumbers, inseeSites, municipalities, postalCodes));
     }
 
     @GetMapping("/{id}")
@@ -58,7 +69,7 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 
 
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public SdisData importSdis(@RequestParam @NonNull final MultipartFile file) {
+    public SdisData importSdis(@RequestBody @NonNull final MultipartFile file) {
         try (final var datasource = new StreamDataSource(file)) {
             return new SdisData(readerService.saveExcel(datasource));
         } catch (final IOException e) {
@@ -69,6 +80,11 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
     @GetMapping(value = "/count")
     public long countSdis() {
         return service.count();
+    }
+
+    @GetMapping("/filters")
+    public Filter getFilter() {
+        return service.getFilter().orElseThrow();
     }
 
 }

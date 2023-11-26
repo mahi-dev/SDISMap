@@ -3,6 +3,7 @@ package org.mahidev.sdismap.service;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
+import org.mahidev.sdismap.model.Filter;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.repository.SdisRepository;
 import org.mahidev.sdismap.utility.SdisComparator;
@@ -41,5 +42,17 @@ public record SdisService(SdisRepository repository) implements Manager.SdisServ
     @Override
     public Optional<String> getDescription(@NotBlank final String name) {
         return repository.findByName(name).map(Sdis::getSupportDescription);
+    }
+
+    @Override
+    public Optional<Filter> getFilter() {
+        return Optional.of(new Filter(repository.findDistinctNames(), repository.findDistinctAnfrNumbers(),
+                repository.findDistinctInseeSites(), repository.findDistinctMunicipalities(), repository.findDistinctLocationPostalCodes()));
+    }
+
+    @Override
+    public List<Sdis> getFilteredSdis(final List<String> names, final List<Integer> anfrNumbers,
+                                      final List<Integer> inseeSites, final List<String> municipalities, final List<Integer> postalCodes) {
+        return repository.filterSdis(new Filter(names, anfrNumbers, inseeSites, municipalities, postalCodes));
     }
 }

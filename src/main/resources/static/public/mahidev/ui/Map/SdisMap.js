@@ -46,7 +46,7 @@ export class SdisMap extends Component {
     centerMap(latitude, longitude, zoom = 10) {
         this.currentMap = this.currentMap.setView([latitude, longitude], zoom);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> <a href="mailto:o.mahi@outlook.com">Omar MAHI</a>'
         }).addTo(this.currentMap);
     }
 
@@ -103,7 +103,7 @@ export class SdisMap extends Component {
     }
 
     toHtml() {
-        return `<div id="map"></div>`;
+        return `<div id="map" class="col-8"></div>`;
     }
 
     convertToDecimal(dms) {

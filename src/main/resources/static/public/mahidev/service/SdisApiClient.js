@@ -21,6 +21,20 @@ export class SdisApiClient {
         return this._delegate.get(this._serviceUrl + "/", null, MimeTypeKeys.JSON);
     }
 
+    getFilters() {
+        return this._delegate.get(this._serviceUrl + "/filters", null, MimeTypeKeys.JSON);
+    }
+
+    getFilteredSdis(names, anfrNumbers, inseeSites, municipalities, postalCodes) {
+        return this._delegate.get(this._serviceUrl + "/filter", {
+            names,
+            anfrNumbers,
+            inseeSites,
+            municipalities,
+            postalCodes
+        }, MimeTypeKeys.JSON);
+    }
+
     getSdis(id) {
         return this._delegate.get(this._serviceUrl + "/", {id}, MimeTypeKeys.JSON);
     }
