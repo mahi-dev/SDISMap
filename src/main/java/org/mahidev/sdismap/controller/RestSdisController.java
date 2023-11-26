@@ -10,19 +10,24 @@ import org.mahidev.sdismap.exception.GlobalExceptionHandler;
 import org.mahidev.sdismap.exception.ImportSdisException;
 import org.mahidev.sdismap.exception.SdisDescriptionNotFoundException;
 import org.mahidev.sdismap.model.Sdis;
+import org.mahidev.sdismap.model.SdisData;
 import org.mahidev.sdismap.service.Manager;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 
 @Log4j2
 @RestController
 @RequestMapping("/api/sdis")
 public record RestSdisController(Manager.SdisService service, Manager.ReaderService<Sdis> readerService,
                                  DataSource dataSource) {
+
+    @GetMapping("/")
+    public SdisData getAllSdis() {
+        return new SdisData(service.getAllSdis());
+    }
 
     @GetMapping("/{id}")
     public Sdis getSdis(@PathVariable @NotBlank final int id) {
@@ -43,18 +48,19 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
     }
 
     @GetMapping(value = "/import")
-    public List<Sdis> importSdis() {
+    public SdisData importSdis() {
         try {
-            return readerService.saveExcel(dataSource);
+            return new SdisData(readerService.saveExcel(dataSource));
         } catch (final IOException e) {
             throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
         }
     }
 
+
     @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public List<Sdis> importSdis(@RequestParam @NonNull final MultipartFile file) {
+    public SdisData importSdis(@RequestParam @NonNull final MultipartFile file) {
         try (final var datasource = new StreamDataSource(file)) {
-            return readerService.saveExcel(datasource);
+            return new SdisData(readerService.saveExcel(datasource));
         } catch (final IOException e) {
             throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
         }
@@ -64,4 +70,5 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
     public long countSdis() {
         return service.count();
     }
+
 }

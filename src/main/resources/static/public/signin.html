@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>Carte des S.D.I.S</title>
+</head>
+<body>
+
+<!-- Scripts -->
+<script src="mahidev/lib/oidc-client.js" type="text/javascript"></script>
+<script>
+    Oidc.Log.logger = console;
+    Oidc.Log.level = Oidc.Log.NONE;
+
+    new Oidc.UserManager().signinRedirectCallback().catch(function (err) {
+        Oidc.Log.logger.error("error: " + err && err.message);
+    });
+
+</script>
+</body>
+</html>
