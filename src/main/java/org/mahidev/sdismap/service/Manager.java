@@ -11,34 +11,37 @@ import java.util.List;
 import java.util.Optional;
 
 public class Manager {
-    public interface SdisService {
+	public interface SdisService {
 
-        long count();
+		long count();
 
-        List<Sdis> getAllSdis();
+		List<Sdis> getAllSdis();
 
-        List<Sdis> saveAllSdis(@NonNull final List<Sdis> sdisList);
+		List<Sdis> saveAllSdis(@NonNull final List<Sdis> sdisList);
 
-        Optional<Sdis> getSdis(final long id);
+		Optional<Sdis> getSdis(final long id);
 
-        Optional<Sdis> getSdis(@NotBlank final String name);
+		Optional<Sdis> getSdis(@NotBlank final String name);
 
-        Optional<String> getDescription(@NotBlank final String name);
+		Optional<String> getDescription(@NotBlank final String name);
 
-        Optional<Filter> getFilter();
+		Optional<Filter> getFilter();
 
-        List<Sdis> getFilteredSdis(List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities, List<Integer> postalCodes);
-    }
+		List<Sdis> getFilteredSdis(List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities,
+				List<Integer> postalCodes);
 
-    public interface ReaderService<T> {
+		List<Sdis> findSdis(String search);
+	}
 
-        List<T> readExcel(@NonNull final DataSource dataSource) throws IOException;
+	public interface ReaderService<T> {
 
-        List<Sdis> readExcel(@NonNull DataSource dataSource, int limit) throws IOException;
+		List<T> readExcel(@NonNull final DataSource dataSource) throws IOException;
 
-        List<T> saveExcel(@NonNull final DataSource dataSource) throws IOException;
+		List<Sdis> readExcel(@NonNull DataSource dataSource, int limit) throws IOException;
 
-        List<T> saveExcel(@NonNull final DataSource dataSource, final int limit) throws IOException;
-    }
+		List<T> saveExcel(@NonNull final DataSource dataSource) throws IOException;
+
+		List<T> saveExcel(@NonNull final DataSource dataSource, final int limit) throws IOException;
+	}
 
 }

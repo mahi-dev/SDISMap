@@ -43,7 +43,7 @@ export class SdisMap extends Component {
         this.initComponents();
     }
 
-    centerMap(latitude, longitude, zoom = 10) {
+    centerMap(latitude = 45.83, longitude = 6.86, zoom = 10) {
         this.currentMap = this.currentMap.setView([latitude, longitude], zoom);
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> <a href="mailto:o.mahi@outlook.com">Omar MAHI</a>'
@@ -72,6 +72,10 @@ export class SdisMap extends Component {
         return sdisInfo;
     }
 
+    removeAllMarkers(){
+        this._sdisInfos.map(this.removeMarker);
+    }
+
     removeMarker(sdisInfo) {
         sdisInfo.marker.remove();
     }
@@ -91,13 +95,11 @@ export class SdisMap extends Component {
     }
 
     initMap() {
-        if (this._latitude && this._longitude) {
-            this.centerMap(this._latitude, this._longitude, this._zoom);
-        }
+        this.centerMap(this._latitude, this._longitude, this._zoom);
         this.fitBound(this._sdisData?.sdisList)
     }
 
-    initSdisMarker(sdisList) {
+    setSdisMarker(sdisList) {
         sdisList.map(sdis => this.addMarker(sdis, sdis.location.siteLatitude, sdis.location.siteLongitude))
             .map(sdisInfo => this.addPopup(sdisInfo, this.createHtmlContent(sdisInfo.sdis)))
     }

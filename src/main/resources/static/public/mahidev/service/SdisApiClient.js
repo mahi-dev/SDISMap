@@ -43,6 +43,10 @@ export class SdisApiClient {
         return this._delegate.get(this._serviceUrl + "/count", null, MimeTypeKeys.JSON);
     }
 
+    searchSdis(value){
+        return this._delegate.get(this._serviceUrl + `/search/${encodeURI(value)}`, null, MimeTypeKeys.JSON);
+    }
+
     importSdisFromFile(file) {
         return this._delegate.post(
             this._serviceUrl + SdisApiClient.IMPORT_ENDPOINT,

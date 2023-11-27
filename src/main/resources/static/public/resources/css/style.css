@@ -215,7 +215,7 @@ main {
 }
 
 .contextualsearch {
-    margin-bottom: 0 !important;
+    margin-bottom: 10px !important;
     display: flex;
     flex-direction: column;
     text-align: start;

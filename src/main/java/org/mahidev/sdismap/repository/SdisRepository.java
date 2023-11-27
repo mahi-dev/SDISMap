@@ -16,24 +16,28 @@ import java.util.Optional;
 @RepositoryRestResource
 public interface SdisRepository extends JpaRepository<Sdis, Long>, JpaSpecificationExecutor<Sdis> {
 
-    default List<Sdis> filterSdis(@NonNull final Filter filter) {
-        return findAll(SdisSpecifications.filterBy(filter));
-    }
+	default List<Sdis> filterSdis(@NonNull final Filter filter) {
+		return findAll(SdisSpecifications.filterBy(filter));
+	}
 
-    Optional<Sdis> findByName(@NotBlank final String name);
+	default List<Sdis> findSdis(@NonNull final String searchTerm) {
+		return findAll(SdisSpecifications.hasSearchTerm(searchTerm));
+	}
 
-    @Query("SELECT DISTINCT s.name FROM Sdis s")
-    List<String> findDistinctNames();
+	Optional<Sdis> findByName(@NotBlank final String name);
 
-    @Query("SELECT DISTINCT s.anfrNumber FROM Sdis s")
-    List<Integer> findDistinctAnfrNumbers();
+	@Query("SELECT DISTINCT s.name FROM Sdis s")
+	List<String> findDistinctNames();
 
-    @Query("SELECT DISTINCT s.inseeSite FROM Sdis s")
-    List<Integer> findDistinctInseeSites();
+	@Query("SELECT DISTINCT s.anfrNumber FROM Sdis s")
+	List<Integer> findDistinctAnfrNumbers();
 
-    @Query("SELECT DISTINCT loc.municipality FROM Sdis s JOIN s.location loc")
-    List<String> findDistinctMunicipalities();
+	@Query("SELECT DISTINCT s.inseeSite FROM Sdis s")
+	List<Integer> findDistinctInseeSites();
 
-    @Query("SELECT DISTINCT loc.postalCode FROM Sdis s JOIN s.location loc")
-    List<Integer> findDistinctLocationPostalCodes();
+	@Query("SELECT DISTINCT loc.municipality FROM Sdis s JOIN s.location loc")
+	List<String> findDistinctMunicipalities();
+
+	@Query("SELECT DISTINCT loc.postalCode FROM Sdis s JOIN s.location loc")
+	List<Integer> findDistinctLocationPostalCodes();
 }

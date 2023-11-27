@@ -1,4 +1,5 @@
 import {SETTINGS} from "./config/configuration.js";
+import {SdisController} from "./controller/SdisController.js";
 import {RestWebClient} from "./service/RestWebClient.js";
 import {SdisApiClient} from "./service/SdisApiClient.js";
 import {Header} from "./ui/header/header.js";
@@ -8,7 +9,7 @@ import {SidePanel} from "./ui/SidePanel/SidePanel.js";
 class Main {
 
     constructor() {
-        this._sdisApiClient = new SdisApiClient(new RestWebClient(), SETTINGS.baseApiUrl, SETTINGS.sdisApi);
+        this._sdisController = new SdisController(new SdisApiClient(new RestWebClient(), SETTINGS.baseApiUrl, SETTINGS.sdisApi), new SdisMap(), new SidePanel());
         this.init();
     }
 
@@ -25,46 +26,22 @@ class Main {
     async init() {
         this.createHeader();
         await this.createMap();
-        this.createSidePannel();
+        await this.createSidePannel();
     }
 
     async createMap() {
-        const count = await this._sdisApiClient.countSdis();
+        const count = await this._sdisController.countAsync();
 
         if (!count || count <= 0)
-            this._sdisData = await this._sdisApiClient.importSdis();
+            this._sdisData = await this._sdisController.importAsync();
         else
-            this._sdisData = await this._sdisApiClient.getAllSdis();
+            this._sdisData = await this._sdisController.getAllAsync();
 
-        const initLatitude = this._sdisData?.center?.latitude;
-        const initLongitude = this._sdisData?.center?.longitude;
-        this._sdisMap = new SdisMap({
-            initLatitude, initLongitude
-        });
-        this._sdisMap.attach(document.querySelector('.principal'));
-        this._sdisMap.sdisData = this._sdisData;
-        this._sdisMap.initMap();
-        this._sdisMap.initSdisMarker(this._sdisData.sdisList);
+        this._sdisController.createMap(this._sdisData);
     }
 
-    createSidePannel() {
-
-        const switchButton = {name: 'recherche dans le corps du texte', active: true, visible: true};
-        const informationIcon = {
-            tooltips: `Recherche uniquement dans l'objet, le nom du compte, le nom du fichier`,
-            icon: 'fa fa-info-circle', visible: !switchButton.active
-        };
-
-        this._sidePanel = new SidePanel({
-            switchButton, informationIcon,
-            customFilters: {},
-            prestationFilters: [],
-            dateFilters: [],
-            formatFilters: []
-        });
-        this._sidePanel.attach(document.querySelector('.principal'));
-        this._sidePanel.closeButtonVisible = false;
-
+    async createSidePannel() {
+        await this._sdisController.createSidePannel();
     }
 }
 
