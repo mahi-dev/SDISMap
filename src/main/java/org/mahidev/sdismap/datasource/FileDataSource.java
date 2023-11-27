@@ -6,14 +6,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.util.MimeType;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
-import static java.nio.file.Files.probeContentType;
 
 @Data
 @NoArgsConstructor(force = true)
@@ -24,14 +19,6 @@ public final class FileDataSource implements DataSource {
 
 	private String path;
 
-	public Path getPath() {
-		try {
-			return Paths.get(new ClassPathResource(path).getURI());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	public InputStream getInputStream() {
 		try {
 			return new ClassPathResource(path).getInputStream();
@@ -41,11 +28,18 @@ public final class FileDataSource implements DataSource {
 	}
 
 	@Override
-	public MimeType getMimeType() {
-		try {
-			return MimeType.valueOf(probeContentType(Path.of(path)));
-		} catch (IOException e) {
-			throw new RuntimeException("Erreur lors de l'obtention du InputStream pour le fichier: " + path, e);
+	public String getFileName() {
+		if (path == null || path.isEmpty()) {
+			return "";
 		}
+		final var parts = path.split("[\\\\/]");
+		return parts[parts.length - 1];
+	}
+
+	@Override
+	public String getFileExtension() {
+		final var filename = getFileName();
+		final var dotIndex = filename.lastIndexOf('.');
+		return (dotIndex > 0 && dotIndex < filename.length() - 1) ? filename.substring(dotIndex + 1) : "";
 	}
 }

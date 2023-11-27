@@ -27,98 +27,99 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestPropertySource({"classpath:application.properties", "classpath:application-dev.properties"})
 class ExcelServiceTest {
 
-    private static final String LIST_EMPTY_ERROR = "La liste est vide.";
+	private static void testEntities(final List<Sdis> allSdis) {
+		assertFalse(allSdis.isEmpty(), LIST_EMPTY_ERROR);
+		assertTrue(allSdis.stream().map(Sdis::getLocation).allMatch(Objects::nonNull), OBJECT_IS_NULL_ERROR);
+		assertTrue(allSdis.stream().map(Sdis::getEmissionReception).allMatch(Objects::nonNull), OBJECT_IS_NULL_ERROR);
+		assertTrue(allSdis.stream().map(Sdis::getFrequency).allMatch(Objects::nonNull), OBJECT_IS_NULL_ERROR);
+		assertTrue(allSdis.stream().map(Sdis::getAerien).allMatch(Objects::nonNull), OBJECT_IS_NULL_ERROR);
+	}
 
-    private static final String OBJECT_IS_NULL_ERROR = "L'objet est null.";
-    @Autowired
-    SdisRepository sdisRepository;
+	private static final String LIST_EMPTY_ERROR = "La liste est vide.";
 
-    @Autowired
-    Manager.SdisService sdisService;
+	private static final String OBJECT_IS_NULL_ERROR = "L'objet est null.";
 
-    @Autowired
-    Manager.ReaderService<Sdis> readerService;
+	@Autowired
+	SdisRepository sdisRepository;
 
-    @Autowired
-    @Qualifier("fileDataSource")
-    DataSource dataSource;
+	@Autowired
+	Manager.SdisService sdisService;
 
-    private static void testEntities(final List<Sdis> allSdis) {
-        assertFalse(allSdis.isEmpty(), LIST_EMPTY_ERROR);
-        assertTrue(allSdis.stream().map(Sdis::getLocation).allMatch(Objects::nonNull), OBJECT_IS_NULL_ERROR);
-        assertTrue(allSdis.stream().map(Sdis::getEmissionReception).allMatch(Objects::nonNull), OBJECT_IS_NULL_ERROR);
-        assertTrue(allSdis.stream().map(Sdis::getFrequency).allMatch(Objects::nonNull), OBJECT_IS_NULL_ERROR);
-        assertTrue(allSdis.stream().map(Sdis::getAerien).allMatch(Objects::nonNull), OBJECT_IS_NULL_ERROR);
-    }
+	@Autowired
+	Manager.ReaderService<Sdis> readerService;
 
-    @BeforeEach
-    void setUp() {
-        sdisRepository.deleteAll();
-    }
+	@Autowired
+	@Qualifier("fileDataSource")
+	DataSource dataSource;
 
-    @AfterEach
-    void tearDown() {
-        sdisRepository.deleteAll();
-    }
+	@BeforeEach
+	void setUp() {
+		sdisRepository.deleteAll();
+	}
 
-    @Test
-    void readExcel() throws IOException {
-        final var sdisList = readerService.readExcel(dataSource);
-        assertFalse(sdisList.isEmpty());
-    }
+	@AfterEach
+	void tearDown() {
+		sdisRepository.deleteAll();
+	}
 
-    @Test
-    void readExcelFromMultiPart() throws IOException {
-        try (final var datasource = new StreamDataSource(new InMemoryMultipartFile(dataSource.getPath()))) {
-            final var sdisList = readerService.readExcel(datasource);
-            assertFalse(sdisList.isEmpty(), LIST_EMPTY_ERROR);
-            assertTrue(sdisList.stream().findFirst().map(Sdis::getLocation).isPresent(), OBJECT_IS_NULL_ERROR);
-        }
-    }
+	@Test
+	void readExcel() throws IOException {
+		final var sdisList = readerService.readExcel(dataSource);
+		assertFalse(sdisList.isEmpty());
+	}
 
-    @Test
-    void saveOneSdis() throws IOException {
-        final var sdisList = readerService.readExcel(dataSource);
-        testEntities(sdisList);
-        sdisList.stream().findAny().ifPresent(sdis -> {
-            final var savedSdis = sdisRepository.save(sdis);
-            assertTrue(SdisComparator.areSdisEntitiesEqual(sdis, savedSdis));
-        });
-        final var allSdis = sdisService.getAllSdis();
-        assertEquals(1, allSdis.size());
-        testEntities(allSdis);
-    }
+	@Test
+	void readExcelFromMultiPart() throws IOException {
+		try (final var datasource = new StreamDataSource(
+				new InMemoryMultipartFile(dataSource.getFileName(), dataSource.getInputStream(), dataSource.getFileExtension()))) {
+			final var sdisList = readerService.readExcel(datasource);
+			assertFalse(sdisList.isEmpty(), LIST_EMPTY_ERROR);
+			assertTrue(sdisList.stream().findFirst().map(Sdis::getLocation).isPresent(), OBJECT_IS_NULL_ERROR);
+		}
+	}
 
-    @Test
-    void saveExcel() throws IOException {
-        testEntities(readerService.saveExcel(dataSource));
-        testEntities(sdisService.getAllSdis());
-    }
+	@Test
+	void saveOneSdis() throws IOException {
+		final var sdisList = readerService.readExcel(dataSource);
+		testEntities(sdisList);
+		sdisList.stream().findAny().ifPresent(sdis -> {
+			final var savedSdis = sdisRepository.save(sdis);
+			assertTrue(SdisComparator.areSdisEntitiesEqual(sdis, savedSdis));
+		});
+		final var allSdis = sdisService.getAllSdis();
+		assertEquals(1, allSdis.size());
+		testEntities(allSdis);
+	}
 
-    @Test
-    void isPresent() throws IOException {
-        final var limit = 3;
-        final var savedSdis = readerService.saveExcel(dataSource, limit);
-        assertEquals(limit, savedSdis.size());
-        testEntities(savedSdis);
-        final var allSdis = sdisService.getAllSdis();
-        assertEquals(limit, allSdis.size());
-        testEntities(allSdis);
-        final var sdisList = readerService.readExcel(dataSource, limit);
-        assertEquals(limit, sdisList.size());
-        testEntities(sdisList);
-        IntStream.range(0, sdisList.size())
-                .forEach(i -> {
-                    final var sdis = sdisList.get(i);
-                    assertTrue(SdisComparator.isPresent(allSdis, sdis),
-                            String.format("Erreur a l'index %s pour l'objet %s", i, sdis));
-                });
-    }
+	@Test
+	void saveExcel() throws IOException {
+		testEntities(readerService.saveExcel(dataSource));
+		testEntities(sdisService.getAllSdis());
+	}
 
-    @Test
-    void saveExcelFromMultiPart() throws IOException {
-        try (final var datasource = new StreamDataSource(new InMemoryMultipartFile(dataSource.getPath()))) {
-            testEntities(readerService.saveExcel(datasource));
-        }
-    }
+	@Test
+	void isPresent() throws IOException {
+		final var limit = 3;
+		final var savedSdis = readerService.saveExcel(dataSource, limit);
+		assertEquals(limit, savedSdis.size());
+		testEntities(savedSdis);
+		final var allSdis = sdisService.getAllSdis();
+		assertEquals(limit, allSdis.size());
+		testEntities(allSdis);
+		final var sdisList = readerService.readExcel(dataSource, limit);
+		assertEquals(limit, sdisList.size());
+		testEntities(sdisList);
+		IntStream.range(0, sdisList.size()).forEach(i -> {
+			final var sdis = sdisList.get(i);
+			assertTrue(SdisComparator.isPresent(allSdis, sdis), String.format("Erreur a l'index %s pour l'objet %s", i, sdis));
+		});
+	}
+
+	@Test
+	void saveExcelFromMultiPart() throws IOException {
+		try (final var datasource = new StreamDataSource(
+				new InMemoryMultipartFile(dataSource.getFileName(), dataSource.getInputStream(), dataSource.getFileExtension()))) {
+			testEntities(readerService.saveExcel(datasource));
+		}
+	}
 }

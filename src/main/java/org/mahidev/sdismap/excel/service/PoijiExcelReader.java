@@ -24,8 +24,8 @@ public record PoijiExcelReader() implements ExcelParser<Sdis> {
 
 	private static PoijiExcelType getPoijiExcelType(@NonNull final String type) {
 		return switch (type) {
-			case FileFormat.XLS -> PoijiExcelType.XLS;
-			case FileFormat.XLSX -> PoijiExcelType.XLSX;
+			case FileFormat.XLS_EXT -> PoijiExcelType.XLS;
+			case FileFormat.XLSX_EXT -> PoijiExcelType.XLSX;
 			default -> throw new BadFormatException(
 					String.format("Le fichier est un %s, un %s ou un %s est attendu!", FileFormat.XLS, FileFormat.XLSX, type));
 		};
@@ -39,7 +39,7 @@ public record PoijiExcelReader() implements ExcelParser<Sdis> {
 	}
 
 	@Override
-	public List<Sdis> parseExcel(@NonNull final InputStream xlsFile, @NonNull final MimeType type) throws IOException {
+	public List<Sdis> parseExcel(@NonNull final InputStream xlsFile, @NonNull final String type) throws IOException {
 		try (final var fileStream = xlsFile) {
 			return Poiji.fromExcel(fileStream, getPoijiExcelType(type), Sdis.class);
 		}

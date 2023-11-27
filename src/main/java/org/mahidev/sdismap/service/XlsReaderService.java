@@ -12,13 +12,13 @@ import java.util.List;
 public record XlsReaderService(Manager.SdisService service, ExcelParser<Sdis> excelParser) implements Manager.ReaderService<Sdis> {
 	@Override
 	public List<Sdis> readExcel(@NonNull final DataSource dataSource) throws IOException {
-		return excelParser.parseExcel(dataSource.getInputStream(), dataSource.getMimeType());
+		return excelParser.parseExcel(dataSource.getInputStream(), dataSource.getFileExtension());
 	}
 
 	@Override
 	public List<Sdis> readExcel(@NonNull final DataSource dataSource, final int limit) throws IOException {
-		return excelParser.parseExcel(dataSource.getInputStream(), dataSource.getMimeType()).stream().sorted(Comparator.comparing(Sdis::getAnfrNumber))
-				.limit(limit).toList();
+		return excelParser.parseExcel(dataSource.getInputStream(), dataSource.getFileExtension()).stream()
+				.sorted(Comparator.comparing(Sdis::getAnfrNumber)).limit(limit).toList();
 	}
 
 	@Override

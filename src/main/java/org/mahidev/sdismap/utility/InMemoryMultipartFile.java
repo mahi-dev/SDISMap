@@ -21,6 +21,10 @@ public class InMemoryMultipartFile implements MultipartFile {
 		this(filePath.getFileName().toString(), filePath.toString(), Files.probeContentType(filePath), Files.readAllBytes(filePath));
 	}
 
+	public InMemoryMultipartFile(String fileName, InputStream stream, String type) throws IOException {
+		this(fileName, fileName, type, stream.readAllBytes());
+	}
+
 	@NonNull
 	private final String name;
 
