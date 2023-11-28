@@ -3,7 +3,6 @@ package org.mahidev.sdismap.controller;
 import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
-import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.datasource.StreamDataSource;
 import org.mahidev.sdismap.dto.LocationDto;
 import org.mahidev.sdismap.exception.GlobalExceptionHandler;
@@ -23,7 +22,7 @@ import java.util.List;
 @Log4j2
 @RestController
 @RequestMapping("/api/sdis")
-public record RestSdisController(Manager.SdisService service, Manager.ReaderService<Sdis> readerService, DataSource dataSource) {
+public record RestSdisController(Manager.SdisService service, Manager.ReaderService<Sdis> readerService) {
 
 	@GetMapping("/")
 	public SdisData getAllSdis() {
@@ -69,7 +68,7 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 	@GetMapping(value = "/import")
 	public SdisData importSdis() {
 		try {
-			return new SdisData(readerService.saveExcel(dataSource));
+			return new SdisData(readerService.saveExcel());
 		} catch (final IOException e) {
 			throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
 		}

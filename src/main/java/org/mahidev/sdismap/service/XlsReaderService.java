@@ -9,7 +9,13 @@ import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
-public record XlsReaderService(Manager.SdisService service, ExcelParser<Sdis> excelParser) implements Manager.ReaderService<Sdis> {
+public record XlsReaderService(Manager.SdisService service, ExcelParser<Sdis> excelParser, DataSource dataSource) implements Manager.ReaderService<Sdis> {
+
+	@Override
+	public List<Sdis> readExcel() throws IOException {
+		return readExcel(dataSource);
+	}
+
 	@Override
 	public List<Sdis> readExcel(@NonNull final DataSource dataSource) throws IOException {
 		return excelParser.parseExcel(dataSource.getInputStream(), dataSource.getFileExtension());
@@ -19,6 +25,16 @@ public record XlsReaderService(Manager.SdisService service, ExcelParser<Sdis> ex
 	public List<Sdis> readExcel(@NonNull final DataSource dataSource, final int limit) throws IOException {
 		return excelParser.parseExcel(dataSource.getInputStream(), dataSource.getFileExtension()).stream()
 				.sorted(Comparator.comparing(Sdis::getAnfrNumber)).limit(limit).toList();
+	}
+
+	@Override
+	public List<Sdis> readExcel(final int limit) throws IOException {
+		return readExcel(dataSource, limit);
+	}
+
+	@Override
+	public List<Sdis> saveExcel() throws IOException {
+		return saveExcel(dataSource);
 	}
 
 	@Override

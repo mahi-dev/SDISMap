@@ -1,6 +1,5 @@
 package org.mahidev.sdismap;
 
-import org.mahidev.sdismap.controller.RestSdisController;
 import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.datasource.FileDataSource;
 import org.mahidev.sdismap.excel.service.ExcelParser;
@@ -20,40 +19,34 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(scanBasePackages = {"org.mahidev.sdismap.configuration"})
+@SpringBootApplication(scanBasePackages = {"org.mahidev.sdismap.controller"})
 @EntityScan({"org.mahidev.sdismap.model"})
 @EnableJpaRepositories({"org.mahidev.sdismap.repository"})
 @EnableConfigurationProperties({FileDataSource.class})
 @ConfigurationPropertiesScan
 public class SdisMapApplication {
 
-    public static void main(final String[] args) {
-        SpringApplication.run(SdisMapApplication.class, args);
-    }
+	public static void main(final String[] args) {
+		SpringApplication.run(SdisMapApplication.class, args);
+	}
 
-    @Lazy
-    @Bean
-    @Qualifier("sdisExcelService")
-    Manager.ReaderService<Sdis> excelService(final Manager.SdisService service, final ExcelParser<Sdis> excelParser) {
-        return new XlsReaderService(service, excelParser);
-    }
+	@Lazy
+	@Bean
+	@Qualifier("sdisExcelService")
+	Manager.ReaderService<Sdis> excelService(final Manager.SdisService service, final ExcelParser<Sdis> excelParser,
+			@Qualifier("fileDataSource") final DataSource dataSource) {
+		return new XlsReaderService(service, excelParser, dataSource);
+	}
 
-    @Lazy
-    @Bean
-    Manager.SdisService sdisService(final SdisRepository repository) {
-        return new SdisService(repository);
-    }
+	@Lazy
+	@Bean
+	Manager.SdisService sdisService(final SdisRepository repository) {
+		return new SdisService(repository);
+	}
 
-    @Lazy
-    @Bean
-    RestSdisController restSdisController(final Manager.SdisService sdisService, final Manager.ReaderService<Sdis> readerService,
-                                          @Qualifier("fileDataSource") final DataSource dataSource) {
-        return new RestSdisController(sdisService, readerService, dataSource);
-    }
-
-    @Lazy
-    @Bean
-    ExcelParser<Sdis> excelParser() {
-        return new PoijiExcelReader();
-    }
+	@Lazy
+	@Bean
+	ExcelParser<Sdis> excelParser() {
+		return new PoijiExcelReader();
+	}
 }

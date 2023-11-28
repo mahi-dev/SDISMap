@@ -38,9 +38,15 @@ public class Manager {
 
 	public interface ReaderService<T> {
 
+		List<Sdis> readExcel() throws IOException;
+
+		List<T> saveExcel() throws IOException;
+
 		List<T> readExcel(@NonNull final DataSource dataSource) throws IOException;
 
 		List<Sdis> readExcel(@NonNull DataSource dataSource, int limit) throws IOException;
+
+		List<Sdis> readExcel(int limit) throws IOException;
 
 		List<T> saveExcel(@NonNull final DataSource dataSource) throws IOException;
 
