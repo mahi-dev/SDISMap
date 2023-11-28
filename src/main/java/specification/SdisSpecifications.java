@@ -45,7 +45,7 @@ public class SdisSpecifications {
 				predicates.add(cb.like(cb.lower(aerienJoin.get("height")), wildcard));
 
 				Join<Sdis, EmissionReception> emissionReceptionJoin = root.join("emissionReception", JoinType.LEFT);
-				predicates.add(cb.like(cb.lower(emissionReceptionJoin.get("systme")), wildcard));
+				predicates.add(cb.like(cb.lower(emissionReceptionJoin.get("system")), wildcard));
 				predicates.add(cb.like(cb.lower(emissionReceptionJoin.get("designation")), wildcard));
 				predicates.add(cb.like(cb.lower(emissionReceptionJoin.get("power").as(String.class)), wildcard));
 				predicates.add(cb.like(cb.lower(emissionReceptionJoin.get("powerUnit")), wildcard));
@@ -64,20 +64,20 @@ public class SdisSpecifications {
 		return (root, query, criteriaBuilder) -> {
 			final var predicates = new ArrayList<Predicate>();
 
-			if (filter.names() != null && !filter.names().isEmpty()) {
-				predicates.add(root.get("name").as(String.class).in(filter.names()));
+			if (filter.name() != null && !filter.name().isEmpty()) {
+				predicates.add(root.get("name").as(String.class).in(filter.name()));
 			}
-			if (filter.anfrNumbers() != null && !filter.anfrNumbers().isEmpty()) {
-				predicates.add(root.get("anfrNumber").as(Integer.class).in(filter.anfrNumbers()));
+			if (filter.anfrNumber() != null && !filter.anfrNumber().isEmpty()) {
+				predicates.add(root.get("anfrNumber").as(Integer.class).in(filter.anfrNumber()));
 			}
-			if (filter.inseeSites() != null && !filter.inseeSites().isEmpty()) {
-				predicates.add(root.get("inseeSite").as(Integer.class).in(filter.inseeSites()));
+			if (filter.inseeSite() != null && !filter.inseeSite().isEmpty()) {
+				predicates.add(root.get("inseeSite").as(Integer.class).in(filter.inseeSite()));
 			}
-			if (filter.municipalities() != null && !filter.municipalities().isEmpty()) {
-				predicates.add(root.join("location").get("municipality").as(String.class).in(filter.municipalities()));
+			if (filter.municipality() != null && !filter.municipality().isEmpty()) {
+				predicates.add(root.join("location").get("municipality").as(String.class).in(filter.municipality()));
 			}
-			if (filter.postalCodes() != null && !filter.postalCodes().isEmpty()) {
-				predicates.add(root.join("location").get("postalCode").in(filter.postalCodes()));
+			if (filter.postalCode() != null && !filter.postalCode().isEmpty()) {
+				predicates.add(root.join("location").get("postalCode").in(filter.postalCode()));
 			}
 
 			return criteriaBuilder.and(predicates.toArray(new Predicate[0]));

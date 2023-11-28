@@ -50,6 +50,12 @@ public record SdisService(SdisRepository repository) implements Manager.SdisServ
 	}
 
 	@Override
+	public List<Sdis> getFilteredSdis(final String searchTerm, final List<String> names, final List<Integer> anfrNumbers, final List<Integer> inseeSites,
+			final List<String> municipalities, final List<Integer> postalCodes) {
+		return repository.filterSdis(searchTerm, new Filter(names, anfrNumbers, inseeSites, municipalities, postalCodes));
+	}
+
+	@Override
 	public List<Sdis> getFilteredSdis(final List<String> names, final List<Integer> anfrNumbers, final List<Integer> inseeSites,
 			final List<String> municipalities, final List<Integer> postalCodes) {
 		return repository.filterSdis(new Filter(names, anfrNumbers, inseeSites, municipalities, postalCodes));

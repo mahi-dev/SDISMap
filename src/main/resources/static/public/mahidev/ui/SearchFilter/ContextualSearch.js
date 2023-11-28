@@ -1,5 +1,3 @@
-import {IconAnchorButton} from "../Button/IconAnchorButton.js";
-import {Switch} from "../Button/Switch.js";
 import {Component} from "../Component.js";
 
 export default class ContextualSearch extends Component {

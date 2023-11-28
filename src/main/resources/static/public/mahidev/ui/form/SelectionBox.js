@@ -1,6 +1,9 @@
+import { FILTER } from '../../config/message.js';
 import {Component} from '../Component.js';
 
 export class SelectionBox extends Component {
+
+	static NO_VALUE = 'NO_VALUE';
 
 	constructor(options) {
 		super(options);
@@ -18,28 +21,39 @@ export class SelectionBox extends Component {
 	set options(values){
 		this._clear();
 		this._options = values;
+		this._addTitleOption(this._label);
 		this._options.forEach( value => {
-			this._add(value.value, value.label);
+			this._addOption(value.value, value.label);
 		})
 	}
 
 	set label(value) {
-		this._label = value;
+		this._filter = value;
+		this._label = FILTER[value];
 	}
 	
 	toHtml() {
 		return `
 	        <div class="form-group">
-	            <label for="${this.wrapId}_select">${this._label}</label>
 	            <select id="${this.wrapId}_select" class="form-control"></select>
 	        </div>
 		`;
 	}
 
-	_add(value, label){
-		let option = document.createElement('option');
+	_addTitleOption(label){
+		const option = document.createElement('option');
+			option.textContent = label;
+			option.value = SelectionBox.NO_VALUE;
+
+			option.style.color = 'red'; 
+		option.style.fontWeight = 'bold'; 
+		this.selectBox.appendChild(option); 
+	}
+
+	_addOption(value, label){
+		const option = document.createElement('option');
 			option.value = value;
-			option.innerHTML = label;
+			option.textContent = label;
 		this.selectBox.appendChild(option); 
 	}
 
@@ -63,7 +77,8 @@ export class SelectionBox extends Component {
     _onChange(e) {
          this.fireEvent(new CustomEvent('changeValue', {
 			detail: {
-				option : this._getSelectedValue(e.target.value)
+				option : e.target.value,
+				filter : this._filter
 			}
 		}));
     }

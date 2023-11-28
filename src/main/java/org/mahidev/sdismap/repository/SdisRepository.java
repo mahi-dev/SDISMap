@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.util.StringUtils;
 import specification.SdisSpecifications;
 
 import java.util.List;
@@ -22,6 +23,13 @@ public interface SdisRepository extends JpaRepository<Sdis, Long>, JpaSpecificat
 
 	default List<Sdis> findSdis(@NonNull final String searchTerm) {
 		return findAll(SdisSpecifications.hasSearchTerm(searchTerm));
+	}
+
+	default List<Sdis> filterSdis(final String searchTerm, final Filter filter) {
+		final var specification = (StringUtils.hasText(searchTerm)) ?
+				SdisSpecifications.filterBy(filter).and(SdisSpecifications.hasSearchTerm(searchTerm)) :
+				SdisSpecifications.filterBy(filter);
+		return findAll(specification);
 	}
 
 	Optional<Sdis> findByName(@NotBlank final String name);

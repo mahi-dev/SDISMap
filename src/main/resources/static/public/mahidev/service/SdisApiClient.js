@@ -25,6 +25,15 @@ export class SdisApiClient {
         return this._delegate.get(this._serviceUrl + "/filters", null, MimeTypeKeys.JSON);
     }
 
+    filterSdis(filters) {
+        return this._delegate.get(this._serviceUrl + "/filter", filters, MimeTypeKeys.JSON);
+    }
+
+    findFilteredSdis(searchTerm, filters) {
+        const parameter = (!searchTerm) ? '' : `/${encodeURI(searchTerm)}`
+        return this._delegate.get(this._serviceUrl + `/filter${parameter}`, filters, MimeTypeKeys.JSON);
+    }
+
     getFilteredSdis(names, anfrNumbers, inseeSites, municipalities, postalCodes) {
         return this._delegate.get(this._serviceUrl + "/filter", {
             names,
@@ -43,8 +52,8 @@ export class SdisApiClient {
         return this._delegate.get(this._serviceUrl + "/count", null, MimeTypeKeys.JSON);
     }
 
-    searchSdis(value){
-        return this._delegate.get(this._serviceUrl + `/search/${encodeURI(value)}`, null, MimeTypeKeys.JSON);
+    searchSdis(searchTerm) {
+        return this._delegate.get(this._serviceUrl + `/search/${encodeURI(searchTerm)}`, null, MimeTypeKeys.JSON);
     }
 
     importSdisFromFile(file) {

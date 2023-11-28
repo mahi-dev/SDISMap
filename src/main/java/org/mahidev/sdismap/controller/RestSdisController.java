@@ -35,11 +35,18 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 		return new SdisData(service.findSdis(searchTerm));
 	}
 
+	@GetMapping("/filter/{searchTerm}")
+	public SdisData getFilteredSdis(@PathVariable(required = false) final String searchTerm, @RequestParam(required = false) final List<String> name,
+			@RequestParam(required = false) final List<Integer> anfrNumber, @RequestParam(required = false) final List<Integer> inseeSite,
+			@RequestParam(required = false) final List<String> municipality, @RequestParam(required = false) final List<Integer> postalCode) {
+		return new SdisData(service.getFilteredSdis(searchTerm, name, anfrNumber, inseeSite, municipality, postalCode));
+	}
+
 	@GetMapping("/filter")
-	public SdisData getFilteredSdis(@RequestParam(required = false) final List<String> names,
-			@RequestParam(required = false) final List<Integer> anfrNumbers, @RequestParam(required = false) final List<Integer> inseeSites,
-			@RequestParam(required = false) final List<String> municipalities, @RequestParam(required = false) final List<Integer> postalCodes) {
-		return new SdisData(service.getFilteredSdis(names, anfrNumbers, inseeSites, municipalities, postalCodes));
+	public SdisData getFilteredSdis(@RequestParam(required = false) final List<String> name,
+			@RequestParam(required = false) final List<Integer> anfrNumber, @RequestParam(required = false) final List<Integer> inseeSite,
+			@RequestParam(required = false) final List<String> municipality, @RequestParam(required = false) final List<Integer> postalCode) {
+		return new SdisData(service.getFilteredSdis("", name, anfrNumber, inseeSite, municipality, postalCode));
 	}
 
 	@GetMapping("/{id}")

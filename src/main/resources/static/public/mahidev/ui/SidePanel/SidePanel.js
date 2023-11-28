@@ -1,7 +1,6 @@
 import {CloseButton} from "../Button/CloseButton.js";
 import {Component} from "../Component.js";
 import ContextualSearch from "../SearchFilter/ContextualSearch.js";
-import {CustomFilterPanel} from "./CustomFilterPanel.js";
 import {FilterPanel} from "./FilterPanel.js";
 
 export class SidePanel extends Component {
@@ -32,44 +31,23 @@ export class SidePanel extends Component {
         this._closeButton.visible = value;
     }
 
-    set customFilters(value) {
-        this._customFilters = value;
+    set sdisFilters(value) {
+        this._sdisFilters = value;
     }
-
-    set addFilterButton(value) {
-        this._customFilterPanel.addFilter(value);
-    }
-
-    set removeFilter(id) {
-        this._customFilterPanel.removeFilter(id);
-    }
-
 
     bindEvents() {
         this._closeButton.addEventListener('click', () => this.fireEvent(new CustomEvent('displaySidePanel', {
-            detail: {
-                display: false
-            }
+            detail: {display: false}
         })));
 
         this._contextualSearch.addEventListener('searchClick', e => this.fireEvent(new CustomEvent('searchClick', {
-            detail: {
-                search: {value: e.detail.search, inFile: e.detail.toggleState}
-            }
+            detail: {search: {value: e.detail.search, inFile: e.detail.toggleState}}
         })));
 
         this._filterPanel.addEventListener('filter', e => this.fireEvent(new CustomEvent('filter', {
-            detail: {
-                filter: e.detail.filter,
-                add: e.detail.add
-            }
+            detail: {filter: e.detail.filter, option: e.detail.option}
         })));
-        this._filterPanel.addEventListener('remove', e => this.fireEvent(new CustomEvent('remove', {
-            detail: {
-                filter: e.detail.filter,
-                target: e.detail.target
-            }
-        })));
+        
     }
 
     toHtml() {
@@ -91,16 +69,9 @@ export class SidePanel extends Component {
         this._contextualSearch.attach(this.dom);
 
         this._filterPanel = new FilterPanel({
-            title: "Filtres"
-         
+            title: "Filtres",
+            sdisFilters: this._sdisFilters
         });
         this._filterPanel.attach(this.dom);
-
-
-        this._customFilterPanel = new CustomFilterPanel({
-            customFilters: this._customFilters
-        });
-        this._customFilterPanel.attach(this.dom);
     }
-
 }

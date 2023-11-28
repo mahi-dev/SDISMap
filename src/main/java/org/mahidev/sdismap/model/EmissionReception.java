@@ -16,25 +16,24 @@ import org.hibernate.annotations.DynamicUpdate;
 @DynamicUpdate
 public class EmissionReception {
 
-    @ExcelCellName("EmRec N°")
-    private final String number;
+	@ExcelCellName("EmRec N°")
+	private final String number;
 
-    @ExcelCellName("EmRec Systeme")
-    private final String systme;
+	@ExcelCellName("EmRec Systeme")
+	private final String system;
 
-    @ExcelCellName("EmRec Designation Em.")
-    private final String designation;
+	@ExcelCellName("EmRec Designation Em.")
+	private final String designation;
 
-    @ExcelCellName("EmRec Puissance (dBW)")
-    private final double power;
+	@ExcelCellName("EmRec Puissance (dBW)")
+	private final double power;
 
-    @ExcelCellName("EmRec Unite de Puissance")
-    private final String powerUnit;
+	@ExcelCellName("EmRec Unite de Puissance")
+	private final String powerUnit;
 
-    @Id
-    @GeneratedValue
-    @EqualsAndHashCode.Include
-    private Long id;
-
+	@Id
+	@GeneratedValue
+	@EqualsAndHashCode.Include
+	private Long id;
 
 }

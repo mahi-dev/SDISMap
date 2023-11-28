@@ -1,0 +1,48 @@
+export const MESSAGE = {
+    ERROR: {
+        NO_DATA: 'Données absentes.',
+        NO_PANEL: 'Panneau latéral absent.',
+        NO_MAP: 'Carte absente.'
+    }
+};
+
+export const FILTER = {
+    "name": "Nom du Site",
+    "names": "Nom du Site",
+    "mainUsers": "Site Utilisateur Principal",
+    "anfrNumber": "Site N°ANFR",
+    "anfrNumbers": "Site N°ANFR",
+    "commissioningDates": "Site Date Mise en Service",
+    "inseeSite": "Site Code INSEE",
+    "inseeSites": "Site Code INSEE",
+    "cadastreReferences": "Site Ref Cadastre",
+    "supportNumbers": "Support N°",
+    "supportDescriptions": "Support Description",
+    "supportColors": "Support Couleurs",
+    "supportMarkings": "Support Balisage",
+    "supportNatures": "Support Nature",
+    "supportOwners": "Support Propriétaire",
+    "siteLongitude": "Site Long. (Deg.)",
+    "siteLatitude": "Site Lat. (Deg.)",
+    "placeName": "Site Lieu Dit",
+    "municipality": "Site Commune",
+    "postalCode": "Site Code Postal",
+    "municipalities": "Site Commune",
+    "postalCodes": "Site Code Postal",
+    "aerienNumber": "Aerien N°",
+    "petitionerReference": "Aerien Ref. Petitionnaire",
+    "type": "Aerien Type",
+    "dimension": "Aerien Dimension (m)",
+    "tilt": "Aerien Tilt (Deg.)",
+    "azimuth": "Aerien Azymuth (Deg.)",
+    "opening": "Aerien Ouverture (Deg.)",
+    "height": "Aerien Hauteur (m)",
+    "number": "EmRec N°",
+    "system": "EmRec Systeme",
+    "designation": "EmRec Designation Em.",
+    "power": "EmRec Puissance (dBW)",
+    "powerUnit": "EmRec Unite de Puissance",
+    "bandMin": "Bande Freq. Min.",
+    "bandMax": "Bande Freq. Max.",
+    "bandService": "Bande Service",
+}

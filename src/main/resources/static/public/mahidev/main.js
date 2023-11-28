@@ -9,8 +9,27 @@ import {SidePanel} from "./ui/SidePanel/SidePanel.js";
 class Main {
 
     constructor() {
-        this._sdisController = new SdisController(new SdisApiClient(new RestWebClient(), SETTINGS.baseApiUrl, SETTINGS.sdisApi), new SdisMap(), new SidePanel());
         this.init();
+    }
+
+    async initData() {
+        const count = await this._sdisController.countAsync();
+
+        if (!count || count <= 0)
+            this._sdisData = await this._sdisController.importAsync();
+        else
+            this._sdisData = await this._sdisController.getAllAsync();
+
+        this._sdisFilters = await this._sdisController.getFilters();
+    }
+
+    async init() {
+        this.createHeader();
+        this._sdisController = new SdisController(
+            new SdisApiClient(new RestWebClient(), SETTINGS.baseApiUrl, SETTINGS.sdisApi), new SdisMap());
+        await this.initData();
+        this._sdisController.createMap(this._sdisData);
+        this._sdisController.createSidePanel(new SidePanel({sdisFilters: this._sdisFilters}));
     }
 
     createHeader() {
@@ -20,28 +39,6 @@ class Main {
         });
         header.name = 'SDIS 84';
         header.logo = 'public/resources/img/sdis84.jpeg';
-
-    }
-
-    async init() {
-        this.createHeader();
-        await this.createMap();
-        await this.createSidePannel();
-    }
-
-    async createMap() {
-        const count = await this._sdisController.countAsync();
-
-        if (!count || count <= 0)
-            this._sdisData = await this._sdisController.importAsync();
-        else
-            this._sdisData = await this._sdisController.getAllAsync();
-
-        this._sdisController.createMap(this._sdisData);
-    }
-
-    async createSidePannel() {
-        await this._sdisController.createSidePannel();
     }
 }
 
