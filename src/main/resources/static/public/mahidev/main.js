@@ -30,6 +30,7 @@ class Main {
         await this.initData();
         this._sdisController.createMap(this._sdisData);
         this._sdisController.createSidePanel(new SidePanel({sdisFilters: this._sdisFilters}));
+        this._sdisController.crateDropArea();
     }
 
     createHeader() {

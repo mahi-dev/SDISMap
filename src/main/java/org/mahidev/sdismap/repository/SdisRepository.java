@@ -4,12 +4,12 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
 import org.mahidev.sdismap.model.Filter;
 import org.mahidev.sdismap.model.Sdis;
+import org.mahidev.sdismap.specification.SdisSpecifications;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import org.springframework.util.StringUtils;
-import specification.SdisSpecifications;
 
 import java.util.List;
 import java.util.Optional;

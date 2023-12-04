@@ -1,8 +1,13 @@
-export class SdisPopup {
-    constructor(sdis) {
-        this._sdis = sdis;
-        this._href = `/details?id=${this._sdis.id}`;
-        this._value = `Afficher les details dans un nouvel onglet.`;
+import {Component} from "../Component.js";
+
+export class SdisPage extends Component {
+
+    constructor(option) {
+        super(option);
+    }
+
+    set sdis(value) {
+        this._sdis = value;
     }
 
     toHtml() {
@@ -28,7 +33,6 @@ export class SdisPopup {
             <p>Aerien - Height: ${aerien.height}</p>
             <p>Frequence Min: ${frequency.bandMin} - Max: ${frequency.bandMax}</p>
             <p>Band Service: ${frequency.bandService}</p>
-            <a type="button" class="btn btn-outline-primary" role="button" target="_blank" href="${this._href}">${this._value}</a>
         </div>
         `;
     }

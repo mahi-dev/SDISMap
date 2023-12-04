@@ -26,6 +26,15 @@ body {
     height: 100%;
 }
 
+.height65 {
+    height: 65%;
+}
+
+.height35 {
+    height: 35%;
+}
+
+
 select {
     color: #ccc;
 }
@@ -239,7 +248,6 @@ main {
     flex-wrap: nowrap;
     justify-content: flex-start;
     height: 100%;
-    width: 0;
     z-index: 99;
     top: 0;
     left: 0;
@@ -782,10 +790,15 @@ a.disabled-link {
     max-height: 8%;
 }
 
+.upload {
+    align-content: center;
+    justify-content: center;
+}
+
 #drop-area {
     border: 2px dashed #ccc;
     border-radius: 20px;
-    width: 100%;
+    width: 60%;
     height: var(--drop-area_height);
     padding: 5px;
 }
@@ -810,6 +823,7 @@ a.disabled-link {
     padding: 0 0;
     color: darkslategray;
     text-decoration: underline;
+    font-size: medium;
 }
 
 #up-area {
@@ -1396,7 +1410,7 @@ div.share-table-row__cell {
 }
 
 #map {
-    height: 65%;
+    height: 100%;
     /*width: 70%;*/
     padding-left: 10px;
     margin-top: 10px;

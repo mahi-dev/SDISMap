@@ -1,4 +1,4 @@
-package specification;
+package org.mahidev.sdismap.specification;
 
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;

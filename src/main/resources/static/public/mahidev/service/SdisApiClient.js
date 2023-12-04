@@ -45,7 +45,7 @@ export class SdisApiClient {
     }
 
     getSdis(id) {
-        return this._delegate.get(this._serviceUrl + "/", {id}, MimeTypeKeys.JSON);
+        return this._delegate.get(this._serviceUrl + `/${encodeURI(id)}`, null, MimeTypeKeys.JSON);
     }
 
     countSdis() {

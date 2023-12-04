@@ -72,7 +72,7 @@ export class SdisMap extends Component {
         return sdisInfo;
     }
 
-    removeAllMarkers(){
+    removeAllMarkers() {
         this._sdisInfos.map(this.removeMarker);
     }
 

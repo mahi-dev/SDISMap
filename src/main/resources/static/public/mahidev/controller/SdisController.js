@@ -1,5 +1,6 @@
 import {MESSAGE} from "../config/message.js";
 import {SelectionBox} from "../ui/form/SelectionBox.js";
+import DropArea from "../ui/Upload/DropArea.js";
 
 export class SdisController {
 
@@ -15,6 +16,10 @@ export class SdisController {
 
     get principalElement() {
         return document.querySelector('.principal');
+    }
+
+    get uploadElement() {
+        return document.querySelector('.upload');
     }
 
     get _contextualSearchValue() {
@@ -97,5 +102,60 @@ export class SdisController {
 
     _searchFilteredSdis() {
         return this.searchFilteredSdis((!this._contextualSearchValue) ? "" : this._contextualSearchValue, this._currentFilters);
+    }
+
+    crateDropArea() {
+        this._dropArea = new DropArea();
+        this._dropArea.attach(this.uploadElement);
+        this.uploadEvent(this._dropArea.dom);
+    }
+
+    uploadEvent(dropArea) {
+        dropArea.style.visibility = "visible";
+
+        const preventDefaults = (e) => {
+            e.preventDefault()
+            e.stopPropagation()
+        }
+
+        const highlight = (e) => {
+            dropArea.classList.add('highlight')
+        }
+
+        const unhighlight = (e) => {
+            dropArea.classList.remove('highlight')
+        }
+
+        const handleDrop = (e) => {
+            this.files = e.dataTransfer.files;
+            this.upload();
+        }
+
+        const handleFiles = (files) => {
+            this.files = [...files.target.files];
+            this.upload();
+        }
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false)
+            document.body.addEventListener(eventName, preventDefaults, false)
+        });
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false)
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false)
+        });
+
+        dropArea.addEventListener('drop', handleDrop, false)
+
+        let parcourir = document.getElementById("fileElem");
+        parcourir.addEventListener('change', handleFiles, false)
+    }
+
+    upload() {
+        console.log(this.files)
     }
 }
