@@ -39,7 +39,7 @@ public class StreamDataSource implements DataSource, AutoCloseable {
 
 	@Override
 	public String getFileName() {
-		return file.getName();
+		return file.getOriginalFilename();
 	}
 
 	@Override

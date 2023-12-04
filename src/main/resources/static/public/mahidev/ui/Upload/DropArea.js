@@ -7,7 +7,7 @@ export default class DropArea extends Component {
     }
 
     toHtml() {
-        return `<div id="drop-area" style="visibility: hidden;">
+        return `<div id="drop-area">
                 <form class="my-form">
                     <div id="up-area">
                         <p id="glisser">Glissez-déposez des fichiers pour ajouter des points sur la carte, ou</p>
@@ -16,5 +16,9 @@ export default class DropArea extends Component {
                     </div>
                     <input type="file" id="fileElem" multiple accept=".xls,.xlsx">
                 </form></div>`
+    }
+
+    reset() {
+        document.getElementById("fileElem").value = '';
     }
 }

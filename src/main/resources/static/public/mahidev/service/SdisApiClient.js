@@ -57,11 +57,13 @@ export class SdisApiClient {
     }
 
     importSdisFromFile(file) {
+        const formData = new FormData();
+        formData.append('file', file);
         return this._delegate.post(
             this._serviceUrl + SdisApiClient.IMPORT_ENDPOINT,
             null,
-            MimeTypeKeys.MULTIPART_FORM,
-            new URLSearchParams({file}),
+            '',
+            formData,
             MimeTypeKeys.JSON);
     }
 }

@@ -45,7 +45,7 @@ export class SdisController {
     }
 
     reloadMap(data) {
-        if (data?.count >= 0) {
+        if (data?.count > 0) {
             console.log(`results count :${data.count}`)
             this._map.removeAllMarkers();
             this._map.sdisData = data;
@@ -111,8 +111,6 @@ export class SdisController {
     }
 
     uploadEvent(dropArea) {
-        dropArea.style.visibility = "visible";
-
         const preventDefaults = (e) => {
             e.preventDefault()
             e.stopPropagation()
@@ -155,7 +153,15 @@ export class SdisController {
         parcourir.addEventListener('change', handleFiles, false)
     }
 
-    upload() {
-        console.log(this.files)
+    async upload() {
+        try {
+            for (const file of this.files) {
+                const sdisData = await this._service.importSdisFromFile(file);
+                this.reloadMap(sdisData);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+        this._dropArea.reset();
     }
 }

@@ -25,7 +25,8 @@ public record SdisService(SdisRepository repository) implements Manager.SdisServ
 	@Override
 	public List<Sdis> saveAllSdis(@NotNull final @NonNull List<Sdis> sdisList) {
 		final var filtered = SdisComparator.filter(getAllSdis(), sdisList);
-		return repository.saveAll(filtered);
+		repository.saveAll(filtered);
+		return getAllSdis();
 	}
 
 	@Override

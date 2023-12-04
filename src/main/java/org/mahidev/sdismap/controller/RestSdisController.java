@@ -12,7 +12,6 @@ import org.mahidev.sdismap.model.Filter;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.model.SdisData;
 import org.mahidev.sdismap.service.Manager;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -74,7 +73,7 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 		}
 	}
 
-	@PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "/import")
 	public SdisData importSdis(@RequestBody @NonNull final MultipartFile file) {
 		try (final var datasource = new StreamDataSource(file)) {
 			return new SdisData(readerService.saveExcel(datasource));
