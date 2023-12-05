@@ -13,7 +13,10 @@ export class RestWebClient {
      * @return {Promise<Any>}
      */
     get(route, queryParameters, responseType) {
-        return this._invokeAsync('GET', route, queryParameters, null, null, responseType);
+        return this._invokeAsync('GET', route, queryParameters, null, null, responseType)
+            .catch(error => {
+                throw error;
+            });
     }
 
     /**
@@ -27,7 +30,10 @@ export class RestWebClient {
      * @return {Promise<Any>}
      */
     post(route, queryParameters, bodyContentType, bodyInserter, responseType) {
-        return this._invokeAsync('POST', route, queryParameters, bodyContentType, bodyInserter, responseType);
+        return this._invokeAsync('POST', route, queryParameters, bodyContentType, bodyInserter, responseType)
+            .catch(error => {
+                throw error;
+            });
     }
 
     /**
@@ -41,7 +47,10 @@ export class RestWebClient {
      * @return {Promise<Any>}
      */
     put(route, queryParameters, bodyContentType, bodyInserter, responseType) {
-        return this._invokeAsync('PUT', route, queryParameters, bodyContentType, bodyInserter, responseType);
+        return this._invokeAsync('PUT', route, queryParameters, bodyContentType, bodyInserter, responseType)
+            .catch(error => {
+                throw error;
+            });
     }
 
     /**
@@ -55,7 +64,10 @@ export class RestWebClient {
      * @return {Promise<Any>}
      */
     delete(route, queryParameters, bodyContentType, bodyInserter, responseType) {
-        return this._invokeAsync('DELETE', route, queryParameters, bodyContentType, bodyInserter, responseType);
+        return this._invokeAsync('DELETE', route, queryParameters, bodyContentType, bodyInserter, responseType)
+            .catch(error => {
+                throw error;
+            });
     }
 
     /**
@@ -98,8 +110,15 @@ export class RestWebClient {
 
 
         return fetch(route, fetchInit)
-            .then(response => responseType === MimeTypeKeys.JSON ? response.json() : response)
-            .catch(error => console.error('Erreur du client rest', error.message));
+            .then(response => {
+                if (!response.ok) {
+                    return Promise.reject(response);
+                }
+                return responseType === MimeTypeKeys.JSON ? response.json() : response;
+            })
+            .catch(error => {
+                throw error;
+            });
     }
 
 }

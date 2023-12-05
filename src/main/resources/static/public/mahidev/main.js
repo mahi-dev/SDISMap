@@ -35,7 +35,7 @@ class Main {
 
     createHeader() {
         const header = new Header();
-        header.attach(document.getElementsByTagName('main')[0], {
+        header.attach(document.querySelector('.header_principal'), {
             prepend: true
         });
         header.name = 'SDIS 84';

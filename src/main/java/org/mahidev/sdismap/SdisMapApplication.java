@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@SpringBootApplication(scanBasePackages = {"org.mahidev.sdismap.controller"})
+@SpringBootApplication(scanBasePackages = {"org.mahidev.sdismap.controller", "org.mahidev.sdismap.exception"})
 @EntityScan({"org.mahidev.sdismap.model"})
 @EnableJpaRepositories({"org.mahidev.sdismap.repository"})
 @EnableConfigurationProperties({FileDataSource.class})

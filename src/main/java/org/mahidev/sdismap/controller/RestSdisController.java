@@ -7,6 +7,7 @@ import org.mahidev.sdismap.datasource.StreamDataSource;
 import org.mahidev.sdismap.dto.LocationDto;
 import org.mahidev.sdismap.exception.GlobalExceptionHandler;
 import org.mahidev.sdismap.exception.ImportSdisException;
+import org.mahidev.sdismap.exception.NoLocationFoundException;
 import org.mahidev.sdismap.exception.SdisDescriptionNotFoundException;
 import org.mahidev.sdismap.model.Filter;
 import org.mahidev.sdismap.model.Sdis;
@@ -15,7 +16,6 @@ import org.mahidev.sdismap.service.Manager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 
 @Log4j2
@@ -49,7 +49,7 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 
 	@GetMapping("/{id}")
 	public Sdis getSdis(@PathVariable @NotBlank final int id) {
-		return service.getSdis(id).orElseThrow(() -> new SdisDescriptionNotFoundException(GlobalExceptionHandler.NO_LOCATION_FOUND_EXCEPTION_MESSAGE));
+		return service.getSdis(id).orElseThrow(() -> new NoLocationFoundException(GlobalExceptionHandler.NO_LOCATION_FOUND_EXCEPTION_MESSAGE));
 	}
 
 	@GetMapping("/description/{name}")
@@ -68,7 +68,7 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 	public SdisData importSdis() {
 		try {
 			return new SdisData(readerService.saveExcel());
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
 		}
 	}
@@ -77,7 +77,7 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 	public SdisData importSdis(@RequestBody @NonNull final MultipartFile file) {
 		try (final var datasource = new StreamDataSource(file)) {
 			return new SdisData(readerService.saveExcel(datasource));
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
 		}
 	}

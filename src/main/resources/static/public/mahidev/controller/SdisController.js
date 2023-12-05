@@ -1,6 +1,7 @@
 import {MESSAGE} from "../config/message.js";
 import {SelectionBox} from "../ui/form/SelectionBox.js";
 import DropArea from "../ui/Upload/DropArea.js";
+import {MessageDialog} from "../ui/Dialog/MessageDialog.js";
 
 export class SdisController {
 
@@ -8,6 +9,7 @@ export class SdisController {
         this._service = service;
         this._map = map;
         this._currentFilters = {};
+        this.infoModal = new MessageDialog(this.principalElement);
     }
 
     set sidePanel(value) {
@@ -45,16 +47,18 @@ export class SdisController {
     }
 
     reloadMap(data) {
+        let message = 'Pas de nouveau point à ajouter.';
         if (data?.count > 0) {
-            console.log(`results count :${data.count}`)
+            message = `${data.count} nouveaux points ajoutés.`;
             this._map.removeAllMarkers();
             this._map.sdisData = data;
             this._map.fitBound(data?.sdisList);
             this._map.setSdisMarker(data?.sdisList);
-        } else {
-            //@Todo message dialog
-            console.log('No Results')
         }
+        this.infoModal.show({
+            title: 'Info',
+            content: {message}
+        });
     }
 
     async search(value) {
@@ -154,13 +158,19 @@ export class SdisController {
     }
 
     async upload() {
-        try {
-            for (const file of this.files) {
-                const sdisData = await this._service.importSdisFromFile(file);
-                this.reloadMap(sdisData);
-            }
-        } catch (e) {
-            console.error(e);
+        for (const file of this.files) {
+            const sdisData = await this._service.importSdisFromFile(file)
+                .catch((e) => {
+                    e.json().then((error) => {
+                        const title = `Erreur inattendue`;
+                        this.infoModal.show({
+                            title,
+                            content: {message: error.message}
+                        });
+                        console.error(title, error);
+                    });
+                });
+            this.reloadMap(sdisData);
         }
         this._dropArea.reset();
     }
