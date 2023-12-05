@@ -34,7 +34,8 @@ export class SdisController {
         this._map.attach(this.principalElement);
         this._map.sdisData = data;
         this._map.initMap();
-        this._map.setSdisMarker(data?.sdisList);
+        //this._map.setSdisMarker(data?.sdisList);
+        this._map.setSdisMarkerByLocation(data?.sdisList);
     }
 
     createSidePanel(panel, closeButtonVisible = false) {
@@ -53,7 +54,8 @@ export class SdisController {
             this._map.removeAllMarkers();
             this._map.sdisData = data;
             this._map.fitBound(data?.sdisList);
-            this._map.setSdisMarker(data?.sdisList);
+            //this._map.setSdisMarker(data?.sdisList);
+            this._map.setSdisMarkerByLocation(data?.sdisList);
         }
         this.infoModal.show({
             title: 'Info',

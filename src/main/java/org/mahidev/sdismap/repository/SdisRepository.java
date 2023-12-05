@@ -1,6 +1,6 @@
 package org.mahidev.sdismap.repository;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import org.mahidev.sdismap.model.Filter;
 import org.mahidev.sdismap.model.Sdis;
@@ -32,7 +32,9 @@ public interface SdisRepository extends JpaRepository<Sdis, Long>, JpaSpecificat
 		return findAll(specification);
 	}
 
-	Optional<Sdis> findByName(@NotBlank final String name);
+	Optional<Sdis> findByName(@NonNull final String name);
+
+	List<Sdis> findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(@NotNull final String siteLatitude, @NotNull final String siteLongitude);
 
 	@Query("SELECT DISTINCT s.name FROM Sdis s")
 	List<String> findDistinctNames();

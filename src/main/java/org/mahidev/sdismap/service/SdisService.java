@@ -40,6 +40,11 @@ public record SdisService(SdisRepository repository) implements Manager.SdisServ
 	}
 
 	@Override
+	public List<Sdis> getSdis(@NotNull final String siteLatitude, @NotNull final String siteLongitude) {
+		return repository.findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(siteLatitude, siteLongitude);
+	}
+
+	@Override
 	public Optional<String> getDescription(@NonNull final String name) {
 		return repository.findByName(name).map(Sdis::getSupportDescription);
 	}

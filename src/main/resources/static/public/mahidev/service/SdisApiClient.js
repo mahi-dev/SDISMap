@@ -8,6 +8,10 @@ export class SdisApiClient {
 
     static IMPORT_ENDPOINT = '/import';
 
+    static FILTER_ENDPOINT = '/filter';
+
+    static FILTERS_ENDPOINT = '/filters';
+
     constructor(restWebClient, url, api) {
         this._delegate = restWebClient;
         this._serviceUrl = url + api;
@@ -28,14 +32,21 @@ export class SdisApiClient {
     }
 
     getFilters() {
-        return this._delegate.get(this._serviceUrl + "/filters", null, MimeTypeKeys.JSON)
+        return this._delegate.get(this._serviceUrl + SdisApiClient.FILTERS_ENDPOINT, null, MimeTypeKeys.JSON)
             .catch(error => {
                 throw error;
             });
     }
 
     filterSdis(filters) {
-        return this._delegate.get(this._serviceUrl + "/filter", filters, MimeTypeKeys.JSON)
+        return this._delegate.get(this._serviceUrl + SdisApiClient.FILTER_ENDPOINT, filters, MimeTypeKeys.JSON)
+            .catch(error => {
+                throw error;
+            });
+    }
+
+    filterSdisByLocation(latitude, longitude) {
+        return this._delegate.get(this._serviceUrl + "/location", {latitude, longitude}, MimeTypeKeys.JSON)
             .catch(error => {
                 throw error;
             });
@@ -43,14 +54,14 @@ export class SdisApiClient {
 
     findFilteredSdis(searchTerm, filters) {
         const parameter = (!searchTerm) ? '' : `/${encodeURI(searchTerm)}`
-        return this._delegate.get(this._serviceUrl + `/filter${parameter}`, filters, MimeTypeKeys.JSON)
+        return this._delegate.get(this._serviceUrl + SdisApiClient.FILTER_ENDPOINT + parameter, filters, MimeTypeKeys.JSON)
             .catch(error => {
                 throw error;
             });
     }
 
     getFilteredSdis(names, anfrNumbers, inseeSites, municipalities, postalCodes) {
-        return this._delegate.get(this._serviceUrl + "/filter", {
+        return this._delegate.get(this._serviceUrl + SdisApiClient.FILTER_ENDPOINT, {
             names,
             anfrNumbers,
             inseeSites,

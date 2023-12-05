@@ -1,4 +1,5 @@
 import {Component} from "../Component.js";
+import {FILTER} from "../../config/message.js";
 
 export class SdisPage extends Component {
 
@@ -12,28 +13,41 @@ export class SdisPage extends Component {
 
     toHtml() {
         const {
-            name, mainUser, anfrNumber, commissioningDate, inseeSite, cadastreReference, supportNumber,
-            supportDescription, supportColors, supportMarking, supportNature, supportOwner, location,
-            aerien, emissionReception, frequency
-        } = this._sdis;
+            name, anfrNumber, supportNumber, supportColors, supportNature,
+            supportOwner, location
+        } = this._sdis[0];
 
+        const common = `
+            <div class="row">
+                <p class='sdis-popup__name'><b>${name}</b></p>
+                <p class='sdis-popup__anfr-number'>${FILTER['anfrNumber']} : ${anfrNumber}</p>
+            </div>
+            <div class="row">
+                <p class='sdis-popup__location'>${location.address} ${location.postalCode} ${location.municipality} </p>
+                <p class='sdis-popup__gps'>GPS - Long : ${location.siteLongitude}  Lat: ${location.siteLatitude} </p>
+            </div>    
+            <div class="row">
+                <p class='sdis-popup__support-number'>${FILTER['supportNumber']} : ${supportNumber}</p>
+                <p class='sdis-popup__support-colors'>${FILTER['supportColors']} : ${supportColors}</p>
+                <p class='sdis-popup__support-nature'>${FILTER['supportNature']} : ${supportNature}</p>
+                <p class='sdis-popup__support-owner'  >${FILTER['supportOwner']} : ${supportOwner} </p>
+            </div>`;
 
-        return `
-        <div>
-            <p><b>${name}</b></p>
-            <p>${location.address}</p>
-            <p>${location.postalCode} ${location.municipality} </p>
-            <p>ANFR Number: ${anfrNumber}</p>
-            <p>INSEE Site: ${inseeSite}</p>
+        const specific = this._sdis.map((sdis, index) => {
+            const {aerien, frequency} = sdis;
 
-            <p>Aerien - Number: ${aerien.number}</p>
-            <p>Aerien - Type: ${aerien.type}</p>
-            <p>Aerien - Dimension: ${aerien.dimension}</p>
-            <p>Aerien - Tilt: ${aerien.tilt}</p>
-            <p>Aerien - Height: ${aerien.height}</p>
-            <p>Frequence Min: ${frequency.bandMin} - Max: ${frequency.bandMax}</p>
-            <p>Band Service: ${frequency.bandService}</p>
-        </div>
-        `;
+            return `<p>${FILTER['aerienNumber']} : ${aerien.number}</p>
+                    <p>${FILTER['type']} : ${aerien.type}</p>
+                    <p>${FILTER['dimension']} : ${aerien.dimension}</p>
+                    <p>${FILTER['tilt']} : ${aerien.tilt}</p>
+                    <p>${FILTER['height']} : ${aerien.height}</p>
+                    <p>${FILTER['bandMin']} : ${frequency.bandMin} - ${FILTER['bandMax']} : ${frequency.bandMax}</p>
+                    <p>${FILTER['bandService']} : ${frequency.bandService}</p>`;
+        });
+
+        return `<div>
+                    ${common}
+                    ${specific}
+                </div>`;
     }
 }

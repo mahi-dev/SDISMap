@@ -1,5 +1,6 @@
 import {Component} from "../Component.js";
 import {SdisPopup} from "./SdisPopup.js";
+import {SdisPopupTab} from "./SdisPopupTab.js";
 
 export class SdisMap extends Component {
 
@@ -86,8 +87,12 @@ export class SdisMap extends Component {
         return popup;
     }
 
-    createHtmlContent(sdis) {
-        return new SdisPopup(sdis).toHtml();
+    createHtmlContent(sdis, size) {
+        return new SdisPopup(sdis, size).toHtml();
+    }
+
+    createHtmlTabContent(sdisList) {
+        return new SdisPopupTab(sdisList).toHtml();
     }
 
     initComponents() {
@@ -102,6 +107,32 @@ export class SdisMap extends Component {
     setSdisMarker(sdisList) {
         sdisList.map(sdis => this.addMarker(sdis, sdis.location.siteLatitude, sdis.location.siteLongitude))
             .map(sdisInfo => this.addPopup(sdisInfo, this.createHtmlContent(sdisInfo.sdis)))
+    }
+
+    setSdisMarkerByLocation(sdisList) {
+        const groupedSdis = this._groupByLocation(sdisList);
+        for (const key in groupedSdis) {
+            const sdisGroupedList = groupedSdis[key];
+            const sdis = sdisGroupedList[0];
+            const sdisInfo = this.addMarker(sdis, sdis.location.siteLatitude, sdis.location.siteLongitude);
+            this.addPopup(sdisInfo, this.createHtmlContent(sdis, sdisGroupedList.length));
+        }
+    }
+
+    _groupByLocation(sdisList) {
+        if (!Array.isArray(sdisList)) return sdisList;
+        const groupedByCoordinates = {};
+
+        sdisList.forEach(item => {
+            if (item.location && item.location.siteLongitude && item.location.siteLatitude) {
+                const key = `${item.location.siteLongitude}_${item.location.siteLatitude}`;
+                if (!groupedByCoordinates[key]) {
+                    groupedByCoordinates[key] = [];
+                }
+                groupedByCoordinates[key].push(item);
+            }
+        });
+        return groupedByCoordinates;
     }
 
     toHtml() {

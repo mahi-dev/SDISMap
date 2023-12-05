@@ -1,6 +1,7 @@
 package org.mahidev.sdismap.service;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.model.Filter;
@@ -22,6 +23,8 @@ public class Manager {
 		Optional<Sdis> getSdis(final long id);
 
 		Optional<Sdis> getSdis(@NotBlank final String name);
+
+		List<Sdis> getSdis(@NotNull String siteLatitude, @NotNull String siteLongitude);
 
 		Optional<String> getDescription(@NotBlank final String name);
 

@@ -19,13 +19,11 @@ class Main {
         this._sdisApiClient = new SdisApiClient(new RestWebClient(), SETTINGS.baseApiUrl, SETTINGS.sdisApi);
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
-        const sdisId = urlParams.get('id');
-        const sdis = await this._sdisApiClient.getSdis(sdisId);
-
-        const page = new SdisPage({sdis});
+        const latitude = urlParams.get('latitude');
+        const longitude = urlParams.get('longitude');
+        const sdisData = await this._sdisApiClient.filterSdisByLocation(latitude, longitude);
+        const page = new SdisPage({sdis: sdisData?.sdisList});
         page.attach(this.principalElement);
-
-
     }
 
     createHeader() {

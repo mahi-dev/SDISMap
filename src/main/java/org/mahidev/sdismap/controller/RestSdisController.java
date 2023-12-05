@@ -28,6 +28,11 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 		return new SdisData(service.getAllSdis());
 	}
 
+	@GetMapping("/location")
+	public SdisData getSdis(@RequestParam final String latitude, @RequestParam final String longitude) {
+		return new SdisData(service.getSdis(latitude, longitude));
+	}
+
 	@GetMapping("/search/{searchTerm}")
 	public SdisData findSdis(@PathVariable final String searchTerm) {
 		return new SdisData(service.findSdis(searchTerm));

@@ -1,8 +1,10 @@
+import {FILTER} from "../../config/message.js";
+
 export class SdisPopup {
-    constructor(sdis) {
+    constructor(sdis, size) {
         this._sdis = sdis;
-        this._href = `/details?id=${this._sdis.id}`;
         this._value = `Afficher les details dans un nouvel onglet.`;
+        this._size = size;
     }
 
     toHtml() {
@@ -12,24 +14,29 @@ export class SdisPopup {
             aerien, emissionReception, frequency
         } = this._sdis;
 
+        const href = `/details?latitude=${encodeURI(location?.siteLatitude)}&longitude=${encodeURI(location?.siteLongitude)}`;
 
         return `
-        <div>
-            <p><b>${name}</b></p>
-            <p>${location.address}</p>
-            <p>${location.postalCode} ${location.municipality} </p>
-            <p>ANFR Number: ${anfrNumber}</p>
-            <p>INSEE Site: ${inseeSite}</p>
-
-            <p>Aerien - Number: ${aerien.number}</p>
-            <p>Aerien - Type: ${aerien.type}</p>
-            <p>Aerien - Dimension: ${aerien.dimension}</p>
-            <p>Aerien - Tilt: ${aerien.tilt}</p>
-            <p>Aerien - Height: ${aerien.height}</p>
-            <p>Frequence Min: ${frequency.bandMin} - Max: ${frequency.bandMax}</p>
-            <p>Band Service: ${frequency.bandService}</p>
-            <a type="button" class="btn btn-outline-primary" role="button" target="_blank" href="${this._href}">${this._value}</a>
-        </div>
-        `;
+            <div>
+                <div class="row">
+                    <p class='sdis-popup__name'><b>${name}</b></p>
+                    <p class='sdis-popup__anfr-number'>${FILTER['anfrNumber']} : <b>${anfrNumber}</b></p>
+                </div>
+                <div class="row">
+                    <p class='sdis-popup__location'>${location.address} ${location.postalCode} ${location.municipality} </p>
+                    <p class='sdis-popup__gps'>GPS - Long : ${location.siteLongitude}  Lat: ${location.siteLatitude} </p>
+                </div>    
+                <div class="row">
+                    <p class='sdis-popup__support-number'>${FILTER['supportNumber']} : ${supportNumber}</p>
+                    <p class='sdis-popup__support-colors'>${FILTER['supportColors']} : ${supportColors}</p>
+                    <p class='sdis-popup__support-nature'>${FILTER['supportNature']} : ${supportNature}</p>
+                    <p class='sdis-popup__support-owner'  >${FILTER['supportOwner']} : ${supportOwner} </p>
+                </div>
+                  <div class="row">
+                    <p class='sdis-popup__size'><b>${this._size} antenne${this._size > 1 ? 's' : ''}</b></p>
+                </div>
+                <a type="button" class="btn btn-outline-primary" role="button" target="_blank" href="${href}">${this._value}</a>
+            </div>
+            `;
     }
 }
