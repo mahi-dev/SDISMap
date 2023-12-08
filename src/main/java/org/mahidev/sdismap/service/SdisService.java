@@ -3,10 +3,12 @@ package org.mahidev.sdismap.service;
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
 import org.mahidev.sdismap.model.Filter;
+import org.mahidev.sdismap.model.FilterSdis;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.repository.SdisRepository;
 import org.mahidev.sdismap.utility.SdisComparator;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,13 +60,21 @@ public record SdisService(SdisRepository repository) implements Manager.SdisServ
 	@Override
 	public List<Sdis> getFilteredSdis(final String searchTerm, final List<String> names, final List<Integer> anfrNumbers, final List<Integer> inseeSites,
 			final List<String> municipalities, final List<Integer> postalCodes) {
-		return repository.filterSdis(searchTerm, new Filter(names, anfrNumbers, inseeSites, municipalities, postalCodes));
+		return repository.filterSdis(searchTerm,
+				new FilterSdis(names, anfrNumbers, inseeSites, municipalities, postalCodes, Collections.emptyList(), Collections.emptyList()));
+	}
+
+	@Override
+	public List<Sdis> getFilteredSdis(String searchTerm, List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites,
+			List<String> municipalities, List<Integer> postalCodes, List<String> latitude, List<String> longitude) {
+		return repository.filterSdis(searchTerm, new FilterSdis(names, anfrNumbers, inseeSites, municipalities, postalCodes, latitude, longitude));
 	}
 
 	@Override
 	public List<Sdis> getFilteredSdis(final List<String> names, final List<Integer> anfrNumbers, final List<Integer> inseeSites,
 			final List<String> municipalities, final List<Integer> postalCodes) {
-		return repository.filterSdis(new Filter(names, anfrNumbers, inseeSites, municipalities, postalCodes));
+		return repository.filterSdis(
+				new FilterSdis(names, anfrNumbers, inseeSites, municipalities, postalCodes, Collections.emptyList(), Collections.emptyList()));
 	}
 
 	@Override

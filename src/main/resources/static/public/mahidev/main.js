@@ -29,7 +29,11 @@ class Main {
             new SdisApiClient(new RestWebClient(), SETTINGS.baseApiUrl, SETTINGS.sdisApi), new SdisMap());
         await this.initData();
         this._sdisController.createMap(this._sdisData);
-        this._sdisController.createSidePanel(new SidePanel({sdisFilters: this._sdisFilters}));
+        const size = this._sdisData.count;
+        this._sdisController.createSidePanel(new SidePanel({
+            sdisFilters: this._sdisFilters,
+            textValue: `${size} antenne${size > 1 ? 's' : ''}`
+        }));
         this._sdisController.crateDropArea();
     }
 

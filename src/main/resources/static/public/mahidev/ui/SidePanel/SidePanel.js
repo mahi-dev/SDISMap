@@ -2,6 +2,7 @@ import {CloseButton} from "../Button/CloseButton.js";
 import {Component} from "../Component.js";
 import ContextualSearch from "../SearchFilter/ContextualSearch.js";
 import {FilterPanel} from "./FilterPanel.js";
+import {TextContent} from "./TextContent.js";
 
 export class SidePanel extends Component {
 
@@ -35,6 +36,18 @@ export class SidePanel extends Component {
         this._sdisFilters = value;
     }
 
+    set textValue(value) {
+        this._textValue = value;
+    }
+
+    set updateText(value) {
+        this._antennaSize.updateText = value;
+    }
+
+    set boldText(value) {
+        this._antennaSize.boldText = value;
+    }
+
     bindEvents() {
         this._closeButton.addEventListener('click', () => this.fireEvent(new CustomEvent('displaySidePanel', {
             detail: {display: false}
@@ -47,7 +60,7 @@ export class SidePanel extends Component {
         this._filterPanel.addEventListener('filter', e => this.fireEvent(new CustomEvent('filter', {
             detail: {filter: e.detail.filter, option: e.detail.option}
         })));
-        
+
     }
 
     toHtml() {
@@ -73,5 +86,10 @@ export class SidePanel extends Component {
             sdisFilters: this._sdisFilters
         });
         this._filterPanel.attach(this.dom);
+
+        this._antennaSize = new TextContent({
+            textValue: this._textValue
+        });
+        this._antennaSize.attach(this.dom);
     }
 }

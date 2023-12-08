@@ -34,7 +34,6 @@ export class SdisController {
         this._map.attach(this.principalElement);
         this._map.sdisData = data;
         this._map.initMap();
-        //this._map.setSdisMarker(data?.sdisList);
         this._map.setSdisMarkerByLocation(data?.sdisList);
     }
 
@@ -45,22 +44,24 @@ export class SdisController {
         this._sidePanel.closeButtonVisible = closeButtonVisible;
         this._sidePanel.addEventListener('searchClick', e => this.search(e?.detail?.search?.value));
         this._sidePanel.addEventListener('filter', e => this.filter(e));
+        this._sidePanel.boldText = true;
     }
 
-    reloadMap(data) {
+    reloadMap(data, newMessage) {
         let message = 'Pas de nouveau point à ajouter.';
         if (data?.count > 0) {
-            message = `${data.count} nouveaux points ajoutés.`;
+            message = newMessage;
             this._map.removeAllMarkers();
             this._map.sdisData = data;
             this._map.fitBound(data?.sdisList);
-            //this._map.setSdisMarker(data?.sdisList);
             this._map.setSdisMarkerByLocation(data?.sdisList);
+            this._sidePanel.updateText = `${data.count} antenne${data.count > 1 ? 's' : ''}`;
         }
-        this.infoModal.show({
-            title: 'Info',
-            content: {message}
-        });
+        if (data?.count === 0 || newMessage)
+            this.infoModal.show({
+                title: 'Info',
+                content: {message}
+            });
     }
 
     async search(value) {
@@ -172,7 +173,7 @@ export class SdisController {
                         console.error(title, error);
                     });
                 });
-            this.reloadMap(sdisData);
+            this.reloadMap(sdisData, `${sdisData.count} nouveaux points ajoutés.`);
         }
         this._dropArea.reset();
     }

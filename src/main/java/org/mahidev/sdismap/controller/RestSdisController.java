@@ -41,8 +41,9 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 	@GetMapping("/filter/{searchTerm}")
 	public SdisData getFilteredSdis(@PathVariable(required = false) final String searchTerm, @RequestParam(required = false) final List<String> name,
 			@RequestParam(required = false) final List<Integer> anfrNumber, @RequestParam(required = false) final List<Integer> inseeSite,
-			@RequestParam(required = false) final List<String> municipality, @RequestParam(required = false) final List<Integer> postalCode) {
-		return new SdisData(service.getFilteredSdis(searchTerm, name, anfrNumber, inseeSite, municipality, postalCode));
+			@RequestParam(required = false) final List<String> municipality, @RequestParam(required = false) final List<Integer> postalCode,
+			@RequestParam(required = false) final List<String> latitude, @RequestParam(required = false) final List<String> longitude) {
+		return new SdisData(service.getFilteredSdis(searchTerm, name, anfrNumber, inseeSite, municipality, postalCode, latitude, longitude));
 	}
 
 	@GetMapping("/filter")

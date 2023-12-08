@@ -76,10 +76,10 @@ export class RestWebClient {
      * @param {string} httpMethod
      * @param {string} route
      * @param {Object | null} queryParameters
-     * @param {MimeTypeKeys | null} bodyContentType
+     * @param {String | null} bodyContentType
      * @param {Object | null} bodyInserter
      * @param {string | null} responseType
-     * @return {Promise<Any>}
+     * @return {Promise<Object>}
      */
     async _invokeAsync(httpMethod, route, queryParameters, bodyContentType, bodyInserter, responseType) {
         const init = {};

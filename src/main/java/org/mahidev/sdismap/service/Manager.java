@@ -33,6 +33,9 @@ public class Manager {
 		List<Sdis> getFilteredSdis(String searchTerm, List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities,
 				List<Integer> postalCodes);
 
+		List<Sdis> getFilteredSdis(String searchTerm, List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities,
+				List<Integer> postalCodes, List<String> latitude, List<String> longitude);
+
 		List<Sdis> getFilteredSdis(List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities,
 				List<Integer> postalCodes);
 

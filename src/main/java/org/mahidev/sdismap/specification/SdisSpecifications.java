@@ -60,7 +60,7 @@ public class SdisSpecifications {
 		};
 	}
 
-	public static Specification<Sdis> filterBy(@NonNull final Filter filter) {
+	public static Specification<Sdis> filterBy(@NonNull final FilterSdis filter) {
 		return (root, query, criteriaBuilder) -> {
 			final var predicates = new ArrayList<Predicate>();
 
@@ -79,7 +79,10 @@ public class SdisSpecifications {
 			if (filter.postalCode() != null && !filter.postalCode().isEmpty()) {
 				predicates.add(root.join("location").get("postalCode").in(filter.postalCode()));
 			}
-
+			if (filter.latitude() != null && filter.longitude() != null && !filter.latitude().isEmpty() && !filter.longitude().isEmpty()) {
+				predicates.add(root.join("location").get("siteLatitude").as(String.class).in(filter.latitude()));
+				predicates.add(root.join("location").get("siteLongitude").as(String.class).in(filter.longitude()));
+			}
 			return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 		};
 	}

@@ -2,7 +2,7 @@ package org.mahidev.sdismap.repository;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.NonNull;
-import org.mahidev.sdismap.model.Filter;
+import org.mahidev.sdismap.model.FilterSdis;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.specification.SdisSpecifications;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,7 +17,7 @@ import java.util.Optional;
 @RepositoryRestResource
 public interface SdisRepository extends JpaRepository<Sdis, Long>, JpaSpecificationExecutor<Sdis> {
 
-	default List<Sdis> filterSdis(@NonNull final Filter filter) {
+	default List<Sdis> filterSdis(@NonNull final FilterSdis filter) {
 		return findAll(SdisSpecifications.filterBy(filter));
 	}
 
@@ -25,7 +25,7 @@ public interface SdisRepository extends JpaRepository<Sdis, Long>, JpaSpecificat
 		return findAll(SdisSpecifications.hasSearchTerm(searchTerm));
 	}
 
-	default List<Sdis> filterSdis(final String searchTerm, final Filter filter) {
+	default List<Sdis> filterSdis(final String searchTerm, final FilterSdis filter) {
 		final var specification = (StringUtils.hasText(searchTerm)) ?
 				SdisSpecifications.filterBy(filter).and(SdisSpecifications.hasSearchTerm(searchTerm)) :
 				SdisSpecifications.filterBy(filter);

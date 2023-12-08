@@ -21,8 +21,12 @@ class Main {
         const urlParams = new URLSearchParams(queryString);
         const latitude = urlParams.get('latitude');
         const longitude = urlParams.get('longitude');
-        const sdisData = await this._sdisApiClient.filterSdisByLocation(latitude, longitude);
-        const page = new SdisPage({sdis: sdisData?.sdisList});
+        const search = urlParams.get('search');
+        if (search && search.length > 0)
+            this._sdisData = await this._sdisApiClient.findFilteredSdis(search, {latitude, longitude});
+        else
+            this._sdisData = await this._sdisApiClient.filterSdisByLocation(latitude, longitude);
+        const page = new SdisPage({sdis: this._sdisData?.sdisList});
         page.attach(this.principalElement);
     }
 
