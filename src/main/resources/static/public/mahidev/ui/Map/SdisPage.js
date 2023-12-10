@@ -13,12 +13,12 @@ export class SdisPage extends Component {
     }
 
     initComponents() {
-        const headers = [FILTER['aerienNumber'], FILTER['type'], FILTER['dimension'], FILTER['tilt'], FILTER['height'],
+        const headers = [FILTER['aerienNumber'], FILTER['type'], FILTER['power'], FILTER['dimension'], FILTER['tilt'], FILTER['height'],
             FILTER['bandMin'], FILTER['bandMax'], FILTER['bandService']];
 
         const rows = this._sdis.map(sdis => {
-            const {aerien, frequency} = sdis;
-            return [aerien.number, aerien.type, aerien.dimension, aerien.tilt, aerien.height, frequency.bandMin,
+            const {aerien, frequency, emissionReception} = sdis;
+            return [aerien.number, aerien.type, emissionReception.power, aerien.dimension, aerien.tilt, aerien.height, frequency.bandMin,
                 frequency.bandMax, frequency.bandService];
         });
 

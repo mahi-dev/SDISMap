@@ -5,11 +5,12 @@ import org.mahidev.sdismap.datasource.FileDataSource;
 import org.mahidev.sdismap.excel.service.ExcelParser;
 import org.mahidev.sdismap.excel.service.PoijiExcelReader;
 import org.mahidev.sdismap.model.Sdis;
+import org.mahidev.sdismap.model.User;
 import org.mahidev.sdismap.repository.SdisRepository;
-import org.mahidev.sdismap.service.Manager;
-import org.mahidev.sdismap.service.SdisService;
-import org.mahidev.sdismap.service.XlsReaderService;
+import org.mahidev.sdismap.repository.UserRepository;
+import org.mahidev.sdismap.service.*;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -17,9 +18,17 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-@SpringBootApplication(scanBasePackages = {"org.mahidev.sdismap.controller", "org.mahidev.sdismap.exception"})
+import static org.springframework.security.core.userdetails.User.withUsername;
+
+@SpringBootApplication(scanBasePackages = {"org.mahidev.sdismap.configuration", "org.mahidev.sdismap.controller", "org.mahidev.sdismap.exception",
+		"org.mahidev.sdismap.repository"})
 @EntityScan({"org.mahidev.sdismap.model"})
 @EnableJpaRepositories({"org.mahidev.sdismap.repository"})
 @EnableConfigurationProperties({FileDataSource.class})
@@ -28,6 +37,31 @@ public class SdisMapApplication {
 
 	public static void main(final String[] args) {
 		SpringApplication.run(SdisMapApplication.class, args);
+	}
+
+	@Lazy
+	@Bean
+	UserManager.Service userService(final UserRepository repository) {
+		return new UserService(repository);
+	}
+
+	@Lazy
+	@Bean
+	@Primary
+	UserDetailsService customUserDetailsService(final UserManager.Service service) {
+		return new CustomUserDetailsService(service);
+	}
+
+	@Bean
+	UserDetailsService userDetailsService() {
+		final var user = withUsername("mahi").password("$2a$10$D07Lnng6MPZcXvid7larMeBzpcWYgu0dKBEHyxVQB.cLqaZ.RCByO").roles("USER").build();
+		final var admin = withUsername("admin").password("$2a$10$hdySJB/sNy2/U6ss.ejj..rajl9jT2vMZxBVf7iq84Rj90n/qUVdu").roles("ADMIN", "USER").build();
+		return new InMemoryUserDetailsManager(user, admin);
+	}
+
+	@Bean
+	public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
 	}
 
 	@Lazy
@@ -49,4 +83,12 @@ public class SdisMapApplication {
 	ExcelParser<Sdis> excelParser() {
 		return new PoijiExcelReader();
 	}
+
+	@Bean
+	protected CommandLineRunner setup(UserManager.Service userService) {
+		return args -> {
+			userService.createUser(new User("mahi", "$2a$10$D07Lnng6MPZcXvid7larMeBzpcWYgu0dKBEHyxVQB.cLqaZ.RCByO"));
+		};
+	}
+
 }

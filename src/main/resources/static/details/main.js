@@ -26,6 +26,8 @@ class Main {
             this._sdisData = await this._sdisApiClient.findFilteredSdis(search, {latitude, longitude});
         else
             this._sdisData = await this._sdisApiClient.filterSdisByLocation(latitude, longitude);
+        if (this._sdisData.count === 0)
+            window.location.href = '/';
         const page = new SdisPage({sdis: this._sdisData?.sdisList});
         page.attach(this.principalElement);
     }
