@@ -22,8 +22,18 @@ body {
     user-select: none;
 }
 
+body .details {
+    height: 100%;
+    overflow: unset;
+    user-select: unset;
+}
+
 .height100 {
     height: 100%;
+}
+
+.height85 {
+    height: 85%;
 }
 
 .height65 {
@@ -85,10 +95,12 @@ nav {
 }
 
 main {
-    padding-bottom: 65px;
 }
 
 /* CLASS */
+.header_principal {
+    padding: 0 calc(var(--bs-gutter-x) * .5);
+}
 
 .principal {
     padding-top: 10px;
@@ -279,7 +291,7 @@ main {
 }
 
 .sidepanel[class^='col-'], .sidepanel[class*=' col-'] {
-    overflow-x: auto;
+    overflow-x: hidden;
     padding: 1% 1% 0 1%;
 }
 
@@ -864,6 +876,7 @@ a.disabled-link {
 }
 
 #glisser {
+    line-height: normal;
     display: inline-block;
     margin-bottom: 0rem !important;
 }
@@ -1091,6 +1104,7 @@ div.share-table-row__cell {
 /* Page Header */
 
 .page-header {
+    padding: 15px 0;
     display: flex;
     background-color: var(--mw-couleur-fond-page);
     min-height: 58px;
@@ -1101,7 +1115,6 @@ div.share-table-row__cell {
 
 .page-header__logo {
     width: 160px;
-    padding-bottom: 15px;
 }
 
 .page-header__title {
@@ -1442,10 +1455,9 @@ div.share-table-row__cell {
 }
 
 #map {
-    height: 100%;
-    /*width: 70%;*/
-    padding-left: 10px;
-    margin-top: 10px;
+    width: 64%;
+    margin: 10px;
+    border-radius: 15px;
 }
 
 .leaflet-attribution-flag {
@@ -1492,7 +1504,7 @@ div.share-table-row__cell {
 /*details*/
 .sdis__details {
     overflow-y: auto;
-    padding-bottom: 10px;
+    padding: 15px 20px;
 }
 
 /*sdis popup*/
@@ -1537,39 +1549,49 @@ div.share-table-row__cell {
 }
 
 /*sdis page*/
-.sdis-page__name {
+.sdis-page__antenna_details {
+    font-size: 20px;
 }
 
-.sdis-page__anfr-number {
+.sdis-page__antenna_details__name {
+    width: auto;
+    line-height: normal;
 }
 
-.sdis-page__location {
-    line-height: 20px;
+.sdis-page__antenna_details__anfr-number {
+    width: auto;
+    line-height: normal;
 }
 
-.sdis-page__gps {
-
+.sdis-page__antenna_details__location {
+    width: auto;
+    line-height: normal;
+    padding-right: calc(var(--bs-gutter-x) * 3.5);
 }
 
-.sdis-page__support-number {
-
+.sdis-page__antenna_details__gps {
+    width: auto;
+    line-height: normal;
 }
 
-.sdis-page__support-colors {
-
+.sdis-page__antenna_details__support-number {
+    width: auto;
+    line-height: normal;
 }
 
-.sdis-page__support-nature {
-
+.sdis-page__antenna_details__support-colors {
+    width: auto;
+    line-height: normal;
 }
 
-.sdis-page__support-owner {
-
+.sdis-page__antenna_details__support-nature {
+    width: auto;
+    line-height: normal;
 }
 
-.sdis-page__size {
-    display: flex;
-    justify-content: right;
+.sdis-page__antenna_details__support-owner {
+    width: auto;
+    line-height: normal;
 }
 
 .textContent {
@@ -1578,4 +1600,86 @@ div.share-table-row__cell {
 
 .textContent p {
     place-self: flex-end;
+}
+
+/***********DataTable***********/
+.sdis-page__antenna_details__table {
+    font-size: 18px;
+    margin-top: 120px;
+}
+
+.table-cell {
+    display: table-cell;
+}
+
+.table-cell:nth-child(1),
+.table-cell:nth-child(3),
+.table-cell:nth-child(4),
+.table-cell:nth-child(5) {
+    width: 10%;
+}
+
+
+.table-cell:nth-child(3),
+.table-cell:nth-child(4),
+.table-cell:nth-child(5),
+.table-cell:nth-child(6),
+.table-cell:nth-child(7) {
+    text-align: right;
+}
+
+.table-cell:nth-child(8) {
+    padding-left: 20px;
+}
+
+.table-row {
+    display: table-row;
+    line-height: 34px;
+}
+
+.table .table-row:first-child .table-cell {
+    transform: rotate(-45deg);
+    transform-origin: top left;
+    line-height: normal;
+}
+
+.table-row.datatable__row:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+@media print {
+    @page {
+        size: A4 portrait;
+        margin: 0.2cm;
+    }
+
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    body, html {
+        height: auto;
+    }
+
+    .principal, .page__antenna_details__table {
+        height: auto;
+        overflow: visible;
+    }
+
+    .sdis-page__antenna_details__common {
+        font-size: 16px;
+    }
+
+    .sdis-page__antenna_details__table {
+        font-size: 12px;
+        margin-top: 60px;
+    }
+
+    .table .table-row:first-child .table-cell {
+        font-size: 10px;
+    }
+
+    .table-row.datatable__row:nth-child(even) {
+        background-color: #f2f2f2;
+    }
 }

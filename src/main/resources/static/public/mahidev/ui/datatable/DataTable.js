@@ -1,98 +1,25 @@
 import {Component} from "../Component.js";
+import {DataTableRow} from "./DataTableRow.js";
 
 export class DataTable extends Component {
 
-    /**
-     * @param {Object} value
-     */
-    set headings(value) {
-        this._headings = value;
+    set headers(value) {
+        this._headers = value;
     }
 
-    get items() {
-        return this._items;
-    }
-
-    /**
-     * @param {Object[]} value
-     */
-    set items(value) {
-        this._items = value;
-        if (this.dom) {
-            this._clearRows();
-            this._setRows();
-        }
-
-    }
-
-    get rowBuilder() {
-        return this._rowBuilder;
-    }
-
-    /**
-     * @param {Function} value
-     */
-    set rowBuilder(value) {
-        this._rowBuilder = value || (item => new DataTableRow({value: item}));
+    set rows(value) {
+        this._rows = value;
     }
 
     initComponents() {
-        this._setHeadings();
-        this._setRows();
-    }
-
-    _setHeadings() {
-        for (let heading of this._headings) {
-            let cell = new HeadingCell({value: heading});
-            cell.attach(this.dom.firstElementChild);
-        }
-    }
-
-    _setRows() {
-        for (const item of this._items) {
-            let row = this._rowBuilder(item);
-            row.attach(this.dom);
-        }
-    }
-
-    _clearRows() {
-        if (!this.dom)
-            return;
-        this.dom.querySelectorAll('div.datatable__row').forEach(row => this.dom.removeChild(row));
+        const header = new DataTableRow({cells: this._headers});
+        header.attach(this.dom);
+        this._rows.map(cells => new DataTableRow({cells}))
+            .forEach(dataTableRow => dataTableRow.attach(this.dom))
     }
 
     toHtml() {
-        return `
-			<div class="table" style="display: table;">
-				<div class="datatable__header" style="display: table-row;"></div>
-			</div>`;
+        return `<div class="table" style="display: table;"></div>`;
     }
 }
 
-class HeadingCell extends Component {
-
-    set value(value) {
-        this._value = value;
-    }
-
-    toHtml() {
-        return `<div style="display: table-cell;">${this._value}</div>`;
-    }
-}
-
-class DataTableRow extends Component {
-
-    /**
-     * @param {Object} value
-     */
-    set value(value) {
-        this._value = value;
-    }
-
-    toHtml() {
-        return `
-			<div style="display: table-row;">
-				<div class="datatable__row" style="display: table-cell;">${this._value}</div>
-			</div>`;
-    }
-}
