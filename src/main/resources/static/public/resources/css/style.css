@@ -1649,8 +1649,7 @@ div.share-table-row__cell {
 
 @media print {
     @page {
-        size: A4 portrait;
-        margin: 0.2cm;
+        margin: 0;
     }
 
     ::-webkit-scrollbar {
@@ -1659,6 +1658,11 @@ div.share-table-row__cell {
 
     body, html {
         height: auto;
+    }
+
+    body {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
     }
 
     .principal, .page__antenna_details__table {
