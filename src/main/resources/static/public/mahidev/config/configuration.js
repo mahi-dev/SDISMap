@@ -1,4 +1,6 @@
+const base = window.location.host;
+
 export const SETTINGS = {
-    baseApiUrl: 'http://localhost:8096',
+    baseApiUrl: `http://${base}`,
     sdisApi: '/api/sdis'
 }
