@@ -8,12 +8,13 @@ export class Header extends Component {
 
     set logo(value) {
         this.dom.querySelector('img').src = value;
+        this.dom.querySelector('img').addEventListener('click', e => this.fireEvent(new CustomEvent('headerLogoClick')));
     }
 
     toHtml() {
         return `
 		<header id="sdisHeader" class="page-header col-sm-12">
-      <img class="page-header__logo" alt="Marco">
+            <img class="page-header__logo" alt="SDIS 84">
 			<h1 class="page-header__title" ></h1>
 		</header>
 	`;

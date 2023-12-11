@@ -1114,6 +1114,7 @@ div.share-table-row__cell {
 }
 
 .page-header__logo {
+    cursor: pointer;
     width: 160px;
 }
 

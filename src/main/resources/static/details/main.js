@@ -39,6 +39,11 @@ class Main {
         });
         header.name = 'SDIS 84';
         header.logo = '../../../public/resources/img/sdis84.jpeg';
+        header.addEventListener('headerLogoClick', e => this._redirect(e));
+    }
+
+    _redirect(e) {
+        window.location.href = "/";
     }
 }
 
