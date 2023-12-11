@@ -813,6 +813,60 @@ a.disabled-link {
     overflow-x: hidden;
 }
 
+@media only screen and (max-width: 768px) {
+    #map {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .principal {
+        height: 80% !important;
+    }
+
+    .sdis__details {
+        height: 90% !important;
+    }
+
+    .upload {
+        height: 0 !important;
+    }
+
+    .sdis-page__antenna_details {
+        font-size: 10px !important;
+    }
+
+    .sdis-page__antenna_details__table {
+        font-size: 10px !important;
+        margin-top: 20px !important;
+    }
+
+    .table-row {
+        line-height: normal !important;
+    }
+
+    .table .table-row:first-child .table-cell {
+        transform: rotate(-57deg) !important;
+        transform-origin: unset !important;
+        font-size: 8px !important;
+        min-width: 60px !important;
+        padding-bottom: 10px;
+    }
+
+    .table-cell:nth-child(1),
+    .table-cell:nth-child(3),
+    .table-cell:nth-child(4),
+    .table-cell:nth-child(5),
+    .table-cell:nth-child(6) {
+        width: 10%;
+        max-width: 70px !important;
+    }
+
+    .table-cell:nth-child(9) {
+        padding-left: 8px !important;
+        max-width: 75px !important;
+    }
+}
+
 @media all and (max-height: 500px) {
     .file-item-card__border {
         max-height: 99%;

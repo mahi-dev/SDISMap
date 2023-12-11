@@ -7,7 +7,7 @@ export default class DropArea extends Component {
     }
 
     toHtml() {
-        return `<div id="drop-area">
+        return `<div id="drop-area" class="d-none d-md-block">
                 <form class="my-form">
                     <div id="up-area">
                         <p id="glisser">Glissez-déposez des fichiers pour ajouter des points sur la carte, ou</p>

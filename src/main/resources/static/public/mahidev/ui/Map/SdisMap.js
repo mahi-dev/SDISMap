@@ -136,7 +136,7 @@ export class SdisMap extends Component {
     }
 
     toHtml() {
-        return `<div id="map" class="col-8"></div>`;
+        return `<div id="map" class="col-sm-8 col-xs-12"></div>`;
     }
 
     convertToDecimal(dms) {
