@@ -6,7 +6,7 @@ MAINTAINER OMAR_MAHI
 VOLUME /tmp
 
 # Ajouter le fichier .jar de votre application
-COPY target/SDISMap-0.0.3-SNAPSHOT.jar app.jar
+COPY target/SDISMap-1.0.0.jar app.jar
 
 # Exécuter l'application
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
