@@ -64,7 +64,7 @@ export class SidePanel extends Component {
     }
 
     toHtml() {
-        return `<div id="${this.wrapId}" class="sidepanel col-4 d-none d-md-block"></div>`;
+        return `<div id="${this.wrapId}" class="sidepanel col-4"></div>`;
     }
 
     toggle() {
