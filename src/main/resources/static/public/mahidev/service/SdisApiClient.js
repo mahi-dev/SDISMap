@@ -94,6 +94,10 @@ export class SdisApiClient {
             });
     }
 
+    reset() {
+        return this._delegate.delete(this._serviceUrl + `/reset`, null, null, null, MimeTypeKeys.JSON)
+    }
+
     importSdisFromFile(file) {
         const formData = new FormData();
         formData.append('file', file);

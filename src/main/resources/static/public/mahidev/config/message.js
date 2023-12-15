@@ -2,7 +2,8 @@ export const MESSAGE = {
     ERROR: {
         NO_DATA: 'Données absentes.',
         NO_PANEL: 'Panneau latéral absent.',
-        NO_MAP: 'Carte absente.'
+        NO_MAP: 'Carte absente.',
+        RESET: 'Erreur lors du reset.'
     }
 };
 
@@ -34,18 +35,18 @@ export const FILTER = {
     "postalCodes": "Site Code Postal",
     "aerienNumber": "Aerien N°",
     "petitionerReference": "Aerien Ref. Petitionnaire",
-    "type": "Aerien Type",
-    "dimension": "Aerien Dimension (m)",
+    "type": "Type",
+    "dimension": "Dimension (m)",
     "tilt": "Aerien Tilt (Deg.)",
-    "azimuth": "Aerien Azymuth (Deg.)",
+    "azimuth": "Azymuth (Deg.)",
     "opening": "Aerien Ouverture (Deg.)",
-    "height": "Aerien Hauteur (m)",
+    "height": "Hauteur (m)",
     "number": "EmRec N°",
     "system": "EmRec Systeme",
     "designation": "EmRec Designation Em.",
-    "power": "EmRec Puissance (dBW)",
+    "power": "Puissance (dBW)",
     "powerUnit": "EmRec Unite de Puissance",
-    "bandMin": "Bande Freq. Min.",
-    "bandMax": "Bande Freq. Max.",
+    "bandMin": "Freq. Min.",
+    "bandMax": "Freq. Max.",
     "bandService": "Bande Service",
 }

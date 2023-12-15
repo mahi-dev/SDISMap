@@ -1,5 +1,8 @@
 package org.mahidev.sdismap;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
+import org.mahidev.sdismap.configuration.NullAsEmptyStringSerializer;
 import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.datasource.FileDataSource;
 import org.mahidev.sdismap.excel.service.ExcelParser;
@@ -37,6 +40,16 @@ public class SdisMapApplication {
 
 	public static void main(final String[] args) {
 		SpringApplication.run(SdisMapApplication.class, args);
+	}
+
+	@Bean
+	@Primary
+	public ObjectMapper objectMapper(final NullAsEmptyStringSerializer nullSerializer) {
+		final var serializerProvider = new DefaultSerializerProvider.Impl();
+		serializerProvider.setNullValueSerializer(nullSerializer);
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setSerializerProvider(serializerProvider);
+		return objectMapper;
 	}
 
 	@Lazy

@@ -2,6 +2,7 @@ import {MESSAGE} from "../config/message.js";
 import {SelectionBox} from "../ui/form/SelectionBox.js";
 import DropArea from "../ui/Upload/DropArea.js";
 import {MessageDialog} from "../ui/Dialog/MessageDialog.js";
+import {Spinner} from "../ui/Spinner/Spinner.js";
 
 export class SdisController {
 
@@ -28,6 +29,10 @@ export class SdisController {
         return document?.querySelector('.contextualsearch input')?.value;
     }
 
+    set spinnerActive(value) {
+        this._spinner.isSpinnerActive = value;
+    }
+
     createMap(data) {
         if (!data) throw new Error(MESSAGE.ERROR.NO_DATA);
         if (!this._map) throw new Error(MESSAGE.ERROR.NO_MAP);
@@ -44,6 +49,8 @@ export class SdisController {
         this._sidePanel.closeButtonVisible = closeButtonVisible;
         this._sidePanel.addEventListener('searchClick', e => this.search(e?.detail?.search?.value));
         this._sidePanel.addEventListener('filter', e => this.filter(e));
+        this._sidePanel.addEventListener('reset', e => this.reset());
+        this._sidePanel.addEventListener('deleteAll', e => this.reset(false));
         this._sidePanel.boldText = true;
     }
 
@@ -55,13 +62,17 @@ export class SdisController {
             this._map.sdisData = data;
             this._map.fitBound(data?.sdisList);
             this._map.setSdisMarkerByLocation(data?.sdisList);
+            this._sidePanel.deleteButtonVisible = this._data.count > 0;
             this._sidePanel.updateText = `${data.count} antenne${data.count > 1 ? 's' : ''}`;
         }
-        if (data?.count === 0 || newMessage)
+        if (data?.count === 0 || newMessage) {
+            this._sidePanel.deleteButtonVisible = false;
             this.infoModal.show({
                 title: 'Info',
                 content: {message}
             });
+        }
+
     }
 
     async search(value) {
@@ -111,10 +122,17 @@ export class SdisController {
         return this.searchFilteredSdis((!this._contextualSearchValue) ? "" : this._contextualSearchValue, this._currentFilters);
     }
 
-    crateDropArea() {
+    createDropArea() {
         this._dropArea = new DropArea();
         this._dropArea.attach(this.uploadElement);
         this.uploadEvent(this._dropArea.dom);
+    }
+
+    createSpinner() {
+        this._spinner = new Spinner();
+        this._spinner.attach(document.querySelector('#map'));
+        this._spinner.logo = 'fa-circle-notch';
+        this._spinner.logo = 'fa-spin';
     }
 
     uploadEvent(dropArea) {
@@ -176,5 +194,26 @@ export class SdisController {
             this.reloadMap(sdisData, `${sdisData.count} nouveaux points ajoutés.`);
         }
         this._dropArea.reset();
+    }
+
+    async reset(reImport = true) {
+        const reset = await this._service.reset();
+        if (!reset)
+            this.infoModal.show({
+                title: 'Error',
+                content: {message: MESSAGE.ERROR.RESET}
+            });
+        this._map.removeAllMarkers();
+        this._data = {count: 0};
+        this.spinnerActive = true;
+        delay(0.5).then(async () => {
+            if (reImport) {
+                this._data = await this._service.importSdis();
+                this.reloadMap(this._data);
+            }
+            this.spinnerActive = false;
+            this._sidePanel.deleteButtonVisible = this._data.count > 0;
+            this._sidePanel.updateText = `${this._data.count} antenne${this._data.count > 1 ? 's' : ''}`;
+        });
     }
 }

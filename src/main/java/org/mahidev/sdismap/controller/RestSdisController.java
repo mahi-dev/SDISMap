@@ -98,4 +98,9 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 		return service.getFilter().orElseThrow();
 	}
 
+	@DeleteMapping("/reset")
+	public boolean reset() {
+		return service.deleteAll();
+	}
+
 }

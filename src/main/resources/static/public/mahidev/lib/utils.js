@@ -1,7 +1,7 @@
 /**
  * polyfill permettant de tester l'egalité entre deux objets
- * @param {Object} a 
- * @param {Object} b 
+ * @param {Object} a
+ * @param {Object} b
  */
 function isEquivalent(a, b) {
     let aProps = Object.getOwnPropertyNames(a);
@@ -20,7 +20,7 @@ function isEquivalent(a, b) {
 }
 
 /** Verifie la presence d'un element
- * @param {any} value 
+ * @param {any} value
  * @return {Boolean} true si la value est present
  */
 const isPresent = (value) => {
@@ -137,14 +137,15 @@ function forEachAsync(arr, fn) {
             return Promise.resolve(fn(el)).then(next);
         }
     }
+
     return Promise.resolve().then(next);
 }
 
 async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
-      await callback(array[index], index, array);
+        await callback(array[index], index, array);
     }
-  }
+}
 
 function forEachUploadAsync(arr) {
     function next() {
@@ -154,6 +155,7 @@ function forEachUploadAsync(arr) {
             return Promise.all(map).then(next);
         }
     }
+
     return Promise.resolve().then(next);
 }
 
@@ -226,7 +228,7 @@ function getOneWeekAgo() {
 
 function getOneMonthAgo() {
     const now = new Date();
-    return new Date(now.getFullYear(), now.getMonth()-1, now.getDate()).toISOString();
+    return new Date(now.getFullYear(), now.getMonth() - 1, now.getDate()).toISOString();
 }
 
 function getOneYearAgo() {
@@ -235,4 +237,75 @@ function getOneYearAgo() {
 
 function toISOString(value) {
     return new Date(value).toISOString();
+}
+
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time * 1000));
+}
+
+
+function findIndexByElement(obj, element) {
+    const entries = Object.entries(obj);
+    for (let i = 0; i < entries.length; i++) {
+        if (entries[i][1].includes(element)) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+function createDuplicateMap(rows) {
+    let hashMap = {};
+    rows.map((row, index) => {
+        if (!Array.isArray(hashMap[row[0]]))
+            hashMap[row[0]] = [];
+        hashMap[row[0]].push(index);
+    });
+    return hashMap;
+}
+
+function generateUniqueColors(numColors, colorDifferenceThreshold = 75, referenceColorHex = '#8e033a') {
+    const generatedColors = new Set();
+    const minBrightnessThreshold = 50;
+    const maxBrightnessThreshold = 200;
+
+    const referenceRgb = referenceColorHex.substring(1).match(/.{2}/g).map(hex => parseInt(hex, 16));
+    const referenceBrightness = (referenceRgb[0] + referenceRgb[1] + referenceRgb[2]) / 3;
+
+    const generateColor = () => {
+        return '#' + Array.from({length: 3}, () => Math.floor(Math.random() * 256).toString(16).padStart(2, '0')).join('');
+    }
+
+    const isColorValid = (color) => {
+        const rgb = color.substring(1).match(/.{2}/g).map(hex => parseInt(hex, 16));
+        const brightness = (rgb[0] + rgb[1] + rgb[2]) / 3;
+        return brightness > minBrightnessThreshold && brightness < maxBrightnessThreshold && brightness > referenceBrightness;
+    }
+
+    const isColorDistinct = (newColor, threshold) => {
+        const newRgb = newColor.substring(1).match(/.{2}/g).map(hex => parseInt(hex, 16));
+        for (let color of generatedColors) {
+            const existingRgb = color.substring(1).match(/.{2}/g).map(hex => parseInt(hex, 16));
+            const distance = Math.sqrt(newRgb.reduce((acc, val, i) => acc + Math.pow(val - existingRgb[i], 2), 0));
+            if (distance < threshold) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    const getUniqueColor = () => {
+        let color;
+        do {
+            color = generateColor();
+        } while (!isColorValid(color) || !isColorDistinct(color, colorDifferenceThreshold));
+        generatedColors.add(color);
+        return color;
+    }
+
+    const uniqueColors = [];
+    for (let i = 0; i < numColors; i++) {
+        uniqueColors.push(getUniqueColor());
+    }
+    return uniqueColors;
 }

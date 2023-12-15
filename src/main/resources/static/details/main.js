@@ -28,8 +28,15 @@ class Main {
             this._sdisData = await this._sdisApiClient.filterSdisByLocation(latitude, longitude);
         if (this._sdisData.count === 0)
             window.location.href = '/';
-        const page = new SdisPage({sdis: this._sdisData?.sdisList});
+
+        const sdis = this._sdisData?.sdisList;
+        const switchButtonName = 'Distinguer les duplications';
+        const switchButtonActive = false;
+
+        const page = new SdisPage({sdis, switchButtonActive, switchButtonName});
         page.attach(this.principalElement);
+        page.switchButtonVisible = true;
+        page.switchButtonColorVisible = false;
     }
 
     createHeader() {

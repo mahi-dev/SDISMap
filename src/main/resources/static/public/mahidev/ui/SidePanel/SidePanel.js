@@ -3,6 +3,7 @@ import {Component} from "../Component.js";
 import ContextualSearch from "../SearchFilter/ContextualSearch.js";
 import {FilterPanel} from "./FilterPanel.js";
 import {TextContent} from "./TextContent.js";
+import {FilterButton} from "../Button/FilterButton.js";
 
 export class SidePanel extends Component {
 
@@ -48,6 +49,14 @@ export class SidePanel extends Component {
         this._antennaSize.boldText = value;
     }
 
+    set razButtonVisible(value) {
+        this._razButton.visible = value;
+    }
+
+    set deleteButtonVisible(value) {
+        this._deleteButton.visible = value;
+    }
+
     bindEvents() {
         this._closeButton.addEventListener('click', () => this.fireEvent(new CustomEvent('displaySidePanel', {
             detail: {display: false}
@@ -61,6 +70,9 @@ export class SidePanel extends Component {
             detail: {filter: e.detail.filter, option: e.detail.option}
         })));
 
+        this._razButton.addEventListener('click', e => this.fireEvent(new CustomEvent('reset')));
+
+        this._deleteButton.addEventListener('click', e => this.fireEvent(new CustomEvent('deleteAll')));
     }
 
     toHtml() {
@@ -86,6 +98,14 @@ export class SidePanel extends Component {
             sdisFilters: this._sdisFilters
         });
         this._filterPanel.attach(this.dom);
+
+        this._razButton = new FilterButton();
+        this._razButton.attach(this.dom);
+        this._razButton.name = "Restaurer les points par défaut";
+
+        this._deleteButton = new FilterButton();
+        this._deleteButton.attach(this.dom);
+        this._deleteButton.name = "Supprimer tous les points";
 
         this._antennaSize = new TextContent({
             textValue: this._textValue

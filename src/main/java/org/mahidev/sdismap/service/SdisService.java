@@ -81,4 +81,10 @@ public record SdisService(SdisRepository repository) implements Manager.SdisServ
 	public List<Sdis> findSdis(@NonNull final String searchTerm) {
 		return repository.findSdis(searchTerm);
 	}
+
+	@Override
+	public boolean deleteAll() {
+		repository.deleteAll();
+		return getAllSdis().isEmpty();
+	}
 }

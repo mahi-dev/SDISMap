@@ -40,6 +40,8 @@ public class Manager {
 				List<Integer> postalCodes);
 
 		List<Sdis> findSdis(String search);
+
+		boolean deleteAll();
 	}
 
 	public interface ReaderService<T> {

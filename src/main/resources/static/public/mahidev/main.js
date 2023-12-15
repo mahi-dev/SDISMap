@@ -34,7 +34,8 @@ class Main {
             sdisFilters: this._sdisFilters,
             textValue: `${size} antenne${size > 1 ? 's' : ''}`
         }));
-        this._sdisController.crateDropArea();
+        this._sdisController.createDropArea();
+        this._sdisController.createSpinner();
     }
 
     createHeader() {

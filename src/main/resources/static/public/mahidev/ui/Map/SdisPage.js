@@ -1,6 +1,7 @@
 import {Component} from "../Component.js";
 import {FILTER} from "../../config/message.js";
 import {DataTable} from "../datatable/DataTable.js";
+import {Switch} from "../Button/Switch.js";
 
 export class SdisPage extends Component {
 
@@ -12,18 +13,69 @@ export class SdisPage extends Component {
         this._sdis = value;
     }
 
+    set switchButtonVisible(value) {
+        this._switchButton.visible = value;
+
+    }
+
+    set switchButtonColorVisible(value) {
+        this._switchButtonColor.visible = value;
+
+    }
+
+    set switchButtonActive(value) {
+        this._switchButtonActive = value;
+
+    }
+
+    set switchButtonName(value) {
+        this._switchButtonName = value;
+    }
+
+    get switchButtonState() {
+        return this._switchButton.state;
+    }
+
+    bindEvents() {
+        this._switchButton.addEventListener('toggleEvent', this._distinctDuplicateValue.bind(this));
+        this._switchButtonColor.addEventListener('toggleEvent', this._distinctColors.bind(this));
+    }
+
     initComponents() {
-        const headers = [FILTER['aerienNumber'], FILTER['type'], FILTER['power'], FILTER['dimension'], FILTER['tilt'], FILTER['height'],
-            FILTER['bandMin'], FILTER['bandMax'], FILTER['bandService']];
+        this._switchButtonColor = new Switch({name: 'Distinguer les couleurs', default: false});
+        this._switchButtonColor.attach(this.dom.querySelector('#distinctColor'));
+
+        this._switchButton = new Switch({name: this._switchButtonName, default: this._switchButtonActive});
+        this._switchButton.attach(this.dom.querySelector('#distinctDuplicate'));
+
+        const headers = [FILTER['aerienNumber'], FILTER['type'], FILTER['power'], FILTER['dimension'], FILTER['height'],
+            FILTER['azimuth'], FILTER['bandMin'], FILTER['bandMax'], FILTER['bandService']];
 
         const rows = this._sdis.map(sdis => {
             const {aerien, frequency, emissionReception} = sdis;
-            return [aerien.number, aerien.type, emissionReception.power, aerien.dimension, aerien.tilt, aerien.height, frequency.bandMin,
-                frequency.bandMax, frequency.bandService];
+            return [aerien.number, aerien.type, emissionReception.power, aerien.dimension, aerien.height,
+                aerien.azimuth, frequency.bandMin, frequency.bandMax, frequency.bandService];
         });
+        const distinctDuplicate = this.switchButtonState;
+        this._dataTable = new DataTable({headers, rows, distinctDuplicate});
+        this._dataTable.attach(this.dom.querySelector(".sdis-page__antenna_details__table"))
+    }
 
-        const dataTable = new DataTable({headers, rows});
-        dataTable.attach(this.dom.querySelector(".sdis-page__antenna_details__table"))
+    _distinctDuplicateValue(value) {
+        this._dataTable.distinctDuplicate = value.detail;
+        this._dataTable.createDataTable();
+        this._switchButtonColor.visible = value.detail;
+        if (!value.detail) {
+            if (this._switchButtonColor.state) {
+                this._switchButtonColor.dom.querySelector('input').click();
+            }
+            this._distinctColors({detail: false})
+        }
+    }
+
+    _distinctColors(value) {
+        this._dataTable.distinctColor = value.detail;
+        this._dataTable.createDataTable();
     }
 
     toHtml() {
@@ -35,6 +87,10 @@ export class SdisPage extends Component {
                     <div class="row">
                         <p class='sdis-page__antenna_details__name'><b>${name}</b></p>
                         <p class='sdis-page__antenna_details__anfr-number'>${FILTER['anfrNumber']} : <b>${anfrNumber}</b></p>
+                    </div>
+                    <div class="row sdis-page__antenna_details__distinct">
+                        <div class="switchButton" id="distinctColor"></div>
+                        <div class="switchButton" id="distinctDuplicate"></div>
                     </div>
                     <div class="row">
                         <p class='sdis-page__antenna_details__location'>${address}, ${postalCode} ${municipality}</p>

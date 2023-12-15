@@ -120,8 +120,7 @@ main {
 
 .filterButton {
     font-size: min(1.2vw, 0.85rem);
-    margin-left: 10px;
-    margin-bottom: 5px;
+    margin: 1em 0;
 }
 
 .sorting {
@@ -840,6 +839,14 @@ a.disabled-link {
         display: none !important;
         height: 0 !important;
     }
+
+    .sdis-page__antenna_details__distinct {
+        margin-bottom: 10px;
+    }
+
+    .toggle-label {
+        font-size: 8px !important;
+    }
 }
 
 @media only screen and (max-width: 768px) {
@@ -869,6 +876,14 @@ a.disabled-link {
         height: 0 !important;
     }
 
+    .sdis-page__antenna_details__distinct {
+        margin-bottom: 10px;
+    }
+
+    .toggle-label {
+        font-size: 8px !important;
+    }
+
     .sdis-page__antenna_details {
         font-size: 10px !important;
     }
@@ -880,7 +895,7 @@ a.disabled-link {
     }
 
     .table-row {
-        line-height: normal !important;
+        line-height: 25px !important;
     }
 
     div.table > div:first-of-type {
@@ -889,25 +904,26 @@ a.disabled-link {
     }
 
     .table .table-row:first-child .table-cell {
-        /*transform: unset !important;*/
-        /*transform-origin: unset !important;*/
         font-size: 8px !important;
-        min-width: 60px !important;
+        min-width: 60px;
         padding-bottom: 10px;
     }
 
-    .table-cell:nth-child(1),
-    .table-cell:nth-child(3),
-    .table-cell:nth-child(4),
-    .table-cell:nth-child(5),
-    .table-cell:nth-child(6) {
-        width: 10%;
-        max-width: 70px !important;
+    .table-cell {
+        width: auto;
+    }
+
+    .table-cell:nth-child(2) {
+        min-width: 95px !important;
+    }
+
+    .table-cell:nth-child(8) {
+        min-width: 75px !important;
     }
 
     .table-cell:nth-child(9) {
+        min-width: 170px !important;
         padding-left: 8px !important;
-        max-width: 75px !important;
     }
 }
 
@@ -1100,7 +1116,7 @@ div.table > div:first-of-type {
     font-weight: bold;
 
     position: sticky !important;
-    top: 125px;
+    top: 159px;
     background-color: white !important;
     z-index: 100;
 }
@@ -1358,10 +1374,10 @@ div.share-table-row__cell {
 }
 
 .spinner {
-    position: fixed;
+    position: relative;
     left: 50%;
-    margin-left: -50px;
-    padding: 1em;
+    top: 50%;
+    margin: -50px;
     z-index: 2001;
     text-align: center;
     font-size: 5rem;
@@ -1402,10 +1418,15 @@ div.share-table-row__cell {
 }
 
 /********** toggle *************/
+.sdis-page__antenna_details__distinct {
+    justify-content: flex-end;
+}
+
 .switchButton {
     display: inline-flex;
-    align-items: center;
-    width: 100%;
+    flex-direction: column;
+    align-items: flex-end;
+    width: auto;
 }
 
 .inframe .switchButton {
@@ -1416,7 +1437,7 @@ div.share-table-row__cell {
 .toggle {
     cursor: pointer;
     display: inline-flex;
-    margin-top: 10px;
+    /*margin-top: 10px;*/
 }
 
 .inframe .toggle {
@@ -1725,18 +1746,19 @@ div.share-table-row__cell {
     display: table-cell;
 }
 
-
-.table-cell:nth-child(3),
-.table-cell:nth-child(4) {
-    width: 12%;
+.table-cell:nth-child(3) {
+    width: 6%;
 }
 
-.table-cell:nth-child(1),
+.table-cell:nth-child(1) {
+    width: 8%;
+}
+
+.table-cell:nth-child(4),
 .table-cell:nth-child(5),
 .table-cell:nth-child(6) {
-    width: 10%;
+    width: 12%;
 }
-
 
 .table-cell:nth-child(3),
 .table-cell:nth-child(4),
@@ -1747,8 +1769,16 @@ div.share-table-row__cell {
     text-align: right;
 }
 
+.table-cell:nth-child(4),
+.table-cell:nth-child(5),
+.table-cell:nth-child(6),
+.table-cell:nth-child(7),
+.table-cell:nth-child(8) {
+    padding-left: 8px;
+}
+
 .table-cell:nth-child(9) {
-    padding-left: 20px;
+    padding-left: 15px;
 }
 
 .table-row {
@@ -1793,6 +1823,11 @@ div.share-table-row__cell {
         font-size: 16px;
     }
 
+    .sdis-page__antenna_details__distinct {
+        display: none !important;
+        height: 0 !important;
+    }
+
     .sdis-page__antenna_details__table {
         font-size: 12px;
         margin-top: 10px;
@@ -1804,5 +1839,12 @@ div.share-table-row__cell {
 
     .table-row.datatable__row:nth-child(even) {
         background-color: #f2f2f2;
+    }
+
+    .table-cell:nth-child(3),
+    .table-cell:nth-child(4),
+    .table-cell:nth-child(5),
+    .table-cell:nth-child(6) {
+        width: 6%;
     }
 }

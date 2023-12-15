@@ -44,7 +44,7 @@ public class CustomWebSecurityConfigurerAdapter {
 					auth.anyRequest().authenticated();
 				}).formLogin(Customizer.withDefaults()).logout(l -> l.logoutSuccessUrl("/").invalidateHttpSession(true).clearAuthentication(true).permitAll())
 				.rememberMe(
-						r -> r.userDetailsService(userDetailsService).key("myUniqueKey").rememberMeCookieName("remember-me").tokenValiditySeconds(3600))
+						r -> r.userDetailsService(userDetailsService).key("myUniqueKey").rememberMeCookieName("remember-me").tokenValiditySeconds(604800))
 				.build();
 	}
 
