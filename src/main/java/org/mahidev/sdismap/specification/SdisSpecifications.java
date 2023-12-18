@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class SdisSpecifications {
 
-	public static Specification<Sdis> hasSearchTerm(@NonNull final String searchTerm) {
+	public static <T> Specification<T> hasSearchTerm(@NonNull final String searchTerm) {
 		return (root, query, cb) -> {
 			final var predicates = new ArrayList<Predicate>();
 			if (!searchTerm.isEmpty()) {
@@ -60,7 +60,7 @@ public class SdisSpecifications {
 		};
 	}
 
-	public static Specification<Sdis> filterBy(@NonNull final FilterSdis filter) {
+	public static <T> Specification<T> filterBy(@NonNull final FilterSdis filter) {
 		return (root, query, criteriaBuilder) -> {
 			final var predicates = new ArrayList<Predicate>();
 

@@ -11,6 +11,8 @@ import org.mahidev.sdismap.excel.service.ExcelParser;
 import org.mahidev.sdismap.excel.service.PoijiExcelReader;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.model.User;
+import org.mahidev.sdismap.repository.SdisCommonRepository;
+import org.mahidev.sdismap.repository.SdisDetailsRepository;
 import org.mahidev.sdismap.repository.SdisRepository;
 import org.mahidev.sdismap.repository.UserRepository;
 import org.mahidev.sdismap.service.*;
@@ -33,7 +35,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @SpringBootApplication(scanBasePackages = {"org.mahidev.sdismap.configuration", "org.mahidev.sdismap.controller", "org.mahidev.sdismap.exception",
-		"org.mahidev.sdismap.repository"})
+		"org.mahidev.sdismap.repository", "org.mahidev.sdismap.projection"})
 @EntityScan({"org.mahidev.sdismap.model"})
 @EnableJpaRepositories({"org.mahidev.sdismap.repository"})
 @EnableConfigurationProperties({FileDataSource.class})
@@ -86,8 +88,9 @@ public class SdisMapApplication {
 
 	@Lazy
 	@Bean
-	Manager.SdisService sdisService(final SdisRepository repository) {
-		return new SdisService(repository);
+	Manager.SdisService sdisService(final SdisRepository repository, final SdisCommonRepository commonRepository,
+			final SdisDetailsRepository detailsRepository) {
+		return new SdisService(repository, commonRepository, detailsRepository);
 	}
 
 	@Lazy

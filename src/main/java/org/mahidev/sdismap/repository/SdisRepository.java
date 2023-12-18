@@ -27,8 +27,8 @@ public interface SdisRepository extends JpaRepository<Sdis, Long>, JpaSpecificat
 
 	default List<Sdis> filterSdis(final String searchTerm, final FilterSdis filter) {
 		final var specification = (StringUtils.hasText(searchTerm)) ?
-				SdisSpecifications.filterBy(filter).and(SdisSpecifications.hasSearchTerm(searchTerm)) :
-				SdisSpecifications.filterBy(filter);
+				SdisSpecifications.<Sdis>filterBy(filter).and(SdisSpecifications.hasSearchTerm(searchTerm)) :
+				SdisSpecifications.<Sdis>filterBy(filter);
 		return findAll(specification);
 	}
 

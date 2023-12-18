@@ -12,6 +12,8 @@ import org.mahidev.sdismap.exception.SdisDescriptionNotFoundException;
 import org.mahidev.sdismap.model.Filter;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.model.SdisData;
+import org.mahidev.sdismap.projection.SdisCommon;
+import org.mahidev.sdismap.projection.SdisDetails;
 import org.mahidev.sdismap.service.Manager;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,33 +26,44 @@ import java.util.List;
 public record RestSdisController(Manager.SdisService service, Manager.ReaderService<Sdis> readerService) {
 
 	@GetMapping("/")
-	public SdisData getAllSdis() {
-		return new SdisData(service.getAllSdis());
+	public SdisData<Sdis> getAllSdis() {
+		return new SdisData<>(service.getAllSdis());
 	}
 
 	@GetMapping("/location")
-	public SdisData getSdis(@RequestParam final String latitude, @RequestParam final String longitude) {
-		return new SdisData(service.getSdis(latitude, longitude));
+	public SdisData<Sdis> getSdis(@RequestParam final String latitude, @RequestParam final String longitude) {
+		return new SdisData<>(service.getSdis(latitude, longitude));
+	}
+
+	@GetMapping("/details/location")
+	public SdisData<SdisDetails> getSdisDetails(@RequestParam final String latitude, @RequestParam final String longitude) {
+		return new SdisData<>(service.getSdisDetails(latitude, longitude));
+	}
+
+	@GetMapping("/common/location")
+	public SdisCommon getSdisCommon(@RequestParam final String latitude, @RequestParam final String longitude) {
+		return service.getSdisCommon(latitude, longitude).stream().findFirst()
+				.orElseThrow(() -> new NoLocationFoundException(GlobalExceptionHandler.NO_LOCATION_FOUND_EXCEPTION_MESSAGE));
 	}
 
 	@GetMapping("/search/{searchTerm}")
-	public SdisData findSdis(@PathVariable final String searchTerm) {
-		return new SdisData(service.findSdis(searchTerm));
+	public SdisData<Sdis> findSdis(@PathVariable final String searchTerm) {
+		return new SdisData<>(service.findSdis(searchTerm));
 	}
 
 	@GetMapping("/filter/{searchTerm}")
-	public SdisData getFilteredSdis(@PathVariable(required = false) final String searchTerm, @RequestParam(required = false) final List<String> name,
+	public SdisData<Sdis> getFilteredSdis(@PathVariable(required = false) final String searchTerm, @RequestParam(required = false) final List<String> name,
 			@RequestParam(required = false) final List<Integer> anfrNumber, @RequestParam(required = false) final List<Integer> inseeSite,
 			@RequestParam(required = false) final List<String> municipality, @RequestParam(required = false) final List<Integer> postalCode,
 			@RequestParam(required = false) final List<String> latitude, @RequestParam(required = false) final List<String> longitude) {
-		return new SdisData(service.getFilteredSdis(searchTerm, name, anfrNumber, inseeSite, municipality, postalCode, latitude, longitude));
+		return new SdisData<>(service.getFilteredSdis(searchTerm, name, anfrNumber, inseeSite, municipality, postalCode, latitude, longitude));
 	}
 
 	@GetMapping("/filter")
-	public SdisData getFilteredSdis(@RequestParam(required = false) final List<String> name,
+	public SdisData<Sdis> getFilteredSdis(@RequestParam(required = false) final List<String> name,
 			@RequestParam(required = false) final List<Integer> anfrNumber, @RequestParam(required = false) final List<Integer> inseeSite,
 			@RequestParam(required = false) final List<String> municipality, @RequestParam(required = false) final List<Integer> postalCode) {
-		return new SdisData(service.getFilteredSdis("", name, anfrNumber, inseeSite, municipality, postalCode));
+		return new SdisData<>(service.getFilteredSdis("", name, anfrNumber, inseeSite, municipality, postalCode));
 	}
 
 	@GetMapping("/{id}")
@@ -71,18 +84,18 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 	}
 
 	@GetMapping(value = "/import")
-	public SdisData importSdis() {
+	public SdisData<Sdis> importSdis() {
 		try {
-			return new SdisData(readerService.saveExcel());
+			return new SdisData<Sdis>(readerService.saveExcel());
 		} catch (final Exception e) {
 			throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
 		}
 	}
 
 	@PostMapping(value = "/import")
-	public SdisData importSdis(@RequestBody @NonNull final MultipartFile file) {
+	public SdisData<Sdis> importSdis(@RequestBody @NonNull final MultipartFile file) {
 		try (final var datasource = new StreamDataSource(file)) {
-			return new SdisData(readerService.saveExcel(datasource));
+			return new SdisData<Sdis>(readerService.saveExcel(datasource));
 		} catch (final Exception e) {
 			throw new ImportSdisException(GlobalExceptionHandler.IMPORT_SDIS_EXCEPTION_MESSAGE, e);
 		}

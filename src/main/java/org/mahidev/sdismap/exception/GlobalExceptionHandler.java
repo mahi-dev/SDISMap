@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
 
 	public static final String MSG = "Une exception %s s'est produite : ";
 
-	private static final String UNAUTHORIZED_ACCESS_EXCEPTION = "L'accès à cette ressource n'est pas autorisé.";
+	public static final String UNAUTHORIZED_ACCESS_EXCEPTION = "L'accès à cette ressource n'est pas autorisé.";
 
 	@ExceptionHandler(NullPointerException.class)
 	public ResponseEntity<ApiError> handleNullPointerException(final NullPointerException e) {

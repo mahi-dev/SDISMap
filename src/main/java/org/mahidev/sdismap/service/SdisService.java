@@ -5,6 +5,10 @@ import lombok.NonNull;
 import org.mahidev.sdismap.model.Filter;
 import org.mahidev.sdismap.model.FilterSdis;
 import org.mahidev.sdismap.model.Sdis;
+import org.mahidev.sdismap.projection.SdisCommon;
+import org.mahidev.sdismap.projection.SdisDetails;
+import org.mahidev.sdismap.repository.SdisCommonRepository;
+import org.mahidev.sdismap.repository.SdisDetailsRepository;
 import org.mahidev.sdismap.repository.SdisRepository;
 import org.mahidev.sdismap.utility.SdisComparator;
 
@@ -12,7 +16,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public record SdisService(SdisRepository repository) implements Manager.SdisService {
+public record SdisService(SdisRepository repository, SdisCommonRepository commonRepository, SdisDetailsRepository detailsRepository)
+		implements Manager.SdisService {
 
 	@Override
 	public long count() {
@@ -44,6 +49,16 @@ public record SdisService(SdisRepository repository) implements Manager.SdisServ
 	@Override
 	public List<Sdis> getSdis(@NotNull final String siteLatitude, @NotNull final String siteLongitude) {
 		return repository.findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(siteLatitude, siteLongitude);
+	}
+
+	@Override
+	public List<SdisCommon> getSdisCommon(String siteLatitude, String siteLongitude) {
+		return commonRepository.findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(siteLatitude, siteLongitude);
+	}
+
+	@Override
+	public List<SdisDetails> getSdisDetails(String siteLatitude, String siteLongitude) {
+		return detailsRepository.findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(siteLatitude, siteLongitude);
 	}
 
 	@Override

@@ -6,6 +6,8 @@ import lombok.NonNull;
 import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.model.Filter;
 import org.mahidev.sdismap.model.Sdis;
+import org.mahidev.sdismap.projection.SdisCommon;
+import org.mahidev.sdismap.projection.SdisDetails;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,6 +27,10 @@ public class Manager {
 		Optional<Sdis> getSdis(@NotBlank final String name);
 
 		List<Sdis> getSdis(@NotNull String siteLatitude, @NotNull String siteLongitude);
+
+		List<SdisCommon> getSdisCommon(@NotNull String siteLatitude, @NotNull String siteLongitude);
+
+		List<SdisDetails> getSdisDetails(@NotNull String siteLatitude, @NotNull String siteLongitude);
 
 		Optional<String> getDescription(@NotBlank final String name);
 

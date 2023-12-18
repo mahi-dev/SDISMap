@@ -3,6 +3,7 @@ package org.mahidev.sdismap.controller;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.mahidev.sdismap.dto.UserDto;
+import org.mahidev.sdismap.exception.GlobalExceptionHandler;
 import org.mahidev.sdismap.exception.UnauthorizedAccessException;
 import org.mahidev.sdismap.exception.UserNotFoundException;
 import org.mahidev.sdismap.model.User;
@@ -27,7 +28,7 @@ public record RestUserController(UserManager.Service service, CurrentUserService
 			return UserDto.toDto(service.getUserByEmail(name).map(modifyUser)
 					.orElseGet(() -> service.createUser(new User(name, encoder.encode(password))).orElseThrow()));
 		} else
-			throw new UnauthorizedAccessException("Action non autorisé.");
+			throw new UnauthorizedAccessException(GlobalExceptionHandler.UNAUTHORIZED_ACCESS_EXCEPTION);
 	}
 
 	@GetMapping("/{name}/delete")
@@ -38,9 +39,10 @@ public record RestUserController(UserManager.Service service, CurrentUserService
 				return true;
 			};
 			return service.getUserByEmail(name).filter(user -> user.getId() >= 0L).map(deleteUser)
-					.orElseThrow(() -> new UserNotFoundException(String.format("Utilisateur non trouvé : %s.", name)));
+					.orElseThrow(() -> new UserNotFoundException(String.format("%s : %s.", GlobalExceptionHandler.NOT_FOUND_USER_EXCEPTION, name)));
+
 		} else
-			throw new UnauthorizedAccessException("Action non autorisé.");
+			throw new UnauthorizedAccessException(GlobalExceptionHandler.UNAUTHORIZED_ACCESS_EXCEPTION);
 	}
 
 	@GetMapping("/list")
