@@ -18,27 +18,29 @@ public class GlobalExceptionHandler {
 	public record ApiError(HttpStatus status, String message) {
 	}
 
-	public static final  String NO_SUCH_ALGORITHM_EXCEPTION_MESSAGE  = "L'algorithme demandé n'est pas disponible dans l'environnement.";
+	public static final String NO_SUCH_ALGORITHM_EXCEPTION_MESSAGE = "L'algorithme demandé n'est pas disponible dans l'environnement.";
 
-	public static final  String INVALID_KEY_SPEC_EXCEPTION_MESSAGE   = "Les spécifications de la clé ne sont pas valides.";
+	public static final String INVALID_KEY_SPEC_EXCEPTION_MESSAGE = "Les spécifications de la clé ne sont pas valides.";
 
-	public static final  String NULL_POINTER_EXCEPTION_MESSAGE       = "Une opération a échoué car une valeur nulle a été trouvée là où elle n'était pas attendue.";
+	public static final String NULL_POINTER_EXCEPTION_MESSAGE = "Une opération a échoué car une valeur nulle a été trouvée là où elle n'était pas attendue.";
 
-	public static final  String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE   = "Un argument invalide a été fourni à la requête.";
+	public static final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE = "Un argument invalide a été fourni à la requête.";
 
-	public static final  String NO_LOCATION_FOUND_EXCEPTION_MESSAGE  = "La géolocalisation du sdis n'a pas été trouvé.";
+	public static final String NO_LOCATION_FOUND_EXCEPTION_MESSAGE = "La géolocalisation du sdis n'a pas été trouvé.";
 
-	public static final  String BAD_FORMAT_EXCEPTION_MESSAGE         = "Format du fichier inattendu.";
+	public static final String BAD_FORMAT_EXCEPTION_MESSAGE = "Format du fichier inattendu.";
 
-	public static final  String IMPORT_SDIS_EXCEPTION_MESSAGE        = "Il y a eu un problème pendant l'import des SDIS.";
+	public static final String IMPORT_SDIS_EXCEPTION_MESSAGE = "Il y a eu un problème pendant l'import des SDIS.";
 
-	public static final  String ALREADY_EXIST_USER_EXCEPTION         = "Un utilisateur avec les détails fournis existe déjà.";
+	public static final String ALREADY_EXIST_USER_EXCEPTION = "Un utilisateur avec les détails fournis existe déjà.";
 
-	public static final  String SDIS_DESCRIPTION_NOT_FOUND_EXCEPTION = "La description du sdis n'a pas été trouvé.";
+	public static final String NOT_FOUND_USER_EXCEPTION = "Utilisateur non trouvé.";
 
-	public static final  String MSG                                  = "Une exception %s s'est produite : ";
+	public static final String SDIS_DESCRIPTION_NOT_FOUND_EXCEPTION = "La description du sdis n'a pas été trouvé.";
 
-	private static final String UNAUTHORIZED_ACCESS_EXCEPTION        = "L'accès à cette ressource n'est pas autorisé.";
+	public static final String MSG = "Une exception %s s'est produite : ";
+
+	private static final String UNAUTHORIZED_ACCESS_EXCEPTION = "L'accès à cette ressource n'est pas autorisé.";
 
 	@ExceptionHandler(NullPointerException.class)
 	public ResponseEntity<ApiError> handleNullPointerException(final NullPointerException e) {
@@ -78,6 +80,11 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(UserAlreadyExistException.class)
 	public ResponseEntity<ApiError> handleUserAlreadyExists(final UserAlreadyExistException e) {
 		return exception(e, HttpStatus.CONFLICT, ALREADY_EXIST_USER_EXCEPTION);
+	}
+
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<ApiError> userNotFoundException(final UserNotFoundException e) {
+		return exception(e, HttpStatus.NOT_FOUND, NOT_FOUND_USER_EXCEPTION);
 	}
 
 	@ExceptionHandler(SdisDescriptionNotFoundException.class)

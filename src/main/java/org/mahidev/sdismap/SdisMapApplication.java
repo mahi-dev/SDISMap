@@ -44,7 +44,7 @@ public class SdisMapApplication {
 
 	@Bean
 	@Primary
-	public ObjectMapper objectMapper(final NullAsEmptyStringSerializer nullSerializer) {
+	ObjectMapper objectMapper(final NullAsEmptyStringSerializer nullSerializer) {
 		final var serializerProvider = new DefaultSerializerProvider.Impl();
 		serializerProvider.setNullValueSerializer(nullSerializer);
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -73,7 +73,7 @@ public class SdisMapApplication {
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) throws Exception {
+	AuthenticationManager authenticationManager(final AuthenticationConfiguration authenticationConfiguration) throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
 
@@ -97,8 +97,14 @@ public class SdisMapApplication {
 		return new PoijiExcelReader();
 	}
 
+	@Lazy
 	@Bean
-	protected CommandLineRunner setup(UserManager.Service userService) {
+	CurrentUserService currentUserService() {
+		return new CurrentUserService();
+	}
+
+	@Bean
+	CommandLineRunner setup(final UserManager.Service userService) {
 		return args -> {
 			userService.createUser(new User("mahi", "$2a$10$D07Lnng6MPZcXvid7larMeBzpcWYgu0dKBEHyxVQB.cLqaZ.RCByO"));
 		};
