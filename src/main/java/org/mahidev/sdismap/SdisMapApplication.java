@@ -2,6 +2,8 @@ package org.mahidev.sdismap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ser.DefaultSerializerProvider;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.mahidev.sdismap.configuration.NullAsEmptyStringSerializer;
 import org.mahidev.sdismap.datasource.DataSource;
 import org.mahidev.sdismap.datasource.FileDataSource;
@@ -26,9 +28,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import static org.springframework.security.core.userdetails.User.withUsername;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @SpringBootApplication(scanBasePackages = {"org.mahidev.sdismap.configuration", "org.mahidev.sdismap.controller", "org.mahidev.sdismap.exception",
 		"org.mahidev.sdismap.repository"})
@@ -47,7 +49,11 @@ public class SdisMapApplication {
 	ObjectMapper objectMapper(final NullAsEmptyStringSerializer nullSerializer) {
 		final var serializerProvider = new DefaultSerializerProvider.Impl();
 		serializerProvider.setNullValueSerializer(nullSerializer);
-		ObjectMapper objectMapper = new ObjectMapper();
+		final var objectMapper = new ObjectMapper();
+		final var javaTimeModule = new JavaTimeModule();
+		final var dateSerializer = new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("dd-MM-yyyy - MM:HH:ss"));
+		javaTimeModule.addSerializer(LocalDateTime.class, dateSerializer);
+		objectMapper.registerModule(javaTimeModule);
 		objectMapper.setSerializerProvider(serializerProvider);
 		return objectMapper;
 	}
@@ -63,13 +69,6 @@ public class SdisMapApplication {
 	@Primary
 	UserDetailsService customUserDetailsService(final UserManager.Service service) {
 		return new CustomUserDetailsService(service);
-	}
-
-	@Bean
-	UserDetailsService userDetailsService() {
-		final var user = withUsername("mahi").password("$2a$10$D07Lnng6MPZcXvid7larMeBzpcWYgu0dKBEHyxVQB.cLqaZ.RCByO").roles("USER").build();
-		final var admin = withUsername("admin").password("$2a$10$hdySJB/sNy2/U6ss.ejj..rajl9jT2vMZxBVf7iq84Rj90n/qUVdu").roles("ADMIN", "USER").build();
-		return new InMemoryUserDetailsManager(user, admin);
 	}
 
 	@Bean

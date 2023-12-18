@@ -4,19 +4,20 @@ import org.mahidev.sdismap.model.User;
 
 import java.io.Serial;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserManager {
 
 	interface Service {
-		User createUser(User user);
+		Optional<User> createUser(User user);
 
-		User updateUser(User user);
+		Optional<User> updateUser(long id, String email, String password);
 
 		void deleteUser(long id);
 
-		User getUserById(long id);
+		Optional<User> getUserById(long id);
 
-		User getUserByEmail(String email);
+		Optional<User> getUserByEmail(String email);
 
 		List<User> getAllUsers();
 	}

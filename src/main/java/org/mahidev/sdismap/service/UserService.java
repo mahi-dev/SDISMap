@@ -6,6 +6,7 @@ import org.mahidev.sdismap.model.UserPrincipal;
 import org.mahidev.sdismap.repository.UserRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public record UserService(UserRepository userRepository) implements UserManager.Service {
@@ -14,13 +15,14 @@ public record UserService(UserRepository userRepository) implements UserManager.
 	}
 
 	@Override
-	public User createUser(@NonNull final User user) {
-		return userRepository.save(user);
+	public Optional<User> createUser(@NonNull final User user) {
+		return Optional.of(userRepository.save(user));
 	}
 
 	@Override
-	public User updateUser(@NonNull final User user) {
-		return userRepository.save(user);
+	public Optional<User> updateUser(final long id, @NonNull final String email, @NonNull final String password) {
+		userRepository.updateUserByEmailAndPassword(id, email, password);
+		return getUserById(id);
 	}
 
 	@Override
@@ -29,12 +31,12 @@ public record UserService(UserRepository userRepository) implements UserManager.
 	}
 
 	@Override
-	public User getUserById(final long id) {
-		return userRepository.findById(id).orElse(null);
+	public Optional<User> getUserById(final long id) {
+		return userRepository.findById(id);
 	}
 
 	@Override
-	public User getUserByEmail(@NonNull final String email) {
+	public Optional<User> getUserByEmail(@NonNull final String email) {
 		return userRepository.findByEmail(email);
 	}
 

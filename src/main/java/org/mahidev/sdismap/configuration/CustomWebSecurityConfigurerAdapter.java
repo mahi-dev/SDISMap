@@ -42,9 +42,9 @@ public class CustomWebSecurityConfigurerAdapter {
 					auth.requestMatchers("/").permitAll();
 					auth.requestMatchers("/favicon.ico").permitAll();
 					auth.anyRequest().authenticated();
-				}).formLogin(Customizer.withDefaults()).logout(l -> l.logoutSuccessUrl("/").invalidateHttpSession(true).clearAuthentication(true).permitAll())
-				.rememberMe(
-						r -> r.userDetailsService(userDetailsService).key("myUniqueKey").rememberMeCookieName("remember-me").tokenValiditySeconds(604800))
+				}).formLogin(Customizer.withDefaults()).formLogin(login -> login.successHandler(new LoginSuccessHandler()))
+				.logout(l -> l.logoutSuccessUrl("/").invalidateHttpSession(true).clearAuthentication(true).permitAll()).rememberMe(
+						r -> r.userDetailsService(userDetailsService).key("sdisKey").rememberMeCookieName("sdis-remember-me").tokenValiditySeconds(604800))
 				.build();
 	}
 

@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @NoArgsConstructor(force = true)
@@ -19,10 +21,16 @@ public class User {
 		this.password = "0000";
 	}
 
+	public User(@NonNull final String email, @NonNull final String password) {
+		this.email = email;
+		this.password = password;
+		lastUpdate = LocalDateTime.now();
+	}
+
 	@Id
 	@GeneratedValue
 	@EqualsAndHashCode.Include
-	private Long   id;
+	private Long id;
 
 	@NotBlank
 	@NonNull
@@ -31,4 +39,7 @@ public class User {
 	@NotBlank
 	@NonNull
 	private String password;
+
+	@NonNull
+	private LocalDateTime lastUpdate;
 }
