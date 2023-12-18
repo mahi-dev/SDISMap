@@ -27,7 +27,7 @@ public record RestUserController(UserManager.Service service, CurrentUserService
 			throw new UnauthorizedAccessException("Action non autorisé.");
 	}
 
-	@DeleteMapping("/{name}/delete")
+	@GetMapping("/{name}/delete")
 	public boolean delete(final @PathVariable @NotBlank String name) {
 		if (UserService.isAuthorizedUser(currentUserService.getCurrentUser())) {
 			final var user = service.getUserByEmail(name);

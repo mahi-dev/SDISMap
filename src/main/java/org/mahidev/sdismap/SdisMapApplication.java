@@ -107,6 +107,11 @@ public class SdisMapApplication {
 	CommandLineRunner setup(final UserManager.Service userService) {
 		return args -> {
 			userService.createUser(new User("mahi", "$2a$10$D07Lnng6MPZcXvid7larMeBzpcWYgu0dKBEHyxVQB.cLqaZ.RCByO"));
+			userService.createUser(new User("invite", "$2a$10$BLqzpxAUWBiD4.aW.v8hzuD9leZAVUXXMa/kWk8m8L3NnuO4GbqQ2"));
+			userService.createUser(new User("invite2", "$2a$10$BLqzpxAUWBiD4.aW.v8hzuD9leZAVUXXMa/kWk8m8L3NnuO4GbqQ2"));
+			userService.createUser(new User("invite3", "$2a$10$BLqzpxAUWBiD4.aW.v8hzuD9leZAVUXXMa/kWk8m8L3NnuO4GbqQ2"));
+			userService.createUser(new User("invite4", "$2a$10$BLqzpxAUWBiD4.aW.v8hzuD9leZAVUXXMa/kWk8m8L3NnuO4GbqQ2"));
+			userService.createUser(new User("invite5", "$2a$10$BLqzpxAUWBiD4.aW.v8hzuD9leZAVUXXMa/kWk8m8L3NnuO4GbqQ2"));
 		};
 	}
 
