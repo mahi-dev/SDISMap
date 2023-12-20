@@ -11,6 +11,7 @@ import org.mahidev.sdismap.repository.SdisCommonRepository;
 import org.mahidev.sdismap.repository.SdisDetailsRepository;
 import org.mahidev.sdismap.repository.SdisRepository;
 import org.mahidev.sdismap.utility.SdisComparator;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,8 +53,9 @@ public record SdisService(SdisRepository repository, SdisCommonRepository common
 	}
 
 	@Override
-	public List<SdisCommon> getSdisCommon(String siteLatitude, String siteLongitude) {
-		return commonRepository.findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(siteLatitude, siteLongitude);
+	public Optional<SdisCommon> getSdisCommon(String siteLatitude, String siteLongitude) {
+		return commonRepository.findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(siteLatitude, siteLongitude, PageRequest.of(0, 1)).stream()
+				.findFirst();
 	}
 
 	@Override

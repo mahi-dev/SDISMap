@@ -42,7 +42,7 @@ public record RestSdisController(Manager.SdisService service, Manager.ReaderServ
 
 	@GetMapping("/common/location")
 	public SdisCommon getSdisCommon(@RequestParam final String latitude, @RequestParam final String longitude) {
-		return service.getSdisCommon(latitude, longitude).stream().findFirst()
+		return service.getSdisCommon(latitude, longitude)
 				.orElseThrow(() -> new NoLocationFoundException(GlobalExceptionHandler.NO_LOCATION_FOUND_EXCEPTION_MESSAGE));
 	}
 

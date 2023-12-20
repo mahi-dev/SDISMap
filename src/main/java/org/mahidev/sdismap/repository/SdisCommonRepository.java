@@ -5,6 +5,7 @@ import org.mahidev.sdismap.model.FilterSdis;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.projection.SdisCommon;
 import org.mahidev.sdismap.specification.SdisSpecifications;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -14,7 +15,7 @@ import java.util.List;
 
 @RepositoryRestResource(excerptProjection = SdisCommon.class)
 public interface SdisCommonRepository extends JpaRepository<Sdis, Long>, JpaSpecificationExecutor<SdisCommon> {
-	default List<SdisCommon> filterSdis(@NonNull final FilterSdis filter) {
+	default List<SdisCommon> filterSdis(@NonNull final FilterSdis filter, Pageable limit) {
 		return findAll(SdisSpecifications.filterBy(filter));
 	}
 
@@ -29,7 +30,7 @@ public interface SdisCommonRepository extends JpaRepository<Sdis, Long>, JpaSpec
 		return findAll(specification);
 	}
 
-	List<SdisCommon> findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(String latitude, String longitude);
+	List<SdisCommon> findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(String latitude, String longitude, Pageable limit);
 }
 
 

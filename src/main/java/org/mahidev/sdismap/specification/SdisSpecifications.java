@@ -1,10 +1,9 @@
 package org.mahidev.sdismap.specification;
 
-import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import lombok.NonNull;
-import org.mahidev.sdismap.model.*;
+import org.mahidev.sdismap.model.FilterSdis;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
@@ -30,27 +29,27 @@ public class SdisSpecifications {
 				predicates.add(cb.like(cb.lower(root.get("supportOwner")), wildcard));
 
 				// Pour les champs imbriqués
-				Join<Sdis, Location> locationJoin = root.join("location", JoinType.LEFT);
+				final var locationJoin = root.join("location", JoinType.LEFT);
 				predicates.add(cb.like(cb.lower(locationJoin.get("siteLongitude")), wildcard));
 				predicates.add(cb.like(cb.lower(locationJoin.get("siteLatitude")), wildcard));
 				predicates.add(cb.like(cb.lower(locationJoin.get("address")), wildcard));
 				predicates.add(cb.like(cb.lower(locationJoin.get("municipality")), wildcard));
 				predicates.add(cb.like(cb.lower(locationJoin.get("postalCode").as(String.class)), wildcard));
 
-				Join<Sdis, Aerien> aerienJoin = root.join("aerien", JoinType.LEFT);
+				final var aerienJoin = root.join("aerien", JoinType.LEFT);
 				predicates.add(cb.like(cb.lower(aerienJoin.get("number").as(String.class)), wildcard));
 				predicates.add(cb.like(cb.lower(aerienJoin.get("type")), wildcard));
 				predicates.add(cb.like(cb.lower(aerienJoin.get("dimension")), wildcard));
 				predicates.add(cb.like(cb.lower(aerienJoin.get("tilt")), wildcard));
 				predicates.add(cb.like(cb.lower(aerienJoin.get("height")), wildcard));
 
-				Join<Sdis, EmissionReception> emissionReceptionJoin = root.join("emissionReception", JoinType.LEFT);
+				final var emissionReceptionJoin = root.join("emissionReception", JoinType.LEFT);
 				predicates.add(cb.like(cb.lower(emissionReceptionJoin.get("system")), wildcard));
 				predicates.add(cb.like(cb.lower(emissionReceptionJoin.get("designation")), wildcard));
 				predicates.add(cb.like(cb.lower(emissionReceptionJoin.get("power").as(String.class)), wildcard));
 				predicates.add(cb.like(cb.lower(emissionReceptionJoin.get("powerUnit")), wildcard));
 
-				Join<Sdis, Frequency> frequencyJoin = root.join("frequency", JoinType.LEFT);
+				final var frequencyJoin = root.join("frequency", JoinType.LEFT);
 				predicates.add(cb.like(cb.lower(frequencyJoin.get("bandMin")), wildcard));
 				predicates.add(cb.like(cb.lower(frequencyJoin.get("bandMax")), wildcard));
 				predicates.add(cb.like(cb.lower(frequencyJoin.get("bandService")), wildcard));

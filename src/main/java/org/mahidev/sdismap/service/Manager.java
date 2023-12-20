@@ -28,7 +28,7 @@ public class Manager {
 
 		List<Sdis> getSdis(@NotNull String siteLatitude, @NotNull String siteLongitude);
 
-		List<SdisCommon> getSdisCommon(@NotNull String siteLatitude, @NotNull String siteLongitude);
+		Optional<SdisCommon> getSdisCommon(@NotNull String siteLatitude, @NotNull String siteLongitude);
 
 		List<SdisDetails> getSdisDetails(@NotNull String siteLatitude, @NotNull String siteLongitude);
 
