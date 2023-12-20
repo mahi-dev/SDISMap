@@ -52,6 +52,17 @@ export class SdisApiClient {
             });
     }
 
+    filterSdisCommonByLocation(latitude, longitude, sortBy) {
+        return this._delegate.get(this._serviceUrl + "/common/location", {
+            latitude,
+            longitude,
+            sortBy
+        }, MimeTypeKeys.JSON)
+            .catch(error => {
+                throw error;
+            });
+    }
+
     findFilteredSdis(searchTerm, filters) {
         const parameter = (!searchTerm) ? '' : `/${encodeURI(searchTerm)}`
         return this._delegate.get(this._serviceUrl + SdisApiClient.FILTER_ENDPOINT + parameter, filters, MimeTypeKeys.JSON)

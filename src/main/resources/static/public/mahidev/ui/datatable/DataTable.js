@@ -25,7 +25,7 @@ export class DataTable extends Component {
 
     createDataTable() {
         this._clearDataTable();
-        const header = new DataTableRow({cells: this._headers});
+        const header = new DataTableRow({cells: this._headers, isHeader: true});
         header.attach(this.dom);
 
         const duplicateMap = (this._distinctDuplicate) ? createDuplicateMap(this._rows) : {};

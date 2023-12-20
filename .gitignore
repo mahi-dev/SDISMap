@@ -34,3 +34,4 @@ build/
 
 ### DB ###
 *.db.*
+/sdis.map.server.dev.db 2.log

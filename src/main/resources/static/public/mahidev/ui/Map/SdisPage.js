@@ -1,7 +1,7 @@
-import {Component} from "../Component.js";
 import {FILTER} from "../../config/message.js";
-import {DataTable} from "../datatable/DataTable.js";
 import {Switch} from "../Button/Switch.js";
+import {Component} from "../Component.js";
+import {DataTable} from "../datatable/DataTable.js";
 
 export class SdisPage extends Component {
 
@@ -42,7 +42,7 @@ export class SdisPage extends Component {
     }
 
     initComponents() {
-        this._switchButtonColor = new Switch({name: 'Distinguer les couleurs', default: false});
+        this._switchButtonColor = new Switch({name: 'Grouper les duplications', default: false});
         this._switchButtonColor.attach(this.dom.querySelector('#distinctColor'));
 
         this._switchButton = new Switch({name: this._switchButtonName, default: this._switchButtonActive});
