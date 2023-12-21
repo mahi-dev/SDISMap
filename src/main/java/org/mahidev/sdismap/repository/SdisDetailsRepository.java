@@ -17,18 +17,18 @@ import java.util.List;
 public interface SdisDetailsRepository extends JpaRepository<Sdis, Long>, JpaSpecificationExecutor<SdisDetails> {
 
 	default List<SdisDetails> filterSdis(@NonNull final FilterSdis filter) {
-		return findAll(SdisSpecifications.filterBy(filter));
+		return findBy(SdisSpecifications.filterBy(filter), q -> q.as(SdisDetails.class)).all();
 	}
 
 	default List<SdisDetails> findSdis(@NonNull final String searchTerm) {
-		return findAll(SdisSpecifications.hasSearchTerm(searchTerm));
+		return findBy(SdisSpecifications.hasSearchTerm(searchTerm), q -> q.as(SdisDetails.class)).all();
 	}
 
 	default List<SdisDetails> filterSdis(final String searchTerm, final FilterSdis filter, final Sort sort) {
 		final var specification = (StringUtils.hasText(searchTerm)) ?
 				SdisSpecifications.<SdisDetails>filterBy(filter).and(SdisSpecifications.hasSearchTerm(searchTerm)) :
 				SdisSpecifications.<SdisDetails>filterBy(filter);
-		return findAll(specification, sort);
+		return findBy(specification, q -> q.as(SdisDetails.class).sortBy(sort)).all();
 	}
 
 	List<SdisDetails> findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(String latitude, String longitude, Sort sort);

@@ -26,19 +26,23 @@ export class DataTableRow extends Component {
             this.dom.style.color = `${this._color}`;
     }
 
+    clearDataTableRow() {
+        this._dataTableCells?.map(dataTableCell => dataTableCell.detach())
+    }
+
     bindEvents() {
-        this._dataTableRows.forEach(this._bindEvents.bind(this));
+        this._dataTableCells.forEach(this._bindEvents.bind(this));
     }
 
     initComponents() {
-        this._dataTableRows = this._cells
+        this._dataTableCells = this._cells
             .map(value => new DataTableCell({
                 value,
                 cell: this._isHeader ? `<div  class="table-header"><p class="cell-value">${FILTER[value]}</p>` : value,
                 addOrder: this._isHeader
             }));
 
-        this._dataTableRows.forEach(dataTableCell => dataTableCell.attach(this.dom));
+        this._dataTableCells.forEach(dataTableCell => dataTableCell.attach(this.dom));
         if (this._isDuplicate)
             this.addClass('duplicate');
         if (this._color)

@@ -23,28 +23,28 @@ class Main {
         const longitude = urlParams.get('longitude');
         const search = urlParams.get('search');
         if (search && search.length > 0) {
-            this._sdisData = await this._sdisApiClient.findFilteredSdis(search, {latitude, longitude});
-            //this._sdisCommon = await this._sdisApiClient.findFilteredCommonSdis(search, {latitude, longitude});
-            this._sdisdetails = await this._sdisApiClient.findFilteredDetailsSdis(search, {latitude, longitude});
+            // this._sdisData = await this._sdisApiClient.findFilteredSdis(search, {latitude, longitude});
+            this._sdisCommon = await this._sdisApiClient.findFilteredCommonSdis(search, {latitude, longitude});
+            this._sdisData = await this._sdisApiClient.findFilteredDetailsSdis(search, {latitude, longitude});
         } else {
-            this._sdisData = await this._sdisApiClient.filterSdisByLocation(latitude, longitude);
-            //this._sdisCommon = await this._sdisApiClient.filterSdisCommonByLocation(latitude, longitude);
-            this._sdisdetails = await this._sdisApiClient.filterSdisDetailsByLocation(latitude, longitude);
+            // this._sdisData = await this._sdisApiClient.filterSdisByLocation(latitude, longitude);
+            this._sdisCommon = await this._sdisApiClient.filterSdisCommonByLocation(latitude, longitude);
+            this._sdisData = await this._sdisApiClient.filterSdisDetailsByLocation(latitude, longitude);
         }
 
         if (this._sdisData.count === 0)
-            window.location.href = '/';
-        console.log(this._sdisCommon)
-        console.log(this._sdisdetails)
-        const sdis = this._sdisData?.sdisList;
+            this._redirect();
+        const sdisCommon = this._sdisCommon;
+        const sdisDetails = this._sdisData?.sdisList;
         const switchButtonName = 'Distinguer les duplications';
         const switchButtonActive = false;
 
-        const page = new SdisPage({sdis, switchButtonActive, switchButtonName});
-        page.attach(this.principalElement);
-        page.switchButtonVisible = true;
-        page.switchButtonColorVisible = false;
-        page.addEventListener('sortColumn', e => this._sortColumn(e.detail.siteLatitude, e.detail.siteLongitude, e.detail.sortBy, e.detail.element));
+        this._sdisPage = new SdisPage({sdisCommon, sdisDetails, switchButtonActive, switchButtonName});
+        this._sdisPage.attach(this.principalElement);
+        this._sdisPage.switchButtonVisible = true;
+        this._sdisPage.switchButtonColorVisible = false;
+        this._sdisPage.addEventListener('sortColumn',
+            e => this._sortColumn(e.detail.siteLatitude, e.detail.siteLongitude, e.detail.sortBy, e.detail.element));
     }
 
     createHeader() {
@@ -69,18 +69,18 @@ class Main {
 
         const classStyle = 'red';
         const ascClicked = sortBy.indexOf('ASC') > 0;
-        const asc = element.querySelector(".fa-sort-up");
-        const desc = element.querySelector(".fa-sort-down");
-        if ((ascClicked && asc.classList.contains(classStyle)) ||
-            (!ascClicked && desc.classList.contains(classStyle))) return;
+        const asc = () => element.querySelector(".fa-sort-up");
+        const desc = () => element.querySelector(".fa-sort-down");
+        if ((ascClicked && asc().classList.contains(classStyle)) ||
+            (!ascClicked && desc().classList.contains(classStyle))) return;
+
+        const sortedData = await this._sdisApiClient.filterSdisDetailsByLocation(siteLatitude, siteLongitude, sortBy);
+        this._sdisPage.sortColum = sortedData?.sdisList;
 
         document.querySelectorAll('[class^="fa-sort-"], [class*=" fa-sort-"]')
             .forEach(fas => fas.classList.remove(classStyle))
-        asc.classList[ascClicked ? 'add' : 'remove'](classStyle);
-        desc.classList[!ascClicked ? 'add' : 'remove'](classStyle);
-
-
-        const sortedData = await this._sdisApiClient.filterSdisDetailsByLocation(siteLatitude, siteLongitude, sortBy);
+        asc().classList[ascClicked ? 'add' : 'remove'](classStyle);
+        desc().classList[!ascClicked ? 'add' : 'remove'](classStyle);
     }
 
 }

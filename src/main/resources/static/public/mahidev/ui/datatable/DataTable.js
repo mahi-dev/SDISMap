@@ -19,6 +19,14 @@ export class DataTable extends Component {
         this._distinctColor = value;
     }
 
+    set dataTableValue(value) {
+        if (value?.length > 0) {
+            this.rows = value;
+        }
+        this._clearDataTable();
+        this._setDataTableValues();
+    }
+
     initComponents() {
         this.createDataTable();
     }
@@ -31,16 +39,27 @@ export class DataTable extends Component {
 
     createDataTable() {
         this._clearDataTable();
+        this._setDataTableHeader();
+        this._setDataTableValues();
+    }
+
+    toHtml() {
+        return `<div class="table" style="display: table;"></div>`;
+    }
+
+    _setDataTableHeader() {
         this._header = new DataTableRow({cells: this._headers, isHeader: true});
         this._header.attach(this.dom);
+    }
 
+    _setDataTableValues() {
         const duplicateMap = (this._distinctDuplicate) ? createDuplicateMap(this._rows) : {};
         const values = (this._distinctDuplicate) ? Object.values(duplicateMap) : [];
         const duplicateColors = (this._distinctDuplicate) ? generateUniqueColors(values.length) : [];
         const duplicateIndex = new Set();
         values.filter(value => value.length > 1).map(idxArray => idxArray.map(value => duplicateIndex.add(value)))
 
-        this._rows.map((cells, idx) => {
+        this._dataTableRows = this._rows.map((cells, idx) => {
             const hasDuplicate = duplicateIndex.has(idx) && this._distinctDuplicate;
             let options = {cells};
             if (hasDuplicate) {
@@ -49,14 +68,11 @@ export class DataTable extends Component {
                 options.color = this._distinctColor ? duplicateColors[matchIdx] : 'red';
             }
             return new DataTableRow(options);
-        }).forEach(dataTableRow => dataTableRow.attach(this.dom))
-    }
-
-    toHtml() {
-        return `<div class="table" style="display: table;"></div>`;
+        });
+        this._dataTableRows.forEach(dataTableRow => dataTableRow.attach(this.dom));
     }
 
     _clearDataTable() {
-        this.dom.innerHTML = '';
+        this._dataTableRows?.map(row => row.clearDataTableRow())
     }
 }

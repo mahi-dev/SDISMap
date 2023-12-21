@@ -9,8 +9,12 @@ export class SdisPage extends Component {
         super(option);
     }
 
-    set sdis(value) {
-        this._sdis = value;
+    set sdisCommon(value) {
+        this._sdisCommon = value;
+    }
+
+    set sdisDetails(value) {
+        this._sdisDetails = value;
     }
 
     set switchButtonVisible(value) {
@@ -36,9 +40,12 @@ export class SdisPage extends Component {
         return this._switchButton.state;
     }
 
+    set sortColum(value) {
+        this._dataTable.dataTableValue = this._createDataTableValueRows(value);
+    }
+
     bindEvents() {
-        const {location} = this._sdis[0];
-        const {siteLongitude, siteLatitude} = location;
+        const {siteLongitude, siteLatitude} = this._sdisCommon;
         this._switchButton.addEventListener('toggleEvent', this._distinctDuplicateValue.bind(this));
         this._switchButtonColor.addEventListener('toggleEvent', this._distinctColors.bind(this));
         this._dataTable.addEventListener('sortColumn', e => this.fireEvent(new CustomEvent('sortColumn', {
@@ -55,19 +62,26 @@ export class SdisPage extends Component {
 
         const headers = ['aerienNumber', 'aerienType', 'emissionReceptionPower', 'aerienDimension', 'aerienHeight', 'aerienAzimuth',
             'FrequencyBandMin', 'FrequencyBandMax', 'FrequencyBandService'];
-        const rows = this._sdis.map(sdis => {
-            const {aerien, frequency, emissionReception} = sdis;
-            return [aerien.number, aerien.type, emissionReception.power, aerien.dimension, aerien.height,
-                aerien.azimuth, frequency.bandMin, frequency.bandMax, frequency.bandService];
-        });
+        const rows = this._createDataTableValueRows(this._sdisDetails)
         const distinctDuplicate = this.switchButtonState;
         this._dataTable = new DataTable({headers, rows, distinctDuplicate});
         this._dataTable.attach(this.dom.querySelector(".sdis-page__antenna_details__table"))
     }
 
+    _createDataTableValueRows(data) {
+        return data.map(sdis => {
+            const {
+                aerienNumber, aerienType, emissionReceptionPower, aerienDimension, aerienHeight,
+                aerienAzimuth, frequencyBandMin, frequencyBandMax, frequencyBandService
+            } = sdis;
+            return [aerienNumber, aerienType, emissionReceptionPower, aerienDimension, aerienHeight,
+                aerienAzimuth, frequencyBandMin, frequencyBandMax, frequencyBandService];
+        });
+    }
+
     _distinctDuplicateValue(value) {
         this._dataTable.distinctDuplicate = value.detail;
-        this._dataTable.createDataTable();
+        this._dataTable.dataTableValue = [];
         this._switchButtonColor.visible = value.detail;
         if (!value.detail) {
             if (this._switchButtonColor.state) {
@@ -79,12 +93,14 @@ export class SdisPage extends Component {
 
     _distinctColors(value) {
         this._dataTable.distinctColor = value.detail;
-        this._dataTable.createDataTable();
+        this._dataTable.dataTableValue = [];
     }
 
     toHtml() {
-        const {name, anfrNumber, supportNumber, supportColors, supportNature, supportOwner, location} = this._sdis[0];
-        const {address, postalCode, municipality, siteLongitude, siteLatitude} = location;
+        const {
+            name, anfrNumber, supportNumber, supportColors, supportNature, supportOwner,
+            address, siteLongitude, siteLatitude
+        } = this._sdisCommon;
         return `
             <div class="sdis-page__antenna_details">
                 <div class="sdis-page__antenna_details__common">
@@ -97,7 +113,7 @@ export class SdisPage extends Component {
                         <div class="switchButton" id="distinctDuplicate"></div>
                     </div>
                     <div class="row">
-                        <p class='sdis-page__antenna_details__location'>${address}, ${postalCode} ${municipality}</p>
+                        <p class='sdis-page__antenna_details__location'>${address}</p>
                         <p class='sdis-page__antenna_details__gps'>GPS - Long : <i>${siteLongitude}</i>  Lat : <i>${siteLatitude}</i></p>
                     </div>    
                     <div class="row">

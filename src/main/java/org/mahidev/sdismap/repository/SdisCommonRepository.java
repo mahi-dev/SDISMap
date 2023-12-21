@@ -17,18 +17,18 @@ import java.util.List;
 @RepositoryRestResource(excerptProjection = SdisCommon.class)
 public interface SdisCommonRepository extends JpaRepository<Sdis, Long>, JpaSpecificationExecutor<SdisCommon> {
 	default List<SdisCommon> filterSdis(@NonNull final FilterSdis filter, final Pageable limit) {
-		return findAll(SdisSpecifications.filterBy(filter));
+		return findBy(SdisSpecifications.filterBy(filter), q -> q.as(SdisCommon.class)).all();
 	}
 
 	default List<SdisCommon> findSdis(@NonNull final String searchTerm) {
-		return findAll(SdisSpecifications.hasSearchTerm(searchTerm));
+		return findBy(SdisSpecifications.hasSearchTerm(searchTerm), q -> q.as(SdisCommon.class)).all();
 	}
 
 	default List<SdisCommon> filterSdis(final String searchTerm, final FilterSdis filter, final Sort sort) {
 		final var specification = (StringUtils.hasText(searchTerm)) ?
 				SdisSpecifications.<SdisCommon>filterBy(filter).and(SdisSpecifications.hasSearchTerm(searchTerm)) :
 				SdisSpecifications.<SdisCommon>filterBy(filter);
-		return findAll(specification, sort);
+		return findBy(specification, q -> q.as(SdisCommon.class).sortBy(sort)).all();
 	}
 
 	List<SdisCommon> findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(String latitude, String longitude, Sort sort);
