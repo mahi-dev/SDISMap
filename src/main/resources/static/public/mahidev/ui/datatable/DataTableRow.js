@@ -1,5 +1,6 @@
 import {Component} from "../Component.js";
 import {DataTableCell} from "./DataTableCell.js";
+import {FILTER} from "../../config/message.js";
 
 export class DataTableRow extends Component {
 
@@ -25,13 +26,19 @@ export class DataTableRow extends Component {
             this.dom.style.color = `${this._color}`;
     }
 
+    bindEvents() {
+        this._dataTableRows.forEach(this._bindEvents.bind(this));
+    }
+
     initComponents() {
         this._dataTableRows = this._cells
-            .map(cell => new DataTableCell({cell, addOrder: this._isHeader}));
+            .map(value => new DataTableCell({
+                value,
+                cell: this._isHeader ? `<div  class="table-header"><p class="cell-value">${FILTER[value]}</p>` : value,
+                addOrder: this._isHeader
+            }));
 
         this._dataTableRows.forEach(dataTableCell => dataTableCell.attach(this.dom));
-        this._dataTableRows.forEach(this._bindEvents.bind(this));
-
         if (this._isDuplicate)
             this.addClass('duplicate');
         if (this._color)
@@ -43,7 +50,9 @@ export class DataTableRow extends Component {
     }
 
     _bindEvents(row) {
-        row.addEventListener('sort', console.log);
+        row.addEventListener('sortColumn', e => this.fireEvent(new CustomEvent('sortColumn', {
+            detail: {sortBy: e.detail.sortBy, element: e.detail.element}
+        })));
     }
 }
 

@@ -5,6 +5,7 @@ import org.mahidev.sdismap.model.FilterSdis;
 import org.mahidev.sdismap.model.Sdis;
 import org.mahidev.sdismap.projection.SdisDetails;
 import org.mahidev.sdismap.specification.SdisSpecifications;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
@@ -23,12 +24,12 @@ public interface SdisDetailsRepository extends JpaRepository<Sdis, Long>, JpaSpe
 		return findAll(SdisSpecifications.hasSearchTerm(searchTerm));
 	}
 
-	default List<SdisDetails> filterSdis(final String searchTerm, final FilterSdis filter) {
+	default List<SdisDetails> filterSdis(final String searchTerm, final FilterSdis filter, final Sort sort) {
 		final var specification = (StringUtils.hasText(searchTerm)) ?
 				SdisSpecifications.<SdisDetails>filterBy(filter).and(SdisSpecifications.hasSearchTerm(searchTerm)) :
 				SdisSpecifications.<SdisDetails>filterBy(filter);
-		return findAll(specification);
+		return findAll(specification, sort);
 	}
 
-	List<SdisDetails> findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(String latitude, String longitude);
+	List<SdisDetails> findSdisByLocation_SiteLatitudeAndLocation_SiteLongitude(String latitude, String longitude, Sort sort);
 }

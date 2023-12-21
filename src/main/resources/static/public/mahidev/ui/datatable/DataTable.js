@@ -23,10 +23,16 @@ export class DataTable extends Component {
         this.createDataTable();
     }
 
+    bindEvents() {
+        this._header.addEventListener('sortColumn', e => this.fireEvent(new CustomEvent('sortColumn', {
+            detail: {sortBy: e.detail.sortBy, element: e.detail.element}
+        })));
+    }
+
     createDataTable() {
         this._clearDataTable();
-        const header = new DataTableRow({cells: this._headers, isHeader: true});
-        header.attach(this.dom);
+        this._header = new DataTableRow({cells: this._headers, isHeader: true});
+        this._header.attach(this.dom);
 
         const duplicateMap = (this._distinctDuplicate) ? createDuplicateMap(this._rows) : {};
         const values = (this._distinctDuplicate) ? Object.values(duplicateMap) : [];

@@ -22,13 +22,20 @@ class Main {
         const latitude = urlParams.get('latitude');
         const longitude = urlParams.get('longitude');
         const search = urlParams.get('search');
-        if (search && search.length > 0)
+        if (search && search.length > 0) {
             this._sdisData = await this._sdisApiClient.findFilteredSdis(search, {latitude, longitude});
-        else
+            //this._sdisCommon = await this._sdisApiClient.findFilteredCommonSdis(search, {latitude, longitude});
+            this._sdisdetails = await this._sdisApiClient.findFilteredDetailsSdis(search, {latitude, longitude});
+        } else {
             this._sdisData = await this._sdisApiClient.filterSdisByLocation(latitude, longitude);
+            //this._sdisCommon = await this._sdisApiClient.filterSdisCommonByLocation(latitude, longitude);
+            this._sdisdetails = await this._sdisApiClient.filterSdisDetailsByLocation(latitude, longitude);
+        }
+
         if (this._sdisData.count === 0)
             window.location.href = '/';
-
+        console.log(this._sdisCommon)
+        console.log(this._sdisdetails)
         const sdis = this._sdisData?.sdisList;
         const switchButtonName = 'Distinguer les duplications';
         const switchButtonActive = false;
@@ -37,6 +44,7 @@ class Main {
         page.attach(this.principalElement);
         page.switchButtonVisible = true;
         page.switchButtonColorVisible = false;
+        page.addEventListener('sortColumn', e => this._sortColumn(e.detail.siteLatitude, e.detail.siteLongitude, e.detail.sortBy, e.detail.element));
     }
 
     createHeader() {
@@ -44,14 +52,37 @@ class Main {
         header.attach(document.querySelector('.header_principal'), {
             prepend: true
         });
-        header.name = 'SDIS 84';
-        header.logo = '../../../public/resources/img/sdis84.jpeg';
+        const localImg = `../../../${SETTINGS.header.src}`;
+        header.name = SETTINGS.header.title;
+        header.logo = (SETTINGS.header.urlExterne?.length > 0) ? SETTINGS.header.urlExterne : localImg;
+        header.logoWidth = SETTINGS.header.width;
+        header.alt = SETTINGS.header.alternativeText;
         header.addEventListener('headerLogoClick', e => this._redirect(e));
+        header.addEventListener('headerLogoError', e => header.logo = localImg);
     }
 
     _redirect(e) {
         window.location.href = "/";
     }
+
+    async _sortColumn(siteLatitude, siteLongitude, sortBy, element) {
+
+        const classStyle = 'red';
+        const ascClicked = sortBy.indexOf('ASC') > 0;
+        const asc = element.querySelector(".fa-sort-up");
+        const desc = element.querySelector(".fa-sort-down");
+        if ((ascClicked && asc.classList.contains(classStyle)) ||
+            (!ascClicked && desc.classList.contains(classStyle))) return;
+
+        document.querySelectorAll('[class^="fa-sort-"], [class*=" fa-sort-"]')
+            .forEach(fas => fas.classList.remove(classStyle))
+        asc.classList[ascClicked ? 'add' : 'remove'](classStyle);
+        desc.classList[!ascClicked ? 'add' : 'remove'](classStyle);
+
+
+        const sortedData = await this._sdisApiClient.filterSdisDetailsByLocation(siteLatitude, siteLongitude, sortBy);
+    }
+
 }
 
 new Main();

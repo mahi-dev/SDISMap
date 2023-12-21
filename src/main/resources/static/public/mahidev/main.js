@@ -43,9 +43,12 @@ class Main {
         header.attach(document.querySelector('.header_principal'), {
             prepend: true
         });
-        header.name = 'SDIS 84';
-        header.logo = 'public/resources/img/sdis84.jpeg';
+        header.name = SETTINGS.header.title;
+        header.logo = (SETTINGS.header.urlExterne?.length > 0) ? SETTINGS.header.urlExterne : SETTINGS.header.src;
+        header.logoWidth = SETTINGS.header.width;
+        header.alt = SETTINGS.header.alternativeText;
         header.addEventListener('headerLogoClick', e => this._redirect(e));
+        header.addEventListener('headerLogoError', e => header.logo = SETTINGS.header.src);
     }
 
     _redirect(e) {

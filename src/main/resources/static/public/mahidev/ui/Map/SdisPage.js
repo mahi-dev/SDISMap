@@ -37,8 +37,13 @@ export class SdisPage extends Component {
     }
 
     bindEvents() {
+        const {location} = this._sdis[0];
+        const {siteLongitude, siteLatitude} = location;
         this._switchButton.addEventListener('toggleEvent', this._distinctDuplicateValue.bind(this));
         this._switchButtonColor.addEventListener('toggleEvent', this._distinctColors.bind(this));
+        this._dataTable.addEventListener('sortColumn', e => this.fireEvent(new CustomEvent('sortColumn', {
+            detail: {siteLongitude, siteLatitude, sortBy: e.detail.sortBy, element: e.detail.element}
+        })));
     }
 
     initComponents() {
@@ -48,9 +53,8 @@ export class SdisPage extends Component {
         this._switchButton = new Switch({name: this._switchButtonName, default: this._switchButtonActive});
         this._switchButton.attach(this.dom.querySelector('#distinctDuplicate'));
 
-        const headers = [FILTER['aerienNumber'], FILTER['type'], FILTER['power'], FILTER['dimension'], FILTER['height'],
-            FILTER['azimuth'], FILTER['bandMin'], FILTER['bandMax'], FILTER['bandService']];
-
+        const headers = ['aerienNumber', 'aerienType', 'emissionReceptionPower', 'aerienDimension', 'aerienHeight', 'aerienAzimuth',
+            'FrequencyBandMin', 'FrequencyBandMax', 'FrequencyBandService'];
         const rows = this._sdis.map(sdis => {
             const {aerien, frequency, emissionReception} = sdis;
             return [aerien.number, aerien.type, emissionReception.power, aerien.dimension, aerien.height,

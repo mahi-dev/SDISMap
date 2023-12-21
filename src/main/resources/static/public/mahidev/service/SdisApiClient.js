@@ -5,10 +5,15 @@ import {MimeTypeKeys} from '../lib/MimeTypeKeys.js';
 
 export class SdisApiClient {
 
+    static LOCATION_ENDPOINT = '/location';
 
     static IMPORT_ENDPOINT = '/import';
 
     static FILTER_ENDPOINT = '/filter';
+
+    static COMMON_ENDPOINT = '/common';
+
+    static DETAILS_ENDPOINT = '/details';
 
     static FILTERS_ENDPOINT = '/filters';
 
@@ -46,18 +51,45 @@ export class SdisApiClient {
     }
 
     filterSdisByLocation(latitude, longitude) {
-        return this._delegate.get(this._serviceUrl + "/location", {latitude, longitude}, MimeTypeKeys.JSON)
+        return this._delegate.get(this._serviceUrl + SdisApiClient.LOCATION_ENDPOINT, {latitude, longitude}, MimeTypeKeys.JSON)
             .catch(error => {
                 throw error;
             });
     }
 
-    filterSdisCommonByLocation(latitude, longitude, sortBy) {
-        return this._delegate.get(this._serviceUrl + "/common/location", {
+    filterSdisCommonByLocation(latitude, longitude) {
+        return this._delegate.get(this._serviceUrl + SdisApiClient.COMMON_ENDPOINT + SdisApiClient.LOCATION_ENDPOINT, {
+            latitude,
+            longitude
+
+        }, MimeTypeKeys.JSON)
+            .catch(error => {
+                throw error;
+            });
+    }
+
+    filterSdisDetailsByLocation(latitude, longitude, sortBy = '') {
+        return this._delegate.get(this._serviceUrl + SdisApiClient.DETAILS_ENDPOINT + SdisApiClient.LOCATION_ENDPOINT, {
             latitude,
             longitude,
             sortBy
         }, MimeTypeKeys.JSON)
+            .catch(error => {
+                throw error;
+            });
+    }
+
+    findFilteredCommonSdis(searchTerm, filters) {
+        const parameter = (!searchTerm) ? '' : `/${encodeURI(searchTerm)}`
+        return this._delegate.get(this._serviceUrl + SdisApiClient.COMMON_ENDPOINT + SdisApiClient.FILTER_ENDPOINT + parameter, filters, MimeTypeKeys.JSON)
+            .catch(error => {
+                throw error;
+            });
+    }
+
+    findFilteredDetailsSdis(searchTerm, filters) {
+        const parameter = (!searchTerm) ? '' : `/${encodeURI(searchTerm)}`
+        return this._delegate.get(this._serviceUrl + SdisApiClient.DETAILS_ENDPOINT + SdisApiClient.FILTER_ENDPOINT + parameter, filters, MimeTypeKeys.JSON)
             .catch(error => {
                 throw error;
             });

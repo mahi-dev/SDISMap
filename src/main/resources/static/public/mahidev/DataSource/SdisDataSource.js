@@ -1,4 +1,4 @@
-export default class DmsDataSource {
+export default class SdisDataSource {
 
     /**
      * @public
@@ -49,7 +49,7 @@ export default class DmsDataSource {
     /**
      * @public
      * setter des filtres à appliquer
-     * @param {DocumentInfos} filter le sdiss contenant les metadata de filtre
+     * @param {SdisData} filter le sdiss contenant les metadata de filtre
      */
     set filter(filter) {
         this._filter = filter;

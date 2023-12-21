@@ -14,57 +14,63 @@ import java.util.List;
 import java.util.Optional;
 
 public class Manager {
-    public interface SdisService {
+	public interface SdisService {
 
-        long count();
+		long count();
 
-        List<Sdis> getAllSdis();
+		List<Sdis> getAllSdis();
 
-        List<Sdis> saveAllSdis(@NonNull final List<Sdis> sdisList);
+		List<Sdis> saveAllSdis(@NonNull final List<Sdis> sdisList);
 
-        Optional<Sdis> getSdis(final long id);
+		Optional<Sdis> getSdis(final long id);
 
-        Optional<Sdis> getSdis(@NotBlank final String name);
+		Optional<Sdis> getSdis(@NotBlank final String name);
 
-        List<Sdis> getSdis(@NonNull String siteLatitude, @NonNull String siteLongitude);
+		List<Sdis> getSdis(@NonNull String siteLatitude, @NonNull String siteLongitude);
 
-        Optional<SdisCommon> getSdisCommon(@NonNull String siteLatitude, @NonNull String siteLongitude, @NonNull List<Sort.Order> order);
+		Optional<SdisCommon> getSdisCommon(@NonNull String siteLatitude, @NonNull String siteLongitude, @NonNull List<Sort.Order> order);
 
-        List<SdisDetails> getSdisDetails(@NonNull String siteLatitude, @NonNull String siteLongitude);
+		List<SdisDetails> getSdisDetails(@NonNull String siteLatitude, @NonNull String siteLongitude, @NonNull List<Sort.Order> order);
 
-        Optional<String> getDescription(@NotBlank final String name);
+		Optional<String> getDescription(@NotBlank final String name);
 
-        Optional<Filter> getFilter();
+		Optional<Filter> getFilter();
 
-        List<Sdis> getFilteredSdis(String searchTerm, List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities,
-                                   List<Integer> postalCodes);
+		List<Sdis> getFilteredSdis(String searchTerm, List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities,
+				List<Integer> postalCodes);
 
-        List<Sdis> getFilteredSdis(String searchTerm, List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities,
-                                   List<Integer> postalCodes, List<String> latitude, List<String> longitude);
+		List<Sdis> getFilteredSdis(String searchTerm, List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities,
+				List<Integer> postalCodes, List<String> latitude, List<String> longitude);
 
-        List<Sdis> getFilteredSdis(List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities,
-                                   List<Integer> postalCodes);
+		List<Sdis> getFilteredSdis(List<String> names, List<Integer> anfrNumbers, List<Integer> inseeSites, List<String> municipalities,
+				List<Integer> postalCodes);
 
-        List<Sdis> findSdis(String search);
+		List<Sdis> findSdis(String search);
 
-        boolean deleteAll();
-    }
+		boolean deleteAll();
 
-    public interface ReaderService<T> {
+		List<SdisDetails> getFilteredDetailsSdis(String searchTerm, List<String> name, List<Integer> anfrNumber, List<Integer> inseeSite,
+				List<String> municipality, List<Integer> postalCode, List<String> latitude, List<String> longitude, List<Sort.Order> order);
 
-        List<Sdis> readExcel() throws IOException;
+		Optional<SdisCommon> getFilteredCommonSdis(String searchTerm, List<String> name, List<Integer> anfrNumber, List<Integer> inseeSite,
+				List<String> municipality, List<Integer> postalCode, List<String> latitude, List<String> longitude, List<Sort.Order> order);
+	}
 
-        List<T> saveExcel() throws IOException;
+	public interface ReaderService<T> {
 
-        List<T> readExcel(@NonNull final DataSource dataSource) throws IOException;
+		List<Sdis> readExcel() throws IOException;
 
-        List<Sdis> readExcel(@NonNull DataSource dataSource, int limit) throws IOException;
+		List<T> saveExcel() throws IOException;
 
-        List<Sdis> readExcel(int limit) throws IOException;
+		List<T> readExcel(@NonNull final DataSource dataSource) throws IOException;
 
-        List<T> saveExcel(@NonNull final DataSource dataSource) throws IOException;
+		List<Sdis> readExcel(@NonNull DataSource dataSource, int limit) throws IOException;
 
-        List<T> saveExcel(@NonNull final DataSource dataSource, final int limit) throws IOException;
-    }
+		List<Sdis> readExcel(int limit) throws IOException;
+
+		List<T> saveExcel(@NonNull final DataSource dataSource) throws IOException;
+
+		List<T> saveExcel(@NonNull final DataSource dataSource, final int limit) throws IOException;
+	}
 
 }

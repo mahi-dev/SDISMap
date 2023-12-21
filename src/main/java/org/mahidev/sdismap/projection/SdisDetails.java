@@ -13,7 +13,7 @@ public interface SdisDetails {
 	String getAerienType();
 
 	@Value("#{target.emissionReception.power}")
-	String getPower();
+	String getEmissionReceptionPower();
 
 	@Value("#{target.aerien.dimension}")
 	String getAerienDimension();
@@ -25,12 +25,12 @@ public interface SdisDetails {
 	String getAerienAzimuth();
 
 	@Value("#{target.frequency.bandMin}")
-	String getFrequencyMin();
+	String getFrequencyBandMin();
 
 	@Value("#{target.frequency.bandMax}")
-	String getFrequencyMax();
+	String getFrequencyBandMax();
 
 	@Value("#{target.frequency.bandService}")
-	String getFrequencyService();
+	String getFrequencyBandService();
 }
 

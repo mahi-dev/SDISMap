@@ -6,20 +6,21 @@ export class DataTableCell extends Component {
         this._cell = value
     }
 
+    set value(value) {
+        this._value = value
+    }
+
     set addOrder(value) {
-        this._orderIcon = value ? `<i class="fas fa-sort"></i><i class="fas fa-sort-up"></i><i class="fas fa-sort-down"></i>` : ``
+        this._orderIcon = value ? `<div class="sort"></i><i class="fas fa-sort-up"></i><i class="fas fa-sort-down"></i></div></div>` : ``
     }
 
     bindEvents() {
-        if (this.dom.querySelector('.fa-sort')) {
-            this.dom.querySelector('.fa-sort').addEventListener('click', () => this.fireEvent(new CustomEvent('sort', {
-                detail: {sort: true, cell: this._cell}
+        if (this.dom.querySelector('.fas')) {
+            this.dom.querySelector('.fa-sort-up').addEventListener('click', () => this.fireEvent(new CustomEvent('sortColumn', {
+                detail: {sortBy: ` ${this._value} ASC`, element: this.dom.querySelector('.sort')}
             })));
-            this.dom.querySelector('.fa-sort-up').addEventListener('click', () => this.fireEvent(new CustomEvent('sort', {
-                detail: {sort: 'ASC', cell: this._cell}
-            })));
-            this.dom.querySelector('.fa-sort-down').addEventListener('click', () => this.fireEvent(new CustomEvent('sort', {
-                detail: {sort: 'DESC', cell: this._cell}
+            this.dom.querySelector('.fa-sort-down').addEventListener('click', () => this.fireEvent(new CustomEvent('sortColumn', {
+                detail: {sortBy: ` ${this._value} DESC`, element: this.dom.querySelector('.sort')}
             })));
         }
     }
