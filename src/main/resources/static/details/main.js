@@ -17,17 +17,14 @@ class Main {
     async init() {
         this.createHeader();
         this._sdisApiClient = new SdisApiClient(new RestWebClient(), SETTINGS.baseApiUrl, SETTINGS.sdisApi);
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
+        const urlParams = new URLSearchParams(window.location.search);
         const latitude = urlParams.get('latitude');
         const longitude = urlParams.get('longitude');
         const search = urlParams.get('search');
         if (search && search.length > 0) {
-            // this._sdisData = await this._sdisApiClient.findFilteredSdis(search, {latitude, longitude});
             this._sdisCommon = await this._sdisApiClient.findFilteredCommonSdis(search, {latitude, longitude});
             this._sdisData = await this._sdisApiClient.findFilteredDetailsSdis(search, {latitude, longitude});
         } else {
-            // this._sdisData = await this._sdisApiClient.filterSdisByLocation(latitude, longitude);
             this._sdisCommon = await this._sdisApiClient.filterSdisCommonByLocation(latitude, longitude);
             this._sdisData = await this._sdisApiClient.filterSdisDetailsByLocation(latitude, longitude);
         }
@@ -65,24 +62,29 @@ class Main {
         window.location.href = "/";
     }
 
-    async _sortColumn(siteLatitude, siteLongitude, sortBy, element) {
+    async _sortColumn(latitude, longitude, sortBy, element) {
 
         const classStyle = 'red';
         const ascClicked = sortBy.indexOf('ASC') > 0;
-        const asc = () => element.querySelector(".fa-sort-up");
-        const desc = () => element.querySelector(".fa-sort-down");
-        if ((ascClicked && asc().classList.contains(classStyle)) ||
-            (!ascClicked && desc().classList.contains(classStyle))) return;
+        const asc = element.querySelector(".fa-sort-up");
+        const desc = element.querySelector(".fa-sort-down");
+        if ((ascClicked && asc.classList.contains(classStyle)) ||
+            (!ascClicked && desc.classList.contains(classStyle))) return;
 
-        const sortedData = await this._sdisApiClient.filterSdisDetailsByLocation(siteLatitude, siteLongitude, sortBy);
-        this._sdisPage.sortColum = sortedData?.sdisList;
+        const search = new URLSearchParams(window.location.search).get('search');
+        if (search && search.length > 0) {
+            this._sdisData = await this._sdisApiClient.findFilteredDetailsSdis(search, {latitude, longitude, sortBy});
+        } else {
+            this._sdisData = await this._sdisApiClient.filterSdisDetailsByLocation(latitude, longitude, sortBy);
+        }
+
+        this._sdisPage.sortColum = this._sdisData?.sdisList;
 
         document.querySelectorAll('[class^="fa-sort-"], [class*=" fa-sort-"]')
             .forEach(fas => fas.classList.remove(classStyle))
-        asc().classList[ascClicked ? 'add' : 'remove'](classStyle);
-        desc().classList[!ascClicked ? 'add' : 'remove'](classStyle);
+        asc.classList[ascClicked ? 'add' : 'remove'](classStyle);
+        desc.classList[!ascClicked ? 'add' : 'remove'](classStyle);
     }
-
 }
 
 new Main();
