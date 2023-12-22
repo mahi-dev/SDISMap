@@ -1135,9 +1135,8 @@ a.disabled-link {
 
 div.table > div:first-of-type {
     font-weight: bold;
-
     position: sticky !important;
-    top: 159px;
+    top: 150px;
     background-color: white !important;
     z-index: 100;
 }
