@@ -1,4 +1,6 @@
 # SDIS ANTENNES
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmahi-dev%2FSDISMap.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmahi-dev%2FSDISMap?ref=badge_shield)
+
 
 ## À propos
 "SDIS Antennes" est une application dédiée au recensement des antennes SDIS. Elle offre la possibilité d'ajouter des données via l'upload de fichiers au format `.xls` ou `.xlsx`. Par défaut, l'application est accessible sur le port **8096**.
@@ -93,3 +95,7 @@ copier le CONTAINER ID de l'image sdis
 
 ## Informations Complémentaires
 Une configuration complète du serveur Nginx calqué sur http://sdis-antenne.info est disponible dans `server.config/nginx_config.zip` (protégé par un mot de passe).
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmahi-dev%2FSDISMap.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmahi-dev%2FSDISMap?ref=badge_large)
